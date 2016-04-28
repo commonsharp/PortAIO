@@ -15,6 +15,7 @@ To-Do :
 - Check Anivia
 - Fix Singed Menu @ https://i.gyazo.com/90f25e38ccda196e207c6960c8cafc8e.png
 - Check Rek'Sai Farm
+- Viktor E Pred @ max range
 - Add FlashQ for Blitz
 
 ------------------------------------------------------------------------

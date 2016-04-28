@@ -687,12 +687,6 @@ namespace IKalista
                         this.spells[SpellSlot.E].Cast();
                         this.spells[SpellSlot.E].LastCastAttemptT = Environment.TickCount;
                     }
-
-                    if ((Damages.GetActualDamage(enemy) > enemy.TotalHeal && !this.HasUndyingBuff(enemy) && Environment.TickCount - this.spells[SpellSlot.E].LastCastAttemptT > 500) || (stacks >= getSliderItem(comboMenu, "minStacks")))
-                    {
-                        this.spells[SpellSlot.E].Cast();
-                        this.spells[SpellSlot.E].LastCastAttemptT = Environment.TickCount;
-                    }
                 }
             }
         }

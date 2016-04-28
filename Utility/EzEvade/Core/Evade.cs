@@ -12,6 +12,8 @@ using EloBuddy.SDK.Menu.Values;
 using EzEvade;
 using SharpDX;
 
+// Credits to Rexy for porting this, I didn't use this much but some of the methods helped a lot.
+
 namespace ezEvade
 {
     internal class Evade

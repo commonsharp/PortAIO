@@ -4,8 +4,6 @@
 ------------------------------------------------------------------------
 
 To-Do :
-- Add FlashQ for Blitz
-- Tahm Kench Bug - After Spit, Q in wrong direction
 - Check out Gragas' Q
 - Check out Sion Combo @ https://i.gyazo.com/9b667f2e3f653c653c1f1b2ae83641ce.png
 - Fix Zyra Menu @ https://i.gyazo.com/d8fbdffbac0ae147841362854744de3a.png
@@ -17,6 +15,7 @@ To-Do :
 - Check Anivia
 - Fix Singed Menu @ https://i.gyazo.com/90f25e38ccda196e207c6960c8cafc8e.png
 - Check Rek'Sai Farm
+- Add FlashQ for Blitz
 
 ------------------------------------------------------------------------
 

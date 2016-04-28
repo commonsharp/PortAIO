@@ -97,7 +97,7 @@ namespace OneKeyToWin_AIO_Sebby
             wMenu.Add("autoW", new CheckBox("Auto W"));
             wMenu.Add("AGCW", new CheckBox("AntiGapcloser W"));
 
-            eMenu = Config.AddSubMenu("E Config", "E Config");
+            eMenu = Config.AddSubMenu("E Settings", "E Settings");
             eMenu.Add("autoE", new CheckBox("Auto E"));
 
             Dash = new OKTWdash(E);

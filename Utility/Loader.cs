@@ -83,7 +83,7 @@ namespace PortAIO.Utility
             Miscc.Add("recall", new CheckBox("Enable Recall Tracker?"));
             Miscc.AddSeparator();
             Miscc.Add("skin", new CheckBox("Enable Skin Hack?"));
-            Miscc.Add("evade", new CheckBox("Enable Evade?", false));
+            //Miscc.Add("evade", new CheckBox("Enable Evade?", false));
             Miscc.Add("godTracker", new CheckBox("Enable God Jungle Tracker?", false));
             Miscc.AddSeparator();
             Miscc.Add("ping", new CheckBox("Enable Ping Block?", false));

@@ -4,7 +4,6 @@
 ------------------------------------------------------------------------
 
 To-Do :
-- Kennen Q Pred - Q Lane Clear
 - Orianna Ult Check
 - Lulu - Laneclear & Harass [can put off later] - Might just port another Lulu assembly
 - Check out 2Chainz LeBlanc & check out menu error @ https://i.gyazo.com/126be96565af37526f1b7b752a8e839a.png

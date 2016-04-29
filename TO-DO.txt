@@ -4,16 +4,14 @@
 ------------------------------------------------------------------------
 
 To-Do :
-- Orianna Ult Check
-- Lulu - Laneclear & Harass [can put off later] - Might just port another Lulu assembly
-- Check out 2Chainz LeBlanc & check out menu error @ https://i.gyazo.com/126be96565af37526f1b7b752a8e839a.png
 - Check Anivia
-- Fix Singed Menu @ https://i.gyazo.com/90f25e38ccda196e207c6960c8cafc8e.png
 - Check Rek'Sai Farm
 - Viktor E Pred @ max range
 - Add Q usage in LC - Tristana
 - Add FlashQ for Blitz
 - Port W usage from another caitlyn script
+- Add a button to change combo on Diana
+- Lulu - Laneclear & Harass [can put off later] - Might just port another Lulu assembly
 
 ------------------------------------------------------------------------
 

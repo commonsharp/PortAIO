@@ -5,3 +5,5 @@
 3. Make a new issue and state the title and what you need/want to report.
 
 #### DO. NOT. PM. ME. ABOUT. PORTAIO. ALL COMMENTS GO ON ISSUES.
+
+#### Make sure you have Berb.Common installed @ https://github.com/berbb/EloBuddy

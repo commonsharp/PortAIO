@@ -4,7 +4,6 @@
 ------------------------------------------------------------------------
 
 To-Do :
-- Check out Gragas' Q
 - Check out Sion Combo @ https://i.gyazo.com/9b667f2e3f653c653c1f1b2ae83641ce.png
 - Fix Zyra Menu @ https://i.gyazo.com/d8fbdffbac0ae147841362854744de3a.png
 - Check Cho'Gath Ult

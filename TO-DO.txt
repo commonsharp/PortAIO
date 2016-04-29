@@ -4,7 +4,6 @@
 ------------------------------------------------------------------------
 
 To-Do :
-- Check Cho'Gath Ult
 - Kennen Q Pred - Q Lane Clear
 - Orianna Ult Check
 - Lulu - Laneclear & Harass [can put off later] - Might just port another Lulu assembly

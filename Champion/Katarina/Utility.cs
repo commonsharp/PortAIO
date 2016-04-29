@@ -63,21 +63,12 @@ namespace Staberina
 
         public static Obj_AI_Base GetClosestETarget(Vector3 position)
         {
-            return
-                GetETargets()
-                    .OrderBy(t => t.Distance(position))
-                    .ThenByDescending(t => t.DistanceToPlayer())
-                    .FirstOrDefault();
+            return GetETargets().OrderBy(t => t.Distance(position)).ThenByDescending(t => t.DistanceToPlayer()).FirstOrDefault();
         }
 
         public static IEnumerable<Obj_AI_Base> GetETargets(Vector3 position = new Vector3())
         {
-            return
-                ObjectManager.Get<Obj_AI_Base>()
-                    .Where(
-                        o =>
-                            o.IsValidTarget(SpellManager.E.Range, false, position) && !o.IsMe &&
-                            SpellManager.E.IsInRange(o));
+            return ObjectManager.Get<Obj_AI_Base>().Where(o => o.LSIsValidTarget(SpellManager.E.Range, false, position) && !o.IsMe && SpellManager.E.IsInRange(o));
         }
 
         public static bool IsRReady()

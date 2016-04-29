@@ -4,8 +4,6 @@
 ------------------------------------------------------------------------
 
 To-Do :
-- Check Anivia
-- Add Q usage in LC - Tristana
 - Add FlashQ for Blitz
 - Port W usage from another caitlyn script
 - Add a button to change combo on Diana

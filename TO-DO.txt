@@ -2,8 +2,6 @@
 - Kog'Maw R if lower than target %HP
 - Ez Jg
 - Try and fix pred in some champs
-- Fix Singed
-- Update Sion
 
 ------------------------------------------------------------------------
 

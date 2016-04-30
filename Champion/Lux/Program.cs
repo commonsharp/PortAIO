@@ -129,7 +129,7 @@ namespace MoonLux
             if (((int) (args.Damage/hero.Health) > getSliderItem(shieldMenu, "ASDamagePercent"))
                 || (hero.HealthPercent < getSliderItem(shieldMenu, "ASHealthPercent")))
             {
-                W.Cast(W.GetPrediction(hero).CastPosition);
+                W.Cast(hero);
             }
         }
 
@@ -176,7 +176,7 @@ namespace MoonLux
                     || objects.Count <= 1
                     || (objects.Count == 2 && (objects.ElementAt(0).IsChampion() || objects.ElementAt(1).IsChampion())))
                 {
-                    Q.Cast(prediction.CastPosition);
+                    Q.Cast(target);
                 }
             }
             else

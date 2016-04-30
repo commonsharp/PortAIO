@@ -22,6 +22,10 @@ namespace Jhin___The_Virtuoso.Modes
 
         public static void KillSteal()
         {
+            if (ObjectManager.Player.IsActive(Spells.R))
+            {
+                return;
+            }
             if (Spells.Q.IsReady() && Menus.getCheckBoxItem(Menus.ksMenu, "q.ks"))
             {
                 foreach (var enemy in HeroManager.Enemies.Where(x => x.IsValidTarget(Spells.Q.Range) &&

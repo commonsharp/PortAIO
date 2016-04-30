@@ -285,7 +285,7 @@ namespace SephLissandra
                 var prediction2 = Spells["Q"].GetPrediction(target);
                 if (prediction2.Hitchance >= LissUtils.GetHitChance("Hitchance.Q"))
                 {
-                    Spells["Q"].Cast(prediction2.CastPosition);
+                    Spells["Q"].Cast(target);
                     return;
                 }
             }
@@ -299,7 +299,7 @@ namespace SephLissandra
                     var pred = Spells["Q2"].GetPrediction(target);
                     if (pred.Hitchance >= LissUtils.GetHitChance("Hitchance.Q"))
                     {
-                        Spells["Q2"].Cast(pred.CastPosition);
+                        Spells["Q2"].Cast(target);
                     }
                 }
             }
@@ -542,7 +542,7 @@ namespace SephLissandra
                         var pred = Spells["Q"].GetPrediction(qtarget);
                         if (pred != null)
                         {
-                            Spells["Q"].Cast(pred.CastPosition);
+                            Spells["Q"].Cast(target);
                         }
                     }
                 }
@@ -575,7 +575,7 @@ namespace SephLissandra
                         var pred = Spells["E"].GetPrediction(etarget);
                         if (pred != null)
                         {
-                            Spells["E"].Cast(pred.CastPosition);
+                            Spells["E"].Cast(target);
                         }
                     }
                 }

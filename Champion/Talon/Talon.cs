@@ -629,7 +629,7 @@ namespace GFUELTalon
                         var prediction = W.GetPrediction(enemy);
                         if (prediction.Hitchance >= HitChance.High)
                         {
-                            W.Cast(target);
+                            W.Cast(enemy);
                         }
                     }
                 }

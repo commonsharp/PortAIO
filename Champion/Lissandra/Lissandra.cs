@@ -542,7 +542,7 @@ namespace SephLissandra
                         var pred = Spells["Q"].GetPrediction(qtarget);
                         if (pred != null)
                         {
-                            Spells["Q"].Cast(target);
+                            Spells["Q"].Cast(qtarget);
                         }
                     }
                 }
@@ -575,7 +575,7 @@ namespace SephLissandra
                         var pred = Spells["E"].GetPrediction(etarget);
                         if (pred != null)
                         {
-                            Spells["E"].Cast(target);
+                            Spells["E"].Cast(etarget);
                         }
                     }
                 }

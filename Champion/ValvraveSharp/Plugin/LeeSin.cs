@@ -354,7 +354,7 @@
 
             if (colA.Count == 0 || (getCheckBoxItem(comboMenu, "QCol") && Common.CastSmiteKillCollision(colA)))
             {
-                QELO.Cast(predA.CastPosition);
+                QELO.Cast(target);
             }
         }
 

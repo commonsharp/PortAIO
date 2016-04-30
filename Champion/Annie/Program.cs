@@ -145,15 +145,15 @@ namespace PortAIO.Champion.Annie
                         var aoeCount = poutput.AoeTargetsHitCount;
 
                         if (Rmode == 1)
-                            R.Cast(poutput.CastPosition);
+                            R.Cast(enemy);
 
                         if (Rmode == 3 && HaveStun)
-                            R.Cast(poutput.CastPosition);
+                            R.Cast(enemy);
 
                         if (aoeCount >= getSliderItem(RMenu, "rCount") && getSliderItem(RMenu, "rCount") > 0)
-                            R.Cast(poutput.CastPosition);
+                            R.Cast(enemy);
                         else if (SebbyLib.Program.Combo && HaveStun && getCheckBoxItem(RMenu, "autoRcombo"))
-                            R.Cast(poutput.CastPosition);
+                            R.Cast(enemy);
                         else if (getCheckBoxItem(RMenu, "autoRks"))
                         {
                             var comboDmg = OktwCommon.GetKsDamage(enemy, R);

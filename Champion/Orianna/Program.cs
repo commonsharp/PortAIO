@@ -455,9 +455,9 @@ namespace OneKeyToWin_AIO_Sebby
 
                 if ((int) prepos.Hitchance > 5 - Program.getSliderItem("HitChance"))
                 {
-                    if (prepos.CastPosition.Distance(prepos.CastPosition) < Q.Range)
+                    if (Q.IsInRange(target))
                     {
-                        Q.Cast(prepos.CastPosition);
+                        Q.Cast(target);
                     }
                 }
             }

@@ -124,11 +124,10 @@ namespace ElDiana
 
             comboMenu = _menu.AddSubMenu("Combo", "Combo");
             comboMenu.AddGroupLabel("R Settings");
+            comboMenu.Add("ElDiana.Combo.R.Change", new KeyBind("Change R Mode", false, KeyBind.BindTypes.HoldActive, 'L'));
             comboMenu.Add("ElDiana.Combo.R.Mode", new Slider("Mode (0 : Normal | 1 : Misaya (R > Q)) : ", 0, 0, 1));
             comboMenu.Add("ElDiana.Combo.R", new CheckBox("Use R"));
-            comboMenu.Add("ElDiana.Combo.R.MisayaMinRange",
-                new Slider("R Minimum Range for Misaya ", Convert.ToInt32(spells[Spells.R].Range*0.8), 0,
-                    Convert.ToInt32(spells[Spells.R].Range)));
+            comboMenu.Add("ElDiana.Combo.R.MisayaMinRange", new Slider("R Minimum Range for Misaya ", Convert.ToInt32(spells[Spells.R].Range*0.8), 0, Convert.ToInt32(spells[Spells.R].Range)));
             comboMenu.Add("ElDiana.Combo.R.PreventUnderTower", new Slider("Don't use ult if HP% <  ", 20));
             comboMenu.AddSeparator();
             comboMenu.Add("ElDiana.Combo.Q", new CheckBox("Use Q"));
@@ -236,6 +235,17 @@ namespace ElDiana
                 {
                     Render.Circle.DrawCircle(ObjectManager.Player.Position, misayaRange, Color.White);
                 }
+            }
+
+            var x = ObjectManager.Player.HPBarPosition.X;
+            var y = ObjectManager.Player.HPBarPosition.Y + 200;
+
+            if (getSliderItem(comboMenu, "ElDiana.Combo.R.Mode") == 0)
+            {
+                Drawing.DrawText(x, y + 20, Color.CornflowerBlue, "Current R Logic : Normal");
+            } else
+            {
+                Drawing.DrawText(x, y + 20, Color.Red, "Current R Logic : Misaya");
             }
         }
 
@@ -651,11 +661,28 @@ namespace ElDiana
             }
         }
 
+        public static int lastTime;
+
         private static void OnUpdate(EventArgs args)
         {
             if (Player.IsDead)
             {
                 return;
+            }
+
+            if (getKeyBindItem(comboMenu, "ElDiana.Combo.R.Change"))
+            {
+                if (getSliderItem(comboMenu, "ElDiana.Combo.R.Mode") == 0 && lastTime + 400 < Environment.TickCount)
+                {
+                    lastTime = Environment.TickCount;
+                    comboMenu["ElDiana.Combo.R.Mode"].Cast<Slider>().CurrentValue = 1;
+                }
+
+                if (getSliderItem(comboMenu, "ElDiana.Combo.R.Mode") == 1 && lastTime + 400 < Environment.TickCount)
+                {
+                    lastTime = Environment.TickCount;
+                    comboMenu["ElDiana.Combo.R.Mode"].Cast<Slider>().CurrentValue = 0;
+                }
             }
 
             if (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.Combo))

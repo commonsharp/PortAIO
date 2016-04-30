@@ -316,7 +316,7 @@ namespace ElDiana
                 var pred = spells[Spells.Q].GetPrediction(target);
                 if (pred.Hitchance >= HitChance.VeryHigh)
                 {
-                    spells[Spells.Q].Cast(pred.CastPosition);
+                    spells[Spells.Q].Cast(target);
                 }
             }
 

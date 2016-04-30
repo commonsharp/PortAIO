@@ -314,8 +314,9 @@ namespace PopBlanc
                      Player.HealthPercent >= getSliderItem(ksMenu, "KSHealth")))
                 {
                     var pos = Prediction.GetPrediction(target, W.Delay, W.Range + WRadius, W.Speed);
-                    if (pos.CastPosition.Distance(target.ServerPosition) < WRadius && W.Cast(pos.CastPosition))
+                    if (pos.CastPosition.Distance(target.ServerPosition) < WRadius)
                     {
+                        W.Cast(target);
                         Console.WriteLine("Combo: Cast W");
                         return;
                     }

@@ -225,7 +225,7 @@ namespace GFUELQuinn
                     var prediction = Q.GetPrediction(target);
                     if (prediction.Hitchance >= HitChance.High)
                     {
-                        Q.Cast(prediction.CastPosition);
+                        Q.Cast(target);
                     }
                 }
             }
@@ -480,7 +480,7 @@ namespace GFUELQuinn
                         var prediction = Q.GetPrediction(enemy);
                         if (prediction.Hitchance >= HitChance.High)
                         {
-                            Q.Cast(prediction.CastPosition);
+                            Q.Cast(enemy);
                         }
                     }
                 }

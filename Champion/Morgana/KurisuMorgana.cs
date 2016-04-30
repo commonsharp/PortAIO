@@ -217,7 +217,7 @@ namespace KurisuMorgana
                     var poutput = _q.GetPrediction(qtarget);
                     if (poutput.Hitchance >= (HitChance) getSliderItem(menuQ, "hitchanceq") + 2)
                     {
-                        _q.Cast(poutput.CastPosition);
+                        _q.Cast(qtarget);
                     }
                 }
             }
@@ -232,7 +232,7 @@ namespace KurisuMorgana
                         var poutput = _w.GetPrediction(wtarget);
                         if (poutput.Hitchance >= (HitChance) getSliderItem(menuW, "hitchancew") + 2)
                         {
-                            _w.Cast(poutput.CastPosition);
+                            _w.Cast(wtarget);
                         }
                     }
                 }
@@ -277,7 +277,7 @@ namespace KurisuMorgana
                         var poutput = _q.GetPrediction(qtarget);
                         if (poutput.Hitchance >= (HitChance) getSliderItem(menuQ, "hitchanceq") + 2)
                         {
-                            _q.Cast(poutput.CastPosition);
+                            _q.Cast(qtarget);
                         }
                     }
                 }
@@ -295,7 +295,7 @@ namespace KurisuMorgana
                             var poutput = _w.GetPrediction(wtarget);
                             if (poutput.Hitchance >= (HitChance) getSliderItem(menuW, "hitchancew") + 2)
                             {
-                                _w.Cast(poutput.CastPosition);
+                                _w.Cast(wtarget);
                             }
                         }
                     }

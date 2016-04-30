@@ -265,7 +265,7 @@ namespace ElEasy.Plugins
                             var pred = spells[Spells.R].GetPrediction(target);
                             if (pred.Hitchance >= HitChance.High)
                             {
-                                spells[Spells.R].Cast(pred.CastPosition);
+                                spells[Spells.R].Cast(target);
                             }
                         }
                     }
@@ -280,7 +280,7 @@ namespace ElEasy.Plugins
                             var hits = HeroManager.Enemies.Where(x => x.Distance(target) <= 300f).ToList();
                             if (hits.Any(hit => hits.Count >= countEnemies))
                             {
-                                spells[Spells.R].Cast(pred.CastPosition);
+                                spells[Spells.R].Cast(target);
                             }
                         }
                     }

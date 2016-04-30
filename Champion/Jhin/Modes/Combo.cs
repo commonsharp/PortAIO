@@ -80,7 +80,7 @@ namespace Jhin___The_Virtuoso.Modes
                 var pred = Spells.E.GetPrediction(enemy);
                 if (pred.Hitchance >= Menus.eMenu.HikiChance("e.hit.chance"))
                 {
-                    Spells.E.Cast(pred.CastPosition);
+                    Spells.E.Cast(enemy);
                 }
             }
         }

@@ -6,4 +6,6 @@
 
 #### DO. NOT. PM. ME. ABOUT. PORTAIO. ALL COMMENTS GO ON ISSUES.
 
-#### Make sure you have Berb.Common installed @ https://github.com/berbb/EloBuddy
+# Compile Errors
+#####Make sure you have Berb.Common installed @ https://github.com/berbb/EloBuddy
+#####If you still recieve compile errors refer here : https://www.elobuddy.net/topic/21274-installing-ms-build-tools-140/

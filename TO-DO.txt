@@ -1,5 +1,4 @@
 ﻿To-Do :
-- Port W usage from another caitlyn script
 - Add a button to change combo on Diana
 
 ------------------------------------------------------------------------

@@ -318,7 +318,8 @@ namespace PortAIO
                         LCS_Lucian.Program.OnLoad();
                         break;
                     case "lulu": // SKT
-                        SKT_Series.Program.Game_OnGameLoad();
+                        //SKT_Series.Program.Game_OnGameLoad();
+                        new LuluLicious.Lulu();
                         break;
                     case "lux": // MoonLux
                         MoonLux.Program.GameOnOnGameLoad();

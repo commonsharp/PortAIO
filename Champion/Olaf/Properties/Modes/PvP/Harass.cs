@@ -31,7 +31,7 @@ namespace ExorAIO.Champions.Olaf
                 ObjectManager.Player.ManaPercent > ManaManager.NeededQMana &&
                 Variables.getCheckBoxItem(Variables.QMenu, "qspell.harass"))
             {
-                Variables.Q.Cast(Variables.Q.GetPrediction(Targets.Target).CastPosition.Extend(Variables.Q.GetPrediction(Targets.Target).CastPosition, 75f));
+                Variables.Q.Cast(Targets.Target);
             }
         }
     }

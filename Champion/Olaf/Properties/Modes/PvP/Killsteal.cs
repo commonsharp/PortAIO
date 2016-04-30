@@ -31,7 +31,7 @@ namespace ExorAIO.Champions.Olaf
                             !t.IsValidTarget(Variables.AARange) &&
                             t.Health < Variables.Q.GetDamage(t)))
                 {
-                    Variables.Q.Cast(Variables.Q.GetPrediction(Targets.Target).CastPosition.Extend(Variables.Q.GetPrediction(Targets.Target).CastPosition, 75f));
+                    Variables.Q.Cast(Targets.Target);
                 }
             }
         }

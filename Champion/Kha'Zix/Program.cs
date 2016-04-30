@@ -449,7 +449,7 @@ namespace KhaZix
                     var pred = W.GetPrediction(target);
                     if (pred.HitChance >= HitChance.High)
                     {
-                        W.Cast(pred.CastPosition);
+                        W.Cast(target);
                     }
                 }
 
@@ -458,7 +458,7 @@ namespace KhaZix
                     var pred = E.GetPrediction(target);
                     if (target.IsValid && !target.IsDead && ShouldJump(pred.CastPosition))
                     {
-                        E.Cast(pred.CastPosition);
+                        E.Cast(target);
                     }
                 }
 
@@ -469,7 +469,7 @@ namespace KhaZix
                     var pred = E.GetPrediction(target);
                     if (target.IsValid && !target.IsDead && ShouldJump(pred.CastPosition))
                     {
-                        E.Cast(pred.CastPosition);
+                        E.Cast(target);
                     }
                     if (UseRGapcloseW && R.IsReady())
                     {
@@ -508,7 +508,7 @@ namespace KhaZix
                     var pred = E.GetPrediction(target);
                     if (target.IsValid && !target.IsDead && ShouldJump(pred.CastPosition))
                     {
-                        E.Cast(pred.CastPosition);
+                        E.Cast(target);
                     }
                 }
 
@@ -775,7 +775,7 @@ namespace KhaZix
                                 {
                                     if (Ksbypass || ShouldJump(pred.CastPosition))
                                     {
-                                        E.Cast(pred.CastPosition);
+                                        E.Cast(target);
                                     }
                                 }
                             },
@@ -792,7 +792,7 @@ namespace KhaZix
                         var pred = W.GetPrediction(target);
                         if (pred.HitChance >= HitChance.Medium)
                         {
-                            W.Cast(pred.CastPosition);
+                            W.Cast(target);
                             return;
                         }
                     }
@@ -840,7 +840,7 @@ namespace KhaZix
                             {
                                 if (Ksbypass || ShouldJump(pred.CastPosition))
                                 {
-                                    E.Cast(pred.CastPosition);
+                                    E.Cast(target);
                                 }
                             }
                         }, Edelay);
@@ -861,7 +861,7 @@ namespace KhaZix
                             {
                                 if (Ksbypass || ShouldJump(pred.CastPosition))
                                 {
-                                    E.Cast(pred.CastPosition);
+                                    E.Cast(target);
                                 }
                             }
                         }, Edelay);

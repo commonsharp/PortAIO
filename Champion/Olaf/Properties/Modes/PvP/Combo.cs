@@ -42,9 +42,7 @@ namespace ExorAIO.Champions.Olaf
                 Targets.Target.IsValidTarget(Variables.Q.Range) &&
                 Variables.getCheckBoxItem(Variables.QMenu, "qspell.combo"))
             {
-                Variables.Q.Cast(
-                    Variables.Q.GetPrediction(Targets.Target)
-                        .CastPosition.Extend(Variables.Q.GetPrediction(Targets.Target).CastPosition, 75f));
+                Variables.Q.Cast(Targets.Target);
             }
         }
     }

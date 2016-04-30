@@ -297,7 +297,7 @@ namespace ElVladimirReborn
                         var pred = spells[Spells.R].GetPrediction(x);
                         if (pred.AoeTargetsHitCount >= countEnemy)
                         {
-                            spells[Spells.R].Cast(pred.CastPosition);
+                            spells[Spells.R].Cast(x);
                         }
                     }
                 }

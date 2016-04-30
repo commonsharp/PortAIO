@@ -173,10 +173,6 @@ namespace TreeLib.SpellData
 
         public int StartTick;
 
-        private bool cachedValue;
-
-        private int cachedValueTick;
-
         private Vector2 collisionEnd;
 
         private int helperTick;

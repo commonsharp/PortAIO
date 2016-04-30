@@ -1,7 +1,6 @@
 ﻿To-Do :
 - Kog'Maw R if lower than target %HP
 - Ez Jg
-- Try and fix pred in some champs
 
 ------------------------------------------------------------------------
 

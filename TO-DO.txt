@@ -2,6 +2,8 @@
 - Kog'Maw R if lower than target %HP
 - Ez Jg
 - Try and fix pred in some champs
+- Fix Zilean
+- Fix Vlad R not using when killable
 
 ------------------------------------------------------------------------
 

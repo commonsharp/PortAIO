@@ -29,6 +29,7 @@ namespace PortAIO.Utility
         public static bool human { get { return Miscc["human"].Cast<CheckBox>().CurrentValue; } }
         public static int soraka { get { return Miscc["soraka"].Cast<ComboBox>().CurrentValue; } }
         public static int kogmaw { get { return Miscc["kogmaw"].Cast<ComboBox>().CurrentValue; } }
+        public static int leesin { get { return Miscc["leesin"].Cast<ComboBox>().CurrentValue; } }
         public static bool bubba { get { return Miscc["bubba"].Cast<CheckBox>().CurrentValue; } }
         public static int kalista { get { return Miscc["kalista"].Cast<ComboBox>().CurrentValue; } }
         public static bool gank { get { return Miscc["gank"].Cast<CheckBox>().CurrentValue; } }
@@ -61,7 +62,7 @@ namespace PortAIO.Utility
                 }
                 if (Player.ChampionName.Equals(Champion[2]))
                 {
-                    //Miscc.Add("bubba", new CheckBox("Enable Bubba Kush (WreckingBall)?"));
+                    Miscc.Add("leesin", new ComboBox("Use addon for Lee Sin : ", 0, "ValvraveSharp", "El Lee Sin : Reborn"));
                 }
                 if (Player.ChampionName.Equals(Champion[3]))
                 {

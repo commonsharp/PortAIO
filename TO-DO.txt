@@ -1,13 +1,6 @@
-﻿Done : 
-- Fix Pantheon Orbwalker
-
-------------------------------------------------------------------------
-
-To-Do :
-- Add FlashQ for Blitz
+﻿To-Do :
 - Port W usage from another caitlyn script
 - Add a button to change combo on Diana
-- Lulu - Laneclear & Harass [can put off later] - Might just port another Lulu assembly
 
 ------------------------------------------------------------------------
 
@@ -25,3 +18,4 @@ Port [MAYBE] :
 - Dual Port Hoola Riven
 - Dual Port iLucian
 - Dual Port Vayne Hunter Reborn
+- Port another Lulu

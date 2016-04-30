@@ -328,7 +328,7 @@ namespace iKalistaReborn
             if (prediction.Hitchance >= HitChance.High && target.IsValidTarget(SpellManager.Spell[SpellSlot.Q].Range) &&
                 !ObjectManager.Player.IsDashing() && !Orbwalker.IsAutoAttacking)
             {
-                SpellManager.Spell[SpellSlot.Q].Cast(prediction.CastPosition);
+                SpellManager.Spell[SpellSlot.Q].Cast(target);
             }
         }
 
@@ -341,7 +341,7 @@ namespace iKalistaReborn
                 if (prediction.Hitchance >= HitChance.High &&
                     target.IsValidTarget(SpellManager.Spell[SpellSlot.Q].Range))
                 {
-                    SpellManager.Spell[SpellSlot.Q].Cast(prediction.CastPosition);
+                    SpellManager.Spell[SpellSlot.Q].Cast(target);
                 }
             }
 

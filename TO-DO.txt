@@ -2,7 +2,8 @@
 - Kog'Maw R if lower than target %HP
 - Ez Jg
 - Try and fix pred in some champs
-- Check Nunu
+- Fix Singed
+- Update Sion
 
 ------------------------------------------------------------------------
 
@@ -12,6 +13,7 @@ To-Check :
 ------------------------------------------------------------------------
 
 Port [MAYBE] :
+- The Cheater
 - Dual Port FreshBooster Veigar [#1 Priority]
 - Port in a script with Taric Re-work Update [#2 Priority]
 - Dual Port Nechrito Diana

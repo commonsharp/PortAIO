@@ -164,8 +164,8 @@ namespace Challenger_Series.Plugins
                 _humanizer = null;
             }
 
-            Orbwalker.DisableAttacking = !CanMove();
-            Orbwalker.DisableMovement = !CanAttack();
+            Orbwalker.DisableAttacking = CanMove();
+            Orbwalker.DisableMovement = CanAttack();
             #endregion Humanizer
         }
 
@@ -186,25 +186,25 @@ namespace Challenger_Series.Plugins
 
         private bool CanAttack()
         {
-            if (!getCheckBoxItem(HumanizerMenu, "koggiehumanizerenabled")) return true;
+            if (!getCheckBoxItem(HumanizerMenu, "koggiehumanizerenabled")) return false;
             if (IsWActive())
             {
                 return _humanizer == null;
             }
-            return true;
+            return false;
         }
         private bool CanMove()
         {
-            if (!getCheckBoxItem(HumanizerMenu, "koggiehumanizerenabled")) return true;
+            if (!getCheckBoxItem(HumanizerMenu, "koggiehumanizerenabled")) return false;
             if (IsWActive() && ObjectManager.Player.AttackSpeedMod / 2 > _rand.Next(167, 230) / 100)
             {
                 if ((Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.Combo) && ObjectManager.Player.CountEnemyHeroesInRange(GetAttackRangeAfterWIsApplied() - 25) < 1) || (!Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.None) && !Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.Combo) && (!GameObjects.EnemyMinions.Any(m => m.IsHPBarRendered && m.Distance(ObjectManager.Player) < GetAttackRangeAfterWIsApplied() - 25) && !GameObjects.Jungle.Any(m => m.IsHPBarRendered && m.Distance(ObjectManager.Player) < GetAttackRangeAfterWIsApplied() - 25))))
                 {
-                    return true;
+                    return false;
                 }
                 return _humanizer != null;
             }
-            return true;
+            return false;
         }
 
         #endregion Events

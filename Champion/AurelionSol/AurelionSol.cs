@@ -280,7 +280,7 @@ namespace ElAurelion_Sol
                     var prediction = Q.GetPrediction(target);
                     if (prediction.Hitchance >= HitChance.High)
                     {
-                        Q.Cast(prediction.CastPosition);
+                        Q.Cast(target);
                     }
                 }
 
@@ -318,7 +318,7 @@ namespace ElAurelion_Sol
                     var prediction = R.GetPrediction(target);
                     if (prediction.Hitchance >= HitChance.High)
                     {
-                        R.Cast(prediction.CastPosition);
+                        R.Cast(target);
                     }
                 }
             }
@@ -371,7 +371,7 @@ namespace ElAurelion_Sol
                 var prediction = Q.GetPrediction(sender);
                 if (prediction.Hitchance >= HitChance.High)
                 {
-                    Q.Cast(prediction.CastPosition);
+                    Q.Cast(sender);
                 }
             }
         }
@@ -393,7 +393,7 @@ namespace ElAurelion_Sol
                     var prediction = Q.GetPrediction(gapcloser.Sender);
                     if (prediction.Hitchance >= HitChance.High)
                     {
-                        Q.Cast(prediction.CastPosition);
+                        Q.Cast(gapcloser.Sender);
                     }
                 }
             }
@@ -470,7 +470,7 @@ namespace ElAurelion_Sol
                     var prediction = Q.GetPrediction(target);
                     if (prediction.Hitchance >= HitChance.High)
                     {
-                        Q.Cast(prediction.CastPosition);
+                        Q.Cast(target);
                     }
                 }
             }
@@ -534,7 +534,7 @@ namespace ElAurelion_Sol
                         var prediction = Q.GetPrediction(enemy);
                         if (prediction.Hitchance >= HitChance.High)
                         {
-                            Q.Cast(prediction.CastPosition);
+                            Q.Cast(enemy);
                         }
                     }
 
@@ -543,7 +543,7 @@ namespace ElAurelion_Sol
                         var prediction = R.GetPrediction(enemy);
                         if (prediction.Hitchance >= HitChance.High)
                         {
-                            R.Cast(prediction.CastPosition);
+                            R.Cast(enemy);
                         }
                     }
                 }

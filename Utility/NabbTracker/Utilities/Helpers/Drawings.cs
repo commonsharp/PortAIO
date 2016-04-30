@@ -34,7 +34,7 @@ namespace NabbTracker
                     for (int Spell = 0; Spell < Variables.SpellSlots.Count(); Spell++)
                     {
                         Variables.SpellX = (int)pg.HPBarPosition.X + (pg.ChampionName.Equals("Jhin") ? 15 : 10) + (Spell * 25);
-                        Variables.SpellY = (int)pg.HPBarPosition.Y + (pg.ChampionName.Equals("Jhin") ? 25 : 35);
+                        Variables.SpellY = (int)pg.HPBarPosition.Y + (pg.ChampionName.Equals("Jhin") ? 25 : 35) + (pg.ChampionName.ToLower().Equals("velkoz") ? 20 : 0);
 
                         Variables.DisplayTextFont.DrawText(null, pg.Spellbook.GetSpell(Variables.SpellSlots[Spell]).CooldownExpires - Game.Time > 0 ? string.Format("{0:0}", pg.Spellbook.GetSpell(Variables.SpellSlots[Spell]).CooldownExpires - Game.Time) : Variables.SpellSlots[Spell].ToString(), Variables.SpellX, Variables.SpellY, pg.Spellbook.GetSpell(Variables.SpellSlots[Spell]).Level < 1 ? Color.Gray : pg.Spellbook.GetSpell(Variables.SpellSlots[Spell]).SData.ManaCostArray.MaxOrDefault((value) => value) > pg.Mana ? Color.Cyan : pg.Spellbook.GetSpell(Variables.SpellSlots[Spell]).CooldownExpires - Game.Time > 0 && pg.Spellbook.GetSpell(Variables.SpellSlots[Spell]).CooldownExpires - Game.Time <= 4 ? Color.Red : pg.Spellbook.GetSpell(Variables.SpellSlots[Spell]).CooldownExpires - Game.Time > 4 ? Color.Yellow : Color.LightGreen);
 

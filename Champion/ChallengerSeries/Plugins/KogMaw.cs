@@ -225,6 +225,8 @@ namespace Challenger_Series.Plugins
             ComboMenu.Add("koggieusee", new CheckBox("Use E", true));
             ComboMenu.Add("koggieuser", new CheckBox("Use R", true));
             ComboMenu.Add("koggiewintime", new CheckBox("Dont Activate W if In Danger!", false));
+            ComboMenu.Add("onlyRHP", new CheckBox("Only R if HP of target < than X"));
+            ComboMenu.Add("hpOfTarget", new Slider("HP% Of Target"));
 
             HarassMenu = MainMenu.AddSubMenu("Harass Settings", "koggieharassmenu");
             HarassMenu.Add("koggieuserharass", new CheckBox("Use R", true));
@@ -288,10 +290,13 @@ namespace Challenger_Series.Plugins
             if (!getCheckBoxItem(ComboMenu, "koggieuser") || !R.IsReady() || ObjectManager.Player.IsRecalling() || Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.None)) return;
             if (getCheckBoxItem(MainMenu, "koggiesavewmana") && ObjectManager.Player.Mana < GetRMana() + GetWMana()) return;
             var myPos = ObjectManager.Player.ServerPosition;
-            foreach (
-                var enemy in
-                    ValidTargets.Where(h => h.Distance(myPos) < R.Range && (!IsWActive() || h.Distance(myPos) > W.Range + 85) && h.HealthPercent < 25 && h.LSIsValidTarget()))
+            foreach (var enemy in ValidTargets.Where(h => h.Distance(myPos) < R.Range && (!IsWActive() || h.Distance(myPos) > W.Range + 85) && h.HealthPercent < 25 && h.LSIsValidTarget()))
             {
+                if (getCheckBoxItem(ComboMenu, "onlyRHP"))
+                {
+                    if (enemy.HealthPercent > getSliderItem(ComboMenu, "hpOfTarget"))
+                        return;
+                }
                 var prediction = R.GetPrediction(enemy, true);
                 if ((int)prediction.Hitchance > (int)HitChance.Medium)
                 {

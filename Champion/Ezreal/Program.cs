@@ -421,10 +421,23 @@ namespace OneKeyToWin_AIO_Sebby
             if (Program.LaneClear)
             {
                 var mobs = EntityManager.MinionsAndMonsters.EnemyMinions.Where(x => x.IsInRange(Player, Q.Range));
-                if (mobs.Count() > 0 || mobs != null)
+                if (mobs != null)
                 {
-                    var mob = mobs.FirstOrDefault();
-                    Q.Cast(mob.Position);
+                    if (mobs.Count() > 0)
+                    {
+                        var mob = mobs.FirstOrDefault();
+                        Q.Cast(mob.Position);
+                    }
+                }
+
+                var monster = EntityManager.MinionsAndMonsters.Monsters.Where(x => x.IsInRange(Player, Q.Range));
+                if (monster != null)
+                {
+                    if (monster.Count() > 0)
+                    {
+                        var monsters = monster.FirstOrDefault();
+                        Q.Cast(monsters.Position);
+                    }
                 }
             }
 

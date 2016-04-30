@@ -34,7 +34,7 @@ namespace ExorAIO.Champions.Ryze
             {
                 if (!Variables.Q.GetPrediction(Targets.Target).CollisionObjects.Any(c => c.IsMinion))
                 {
-                    Variables.Q.Cast(Variables.Q.GetPrediction(Targets.Target).UnitPosition);
+                    Variables.Q.Cast(Targets.Target);
                 }
             }
         }

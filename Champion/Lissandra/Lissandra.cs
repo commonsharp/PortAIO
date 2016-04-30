@@ -59,12 +59,12 @@ namespace SephLissandra
         public static void OnLoad()
         {
             Player = ObjectManager.Player;
+            DefineSpells();
             if (Player.CharData.BaseSkinName != "Lissandra")
             {
                 return;
             }
             LissMenu.CreateMenu();
-            DefineSpells();
             Game.OnUpdate += GameTick;
             Game.OnUpdate += MonitorMissilePosition;
             AntiGapcloser.OnEnemyGapcloser += OnGapClose;
@@ -525,8 +525,7 @@ namespace SephLissandra
 
         private static void KillSteal()
         {
-            var targets =
-                HeroManager.Enemies.Where(x => x.IsValidTarget() && !x.IsInvulnerable & !x.IsZombie);
+            var targets = HeroManager.Enemies.Where(x => x.IsValidTarget() && !x.IsInvulnerable & !x.IsZombie);
 
             var objAiHeroes = targets as IList<AIHeroClient> ?? targets.ToList();
             if (SpellSlot.Q.IsReady() && getCheckBoxItem(ksMenu, "Killsteal.UseQ"))

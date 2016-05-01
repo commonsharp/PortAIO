@@ -215,6 +215,12 @@ namespace SebbyLib
                     Allies.Add(hero);
             }
 
+            if (AIOmode != 1)
+            {
+                new OKTWward().LoadOKTW();
+                new OKTWtracker().LoadOKTW();
+            }
+
             Game.OnUpdate += OnUpdate;
             Orbwalker.OnPreAttack += Orbwalking_BeforeAttack;
             Drawing.OnDraw += OnDraw;

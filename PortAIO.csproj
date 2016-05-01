@@ -606,7 +606,6 @@
     <Compile Include="Libraries\OKTW - Core\OKTWdash.cs" />
     <Compile Include="Libraries\OKTW - Core\OKTWdraws.cs" />
     <Compile Include="Libraries\OKTW - Core\OKTWtracker.cs" />
-    <Compile Include="Libraries\OKTW - Core\OktwTs.cs" />
     <Compile Include="Libraries\OKTW - Core\OKTWward.cs" />
     <Compile Include="Libraries\SCommon\Damage\AutoAttack.cs" />
     <Compile Include="Libraries\SCommon\Damage\Prediction.cs" />

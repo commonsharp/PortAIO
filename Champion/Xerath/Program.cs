@@ -258,14 +258,13 @@ namespace OneKeyToWin_AIO_Sebby.Champions
                 R.Range = R.Range - getSliderItem(rMenu, "MaxRangeR");
 
             var t = TargetSelector.GetTarget(R.Range, DamageType.Magical);
-            if (t.IsValidTarget())
+            if (t.LSIsValidTarget())
             {
                 if (getKeyBindItem(rMenu, "useR") && !IsCastingR)
                 {
                     R.Cast();
                 }
-                if (!t.IsValidTarget(W.Range) && !IsCastingR && t.CountAlliesInRange(500) == 0 &&
-                    Player.CountEnemiesInRange(1100) == 0)
+                if (!t.IsValidTarget(W.Range) && !IsCastingR && t.CountAlliesInRange(500) == 0 && Player.CountEnemiesInRange(1100) == 0)
                 {
                     if (OktwCommon.GetKsDamage(t, R) + R.GetDamage(t) > t.Health)
                     {

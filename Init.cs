@@ -481,8 +481,8 @@ namespace PortAIO
                     case "trundle": // ElTrundle
                         ElTrundle.Trundle.OnLoad();
                         break;
-                    case "taric": // PippyTaric
-                        PippyTaric.Program.LoadStuff();
+                    case "taric": // SkyLv_Taric
+                        new SkyLv_Taric.SkyLv_Taric();
                         break;
                     default:
                         Chat.Print("This champion is not supported yet but the utilities will still load! - Berb");

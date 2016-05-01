@@ -260,17 +260,10 @@ namespace iKalistaReborn
             //BALISTA
             if (getCheckBoxItem(comboMenu, "com.ikalista.combo.balista") && SpellManager.Spell[SpellSlot.R].IsReady())
             {
-                var soulboundhero = HeroManager.Allies.FirstOrDefault(x => x.HasBuff("kalistacoopstrikeally"));
+                var soulboundhero = HeroManager.Allies.FirstOrDefault(x => x.HasBuff("kalistacoopstrikeally") && x.IsAlly);
                 if (soulboundhero?.ChampionName == "Blitzcrank")
                 {
-                    foreach (
-                        var unit in
-                            HeroManager.Enemies
-                                .Where(
-                                    h => h.IsHPBarRendered &&
-                                         h.Distance(ObjectManager.Player.ServerPosition) > 700 &&
-                                         h.Distance(ObjectManager.Player.ServerPosition) < 1400)
-                        )
+                    foreach (var unit in HeroManager.Enemies.Where(h => h.IsHPBarRendered && h.Distance(ObjectManager.Player.ServerPosition) > 700 && h.Distance(ObjectManager.Player.ServerPosition) < 1400))
                     {
                         if (unit.HasBuff("rocketgrab2"))
                         {

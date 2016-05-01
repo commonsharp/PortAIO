@@ -146,26 +146,34 @@ namespace Challenger_Series.Plugins
             }
 
             #region Humanizer
-            if (_humanizer != null)
+            if (getCheckBoxItem(HumanizerMenu, "koggiehumanizerenabled"))
             {
-                _attacksSoFar = 0;
+                if (_humanizer != null)
+                {
+                    _attacksSoFar = 0;
+                }
+                else if (_attacksSoFar >= getSliderItem(HumanizerMenu, "koggieminattacks"))
+                {
+                    _humanizer = new Humanizer(getSliderItem(HumanizerMenu, "koggiehumanizermovetime"));
+                }
+                if (!IsWActive())
+                {
+                    _humanizer = null;
+                    _attacksSoFar = 0;
+                }
+                if (_humanizer != null && _humanizer.ShouldDestroy)
+                {
+                    _humanizer = null;
+                }
+                Orbwalker.DisableAttacking = CanMove();
+                Orbwalker.DisableMovement = CanAttack();
             }
-            else if (_attacksSoFar >= getSliderItem(HumanizerMenu, "koggieminattacks"))
-            {
-                _humanizer = new Humanizer(getSliderItem(HumanizerMenu, "koggiehumanizermovetime"));
-            }
-            if (!IsWActive())
+            else
             {
                 _humanizer = null;
-                _attacksSoFar = 0;
+                Orbwalker.DisableAttacking = false;
+                Orbwalker.DisableMovement = false;
             }
-            if (_humanizer != null && _humanizer.ShouldDestroy)
-            {
-                _humanizer = null;
-            }
-
-            Orbwalker.DisableAttacking = CanMove();
-            Orbwalker.DisableMovement = CanAttack();
             #endregion Humanizer
         }
 

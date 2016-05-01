@@ -305,8 +305,6 @@ namespace PortAIO
                                 Valvrave_Sharp.Program.MainA();
                                 break;
                         }
-                        //if (Loader.bubba)
-                            //WreckingBall.WreckingBall.WreckingBallLoad();
                         break;
                     case "leona": // El Easy
                         new ElEasy.Plugins.Leona();
@@ -317,8 +315,7 @@ namespace PortAIO
                     case "lucian": // LCS Lucian
                         LCS_Lucian.Program.OnLoad();
                         break;
-                    case "lulu": // SKT
-                        //SKT_Series.Program.Game_OnGameLoad();
+                    case "lulu": // LuluLicious
                         new LuluLicious.Lulu();
                         break;
                     case "lux": // MoonLux
@@ -406,8 +403,8 @@ namespace PortAIO
                     case "varus": // ElVarus
                         Elvarus.Varus.Game_OnGameLoad();
                         break;
-                    case "veigar": // Synx Auto Carry
-                        Champion = new SAutoCarry.Champions.Veigar();
+                    case "veigar": // FreshBooster
+                        new FreshBooster.Champion.Veigar();
                         break;
                     case "reksai": // D-Reksai
                         D_RekSai.Program.Game_OnGameLoad();

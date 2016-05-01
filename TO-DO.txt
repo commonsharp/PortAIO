@@ -8,12 +8,10 @@ To-Check :
 ------------------------------------------------------------------------
 
 Port [MAYBE] :
-- Dual Port FreshBooster Veigar [#1 Priority]
-- Port in a script with Taric Re-work Update [#2 Priority]
+- Port in a script with Taric Re-work Update [#1 Priority]
 - Dual Port Nechrito Diana
 - Dual Port Challenger Series Kalista
 - Dual Port Challenger Series Lucian
 - Dual Port Hoola Riven
 - Dual Port iLucian
 - Dual Port Vayne Hunter Reborn
-- Port another Lulu

@@ -478,7 +478,7 @@
     <Compile Include="Champion\Vayne\Utility\Geometry.cs" />
     <Compile Include="Champion\Vayne\Utility\WardTracker\WardDetector.cs" />
     <Compile Include="Champion\Vayne\Utility\WardTracker\WardTrackerVariables.cs" />
-    <Compile Include="Champion\Veigar\Program.cs" />
+    <Compile Include="Champion\Veigar\Veigar.cs" />
     <Compile Include="Champion\Vel%27Koz\Program.cs" />
     <Compile Include="Champion\Viktor\Viktor.cs" />
     <Compile Include="Champion\Vi\DrawDamage.cs" />

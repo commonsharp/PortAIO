@@ -554,19 +554,18 @@ namespace Kassawin
 
             var rCount = getSliderItem(comboMenu, "rcount");
             var extendedposition = Player.Position.LSExtend(target.Position, 500);
-            if (ForcePulseCount() < rCount && user && R.IsReady() && Player.IsFacing(target))
+            if (ForcePulseCount() < rCount && user && R.IsReady())
             {
-                if (target.UnderTurret(true) && userturret)
+                if (userturret)
                 {
-                    return;
+                    if (target.UnderTurret(true))
+                    {
+                        return;
+                    }
                 }
-                if (Player.HealthPercent < getSliderItem(comboMenu, "rhp"))
+                if (Player.HealthPercent > getSliderItem(comboMenu, "rhp"))
                 {
-                    return;
-                }
-                if (Q.IsReady() || (E.IsReady() && (eCanCast() || GetPassiveBuff == 5)) || W.IsReady())
-                {
-                    if (Player.Mana >= (Player.Spellbook.GetSpell(SpellSlot.R).SData.Mana + Q.ManaCost))
+                    if (Q.IsReady() || E.IsReady() || W.IsReady())
                     {
                         if (!Player.IsInAutoAttackRange(target))
                         {

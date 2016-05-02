@@ -418,7 +418,7 @@ namespace OneKeyToWin_AIO_Sebby
 
         public static void farmQ()
         {
-            if (Program.LaneClear)
+            if (Program.LaneClear && getCheckBoxItem(farmMenu, "farmQ") && Player.ManaPercent > getSliderItem(farmMenu, "Mana"))
             {
                 var mobs = EntityManager.MinionsAndMonsters.EnemyMinions.Where(x => x.IsInRange(Player, Q.Range));
                 if (mobs != null)

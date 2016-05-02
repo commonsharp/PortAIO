@@ -15,6 +15,7 @@ using HitChance = SebbyLib.Prediction.HitChance;
 using PredictionInput = SebbyLib.Prediction.PredictionInput;
 using PredictionOutput = SebbyLib.Prediction.PredictionOutput;
 using Spell = LeagueSharp.Common.Spell;
+using SPrediction;
 
 namespace SebbyLib
 {
@@ -80,7 +81,7 @@ namespace SebbyLib
         {
             return Config[item].Cast<KeyBind>().CurrentValue;
         }
-
+        public static bool SPredictionLoad;
         public static void GameOnOnGameLoad()
         {
             enemySpawn = ObjectManager.Get<Obj_SpawnPoint>().FirstOrDefault(x => x.IsEnemy);
@@ -102,9 +103,19 @@ namespace SebbyLib
             Config.Add("AIOmode", new Slider("AIO mode (0 : Util & Champ | 1 : Only Champ | 2 : Only Util)", 0, 0, 2));
             AIOmode = getSliderItem("AIOmode");
 
-            Config.Add("PredictionMODE", new Slider("Prediction MODE (0 : Common Pred | 1 : OKTW© PREDICTION)", 0, 0, 1));
+            Config.Add("PredictionMODE", new Slider("Prediction MODE (0 : Common Pred | 1 : OKTW© PREDICTION | 2 : SPrediction)", 0, 0, 2));
             Config.Add("HitChance", new Slider("AIO mode (0 : Very High | 1 : High | 2 : Medium)", 0, 0, 2));
             Config.Add("debugPred", new CheckBox("Draw Aiming OKTW© PREDICTION", false));
+
+            if (getSliderItem("PredictionMODE") == 2)
+            {
+                SPrediction.Prediction.Initialize(Config);
+                SPredictionLoad = true;
+            }
+            else
+            {
+                Config.AddLabel("SPREDICTION NOT LOADED");
+            }
 
             if (AIOmode != 2)
             {
@@ -371,6 +382,30 @@ namespace SebbyLib
                 else if (getSliderItem("HitChance") == 2)
                 {
                     QWER.CastIfHitchanceEquals(target, LeagueSharp.Common.HitChance.Medium);
+                }
+            }
+
+            if (getSliderItem("PredictionMODE") == 2)
+            {
+                if (target is AIHeroClient && target.IsValid)
+                {
+                    var t = target as AIHeroClient;
+                    if (getSliderItem("HitChance") == 0)
+                    {
+                        QWER.SPredictionCast(t, LeagueSharp.Common.HitChance.VeryHigh);
+                    }
+                    else if (getSliderItem("HitChance") == 1)
+                    {
+                        QWER.SPredictionCast(t, LeagueSharp.Common.HitChance.High);
+                    }
+                    else if (getSliderItem("HitChance") == 2)
+                    {
+                        QWER.SPredictionCast(t, LeagueSharp.Common.HitChance.Medium);
+                    }
+                }
+                else
+                {
+                    QWER.CastIfHitchanceEquals(target, LeagueSharp.Common.HitChance.High);
                 }
             }
         }

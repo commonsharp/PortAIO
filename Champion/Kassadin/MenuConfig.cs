@@ -59,7 +59,6 @@ namespace Kassawin
             drawMenu.Add("drawq", new CheckBox("Draw [Q] Range"));
             drawMenu.Add("drawe", new CheckBox("Draw [E] Range"));
             drawMenu.Add("drawr", new CheckBox("Draw [R] Range"));
-            drawMenu.Add("drawqkill", new CheckBox("Draw Killable Minions with [Q]"));
             drawMenu.Add("drawcount", new CheckBox("Draw [R] Count"));
             drawMenu.Add("drawdamage", new CheckBox("Draw Damage"));
 

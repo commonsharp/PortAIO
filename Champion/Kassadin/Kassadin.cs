@@ -28,7 +28,6 @@ namespace Kassawin
 
         private static DamageToUnitDelegate _damageToUnit;
         public static int dontatttimer;
-        public static bool dontAtt;
 
 
         public static int GetPassiveBuff
@@ -85,33 +84,7 @@ namespace Kassawin
             Game.OnUpdate += OnUpdate;
             Obj_AI_Base.OnSpellCast += OnDoCast;
             Obj_AI_Base.OnSpellCast += OnDoCasts;
-            Spellbook.OnCastSpell += OnCastSpell;
-            Obj_AI_Base.OnProcessSpellCast += OnProcess;
             Drawing.OnDraw += OnDraw;
-        }
-
-        private static void OnProcess(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
-        {
-            if (sender.IsMe)
-            {
-                if (args.SData.Name == "RiftWalk" || args.SData.Name == "ForcePulse" || args.SData.Name == "NetherBlade" ||
-                    args.SData.Name == "NullSphere")
-                {
-                    dontAtt = true;
-                }
-                else
-                    dontAtt = false;
-            }
-        }
-
-        private static void OnCastSpell(Spellbook sender, SpellbookCastSpellEventArgs args)
-        {
-            if (args.Slot == SpellSlot.R || args.Slot == SpellSlot.E || args.Slot == SpellSlot.Q ||
-                args.Slot == SpellSlot.W)
-            {
-                dontAtt = true;
-                dontatttimer = Environment.TickCount;
-            }
         }
 
         private static float GetComboDamage(AIHeroClient enemy)
@@ -161,7 +134,6 @@ namespace Kassawin
             var edraw = getCheckBoxItem(drawMenu, "drawe");
             var rdraw = getCheckBoxItem(drawMenu, "drawr");
             var drawcount = getCheckBoxItem(drawMenu, "drawcount");
-            var mindraw = getCheckBoxItem(drawMenu, "drawqkill");
 
             if (qdraw)
             {
@@ -186,30 +158,25 @@ namespace Kassawin
                 Drawing.DrawText(pos.X, pos.Y, System.Drawing.Color.Red, "[R] Stack");
                 Drawing.DrawText(pos.X + 70, pos.Y, System.Drawing.Color.Purple, ForcePulseCount().ToString());
             }
-
-            if (!mindraw) return;
-
-            foreach (
-                var min in
-                    MinionManager.GetMinions(Player.Position, Q.Range)
-                        .Where(x => x.Health < Q.GetDamage(x)))
-            {
-                Render.Circle.DrawCircle(min.Position, 80, System.Drawing.Color.Red, 5, true);
-            }
         }
 
         private static void OnDoCasts(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
         {
             if (!Orbwalking.IsAutoAttack(args.SData.Name)) return;
+
             if (!sender.IsMe) return;
+
             if (!args.SData.IsAutoAttack()) return;
+
             if (args.Target.Type != GameObjectType.obj_AI_Minion) return;
+
             var usew = getCheckBoxItem(farmMenu, "usewl");
+
             if (!usew) return;
+
             if (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.LaneClear))
             {
-                var minions =
-                    MinionManager.GetMinions(Player.Position, 300);
+                var minions = MinionManager.GetMinions(Player.Position, 300);
 
                 if (W.IsReady())
                 {
@@ -217,16 +184,13 @@ namespace Kassawin
                     {
                         W.Cast();
                         Orbwalker.ResetAutoAttack();
-                        Orbwalker.ForcedTarget = (Obj_AI_Base) args.Target;
                     }
-                    foreach (var min in minions.Where(
-                        x => x.NetworkId != ((Obj_AI_Base) args.Target).NetworkId))
+                    foreach (var min in minions.Where(x => x.NetworkId != ((Obj_AI_Base) args.Target).NetworkId))
                     {
                         if (((Obj_AI_Base) args.Target).Health > Player.GetAutoAttackDamage((Obj_AI_Base) args.Target))
                         {
                             W.Cast();
                             Orbwalker.ResetAutoAttack();
-                            Orbwalker.ForcedTarget = min;
                         }
                     }
                 }
@@ -238,8 +202,8 @@ namespace Kassawin
             if (!Orbwalking.IsAutoAttack(args.SData.Name)) return;
             if (!sender.IsMe) return;
             if (args.Target.Type != GameObjectType.AIHeroClient) return;
+            
             var target = (AIHeroClient) args.Target;
-
             var usew = getCheckBoxItem(comboMenu, "usew");
             if (!Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.Combo)) return;
 
@@ -251,7 +215,6 @@ namespace Kassawin
                     {
                         W.Cast();
                         Orbwalker.ResetAutoAttack();
-                        Orbwalker.ForcedTarget = target;
                     }
                 }
             }
@@ -361,8 +324,7 @@ namespace Kassawin
 
         private static void LastHit()
         {
-            var minions = MinionManager.GetMinions(Player.Position, Q.Range, MinionTypes.All, MinionTeam.Enemy,
-                MinionOrderTypes.MaxHealth);
+            var minions = MinionManager.GetMinions(Player.Position, Q.Range, MinionTypes.All, MinionTeam.Enemy, MinionOrderTypes.MaxHealth);
 
             if (minions.FirstOrDefault() == null) return;
             var useq = getCheckBoxItem(farmMenu, "useqlh");
@@ -387,8 +349,7 @@ namespace Kassawin
 
         private static void LaneClear()
         {
-            var minions = MinionManager.GetMinions(Player.Position, Q.Range, MinionTypes.All, MinionTeam.Enemy,
-                MinionOrderTypes.MaxHealth);
+            var minions = MinionManager.GetMinions(Player.Position, Q.Range, MinionTypes.All, MinionTeam.Enemy, MinionOrderTypes.MaxHealth);
 
             var useq = getCheckBoxItem(farmMenu, "useql");
             if (useq)
@@ -410,6 +371,7 @@ namespace Kassawin
                     }
                 }
             }
+
             if (minions.FirstOrDefault() == null) return;
 
 
@@ -501,7 +463,6 @@ namespace Kassawin
         private static void fleeMode()
         {
             EloBuddy.Player.IssueOrder(GameObjectOrder.MoveTo, Game.CursorPos);
-            //    var getrrcount = GetValue("fleercoutn");
             var extendedposition = Player.Position.Extend(Game.CursorPos, 500);
 
             if (R.IsReady())

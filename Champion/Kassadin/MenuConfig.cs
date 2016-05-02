@@ -17,6 +17,7 @@ namespace Kassawin
             comboMenu.Add("usert", new CheckBox("Don't [R] Under Turret"));
             comboMenu.Add("useignite", new CheckBox("Use [Ignite]"));
             comboMenu.Add("rcount", new Slider("Only [R] When Stack Below", 1, 1, 5));
+            comboMenu.Add("rhp", new Slider("Only [R] When HP% Above", 15));
 
             harassMenu = Config.AddSubMenu("Harass Settings", "Harass Settings");
             harassMenu.Add("useqharass", new CheckBox("Use [Q]"));

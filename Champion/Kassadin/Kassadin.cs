@@ -408,8 +408,7 @@ namespace Kassawin
                 if (ForcePulseCount() >= count) return;
                 if (R.IsReady())
                 {
-                    var min =
-                        MinionManager.GetMinions(Player.Position, R.Range);
+                    var min = MinionManager.GetMinions(Player.Position, R.Range);
                     if (min.FirstOrDefault() != null)
                     {
                         var prediction = R.GetCircularFarmLocation(min, R.Width);
@@ -554,16 +553,16 @@ namespace Kassawin
             }
 
             var rCount = getSliderItem(comboMenu, "rcount");
-            var extendedposition = Player.Position.Extend(target.Position, 500);
+            var extendedposition = Player.Position.LSExtend(target.Position, 500);
             if (ForcePulseCount() < rCount && user && R.IsReady() && Player.IsFacing(target))
             {
                 if (target.UnderTurret(true) && userturret) return;
-                if (target.HealthPercent - 15 > Player.HealthPercent) return;
+                if (getSliderItem(comboMenu, "rhp") > Player.HealthPercent) return;
                 if (Q.IsReady() || (E.IsReady() && (eCanCast() || GetPassiveBuff == 5)) || W.IsReady())
                 {
                     if (Player.Mana >= Player.Spellbook.GetSpell(SpellSlot.R).SData.Mana + Q.ManaCost)
                     {
-                        if (Player.Distance(target) > Orbwalking.GetRealAutoAttackRange(target))
+                        if (Player.LSDistance(target) > Orbwalking.GetRealAutoAttackRange(target))
                             R.Cast(extendedposition);
                     }
                 }

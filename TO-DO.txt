@@ -1,8 +1,7 @@
 ﻿To-Do :
 - Cait W - Menu for Gapcloser
-- Check LastHit on Kass
 - Check LB Q/QR
--https://gyazo.com/5d594a226307a9308cd9322790d8ed8f
+- https://gyazo.com/5d594a226307a9308cd9322790d8ed8f @ crashes
 - Import PortAIO image intro
 
 ------------------------------------------------------------------------

@@ -99,10 +99,9 @@ namespace PortAIO.Champion.Caitlyn
             wMenu.Add("telE", new CheckBox("Auto W teleport"));
             wMenu.Add("bushW", new CheckBox("Auto W bush"));
             wMenu.Add("Wspell", new CheckBox("W on special spell detection"));
-            wMenu.Add("WmodeGC",
-                new Slider("Gap Closer position mode (0 : Dash end position | 1 : My Hero Position)", 0, 0, 1));
+            wMenu.Add("WmodeGC", new Slider("Gap Closer position mode (0 : Dash end position | 1 : My Hero Position)", 0, 0, 1));
             foreach (var enemy in ObjectManager.Get<AIHeroClient>().Where(enemy => enemy.IsEnemy))
-                wMenu.Add("WGCchampion" + enemy.ChampionName, new CheckBox("Cast on enemy: " + enemy.ChampionName));
+                wMenu.Add("WGCchampion" + enemy.ChampionName, new CheckBox("GapClose : Cast on enemy: " + enemy.ChampionName));
 
             eMenu = Config.AddSubMenu("E Config");
             eMenu.Add("autoE", new CheckBox("Auto E"));

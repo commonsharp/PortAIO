@@ -192,8 +192,7 @@ namespace PortAIO
                         Feedlesticks.Program.Game_OnGameLoad();
                         break;
                     case "fiora": // Underrated AIO
-                        UnderratedAIO.Champions.Fiora.OnLoad();
-                        //jesuisFiora.Program.Game_OnGameLoad();
+                        FioraProject.Program.Game_OnGameLoad();
                         break;
                     case "fizz": // Math Fizz
                         MathFizz.Program.Game_OnGameLoad();

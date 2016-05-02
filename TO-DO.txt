@@ -8,10 +8,18 @@ To-Check :
 ------------------------------------------------------------------------
 
 Port [MAYBE] :
-- Dual Port Nechrito Diana
-- Dual Port Challenger Series Kalista
-- Dual Port Challenger Series Lucian
-- Dual Port Hoola Riven
-- Dual Port iLucian
-- Dual Port Vayne Hunter Reborn
-- Dual Port OTWK Quinn
+- Nechrito Diana
+- Challenger Series Kalista
+- Challenger Series Lucian
+- Hoola Riven
+- iLucian
+- Vayne Hunter Reborn
+- OTWK Quinn
+- Hoe's Jayce
+- NechritoTwitch
+- YasuoPro
+- e.Motion Katarina
+- ElXerath
+- iMeh Xerath
+- Nechrito Gragas
+- iDzEzreal 

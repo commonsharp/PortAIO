@@ -567,10 +567,7 @@ namespace Kassawin
                 {
                     if (Q.IsReady() || E.IsReady() || W.IsReady())
                     {
-                        if (!Player.IsInAutoAttackRange(target))
-                        {
-                            R.Cast(extendedposition);
-                        }
+                        R.Cast(extendedposition);
                     }
                 }
             }

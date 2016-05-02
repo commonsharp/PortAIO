@@ -106,7 +106,7 @@ namespace Kassawin
             if (Player.GetSpellSlot("summonerdot").IsReady())
                 damage += IgniteDamage(enemy);
 
-            return (float) damage;
+            return (float)damage;
         }
 
         public static int DangerLevel(Interrupter2.InterruptableTargetEventArgs args)
@@ -180,14 +180,14 @@ namespace Kassawin
 
                 if (W.IsReady())
                 {
-                    if (((Obj_AI_Base) args.Target).Health > Player.GetAutoAttackDamage((Obj_AI_Base) args.Target) + 50)
+                    if (((Obj_AI_Base)args.Target).Health > Player.GetAutoAttackDamage((Obj_AI_Base)args.Target) + 50)
                     {
                         W.Cast();
                         Orbwalker.ResetAutoAttack();
                     }
-                    foreach (var min in minions.Where(x => x.NetworkId != ((Obj_AI_Base) args.Target).NetworkId))
+                    foreach (var min in minions.Where(x => x.NetworkId != ((Obj_AI_Base)args.Target).NetworkId))
                     {
-                        if (((Obj_AI_Base) args.Target).Health > Player.GetAutoAttackDamage((Obj_AI_Base) args.Target))
+                        if (((Obj_AI_Base)args.Target).Health > Player.GetAutoAttackDamage((Obj_AI_Base)args.Target))
                         {
                             W.Cast();
                             Orbwalker.ResetAutoAttack();
@@ -202,8 +202,8 @@ namespace Kassawin
             if (!Orbwalking.IsAutoAttack(args.SData.Name)) return;
             if (!sender.IsMe) return;
             if (args.Target.Type != GameObjectType.AIHeroClient) return;
-            
-            var target = (AIHeroClient) args.Target;
+
+            var target = (AIHeroClient)args.Target;
             var usew = getCheckBoxItem(comboMenu, "usew");
             if (!Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.Combo)) return;
 
@@ -509,7 +509,7 @@ namespace Kassawin
         {
             if (_ignite == SpellSlot.Unknown || Player.Spellbook.CanUseSpell(_ignite) != SpellState.Ready)
                 return 0f;
-            return (float) Player.GetSummonerSpellDamage(target, Damage.SummonerSpell.Ignite);
+            return (float)Player.GetSummonerSpellDamage(target, Damage.SummonerSpell.Ignite);
         }
 
         private static void Combo()
@@ -556,14 +556,22 @@ namespace Kassawin
             var extendedposition = Player.Position.LSExtend(target.Position, 500);
             if (ForcePulseCount() < rCount && user && R.IsReady() && Player.IsFacing(target))
             {
-                if (target.UnderTurret(true) && userturret) return;
-                if (getSliderItem(comboMenu, "rhp") > Player.HealthPercent) return;
+                if (target.UnderTurret(true) && userturret)
+                {
+                    return;
+                }
+                if (Player.HealthPercent < getSliderItem(comboMenu, "rhp"))
+                {
+                    return;
+                }
                 if (Q.IsReady() || (E.IsReady() && (eCanCast() || GetPassiveBuff == 5)) || W.IsReady())
                 {
-                    if (Player.Mana >= Player.Spellbook.GetSpell(SpellSlot.R).SData.Mana + Q.ManaCost)
+                    if (Player.Mana >= (Player.Spellbook.GetSpell(SpellSlot.R).SData.Mana + Q.ManaCost))
                     {
-                        if (Player.LSDistance(target) > Orbwalking.GetRealAutoAttackRange(target))
+                        if (!Player.IsInAutoAttackRange(target))
+                        {
                             R.Cast(extendedposition);
+                        }
                     }
                 }
             }
@@ -582,21 +590,21 @@ namespace Kassawin
             {
                 var barPos = unit.HPBarPosition;
                 var damage = DamageToUnit(unit);
-                var percentHealthAfterDamage = Math.Max(0, unit.Health - damage)/unit.MaxHealth;
+                var percentHealthAfterDamage = Math.Max(0, unit.Health - damage) / unit.MaxHealth;
                 var yPos = barPos.Y + YOffset;
-                var xPosDamage = barPos.X + XOffset + Width*percentHealthAfterDamage;
-                var xPosCurrentHp = barPos.X + XOffset + Width*unit.Health/unit.MaxHealth;
+                var xPosDamage = barPos.X + XOffset + Width * percentHealthAfterDamage;
+                var xPosCurrentHp = barPos.X + XOffset + Width * unit.Health / unit.MaxHealth;
 
                 if (damage > unit.Health)
                 {
-                    Text.X = (int) barPos.X + XOffset;
-                    Text.Y = (int) barPos.Y + YOffset - 13;
-                    Text.text = "Killable " + (int) (unit.Health - damage);
+                    Text.X = (int)barPos.X + XOffset;
+                    Text.Y = (int)barPos.Y + YOffset - 13;
+                    Text.text = "Killable " + (int)(unit.Health - damage);
                     Text.OnEndScene();
                 }
                 Drawing.DrawLine(xPosDamage, yPos, xPosDamage, yPos + Height, 1, _color);
                 var differenceInHp = xPosCurrentHp - xPosDamage;
-                var pos1 = barPos.X + 9 + 107*percentHealthAfterDamage;
+                var pos1 = barPos.X + 9 + 107 * percentHealthAfterDamage;
                 for (var i = 0; i < differenceInHp; i++)
                 {
                     Drawing.DrawLine(pos1 + i, yPos, pos1 + i, yPos + Height, 1, FillColor);

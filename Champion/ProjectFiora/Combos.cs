@@ -210,15 +210,6 @@ namespace FioraProject
                 }
             }
 
-        Wcast:
-
-            if (W.IsReady())
-            {
-
-            }
-
-        Rcast:
-
             if (R.IsReady() && Rcombo)
             {
                 var hero = GetTarget();
@@ -254,6 +245,14 @@ namespace FioraProject
                     }
                 }
             }
+
+            Wcast:
+
+            if (W.IsReady())
+            {
+
+            }
+
         }
         #endregion Combo
 

@@ -7,10 +7,9 @@ To-Check :
 
 ------------------------------------------------------------------------
 
-Port [MAYBE] :
+Port [Will Port One at a time when I'm bored or there's nothing on the to-do] :
 - Nechrito Diana
-- Challenger Series Kalista
-- Challenger Series Lucian
+- Challenger Series Kalista/Lucian/Ashe
 - Hoola Riven
 - iLucian
 - Vayne Hunter Reborn
@@ -22,4 +21,22 @@ Port [MAYBE] :
 - ElXerath
 - iMeh Xerath
 - Nechrito Gragas
-- iDzEzreal 
+- iDzEzreal
+- The Cheater
+- AIOCaster
+- OKTW Brand/Blitzcrank/Corki/Darius/Evelynn/Jhin/Kindred/Kog'Maw/Lux/Morg
+- SkyLv Tristana/AurelionSol (These are harder because the menu is so damn large)
+- NoobJaxReloaded
+- Corki Diabath
+- Graves Diabath
+- BadaoKingdom Poppy/GP
+- STahmKench
+- DRengar/Elise/J4
+- ExorCaitlyn/Anivia/Ashe/Mundo/Graves/Jax/Jhin/Jax/Quinn/Sivir
+- Kurisu's Blitzcrank
+- FreshBooster Braum
+- Nocturne is Back https://github.com/xQxCPMxQx/LeagueSharp2/tree/master/Nocturne
+- Kurisu Riven
+- Chewymoon Shaco
+- SimpleSion
+- ElEasy Sona

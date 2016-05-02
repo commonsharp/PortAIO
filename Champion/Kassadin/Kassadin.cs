@@ -27,7 +27,6 @@ namespace Kassawin
         private static readonly System.Drawing.Color FillColor = System.Drawing.Color.Blue;
 
         private static DamageToUnitDelegate _damageToUnit;
-        public static int dontatttimer;
 
 
         public static int GetPassiveBuff

@@ -7,9 +7,9 @@ namespace ExorAIO.Champions.Caitlyn
     using System.Linq;
     using ExorAIO.Utilities;
     using EloBuddy;
-    /// <summary>
-    ///     The logics class.
-    /// </summary>
+    using EloBuddy.SDK;    /// <summary>
+                           ///     The logics class.
+                           /// </summary>
     partial class Logics
     {
         /// <summary>
@@ -28,9 +28,12 @@ namespace ExorAIO.Champions.Caitlyn
             /// </summary>
             if (Variables.Q.IsReady() && Menus.getCheckBoxItem(Variables.QMenu, "qspell.auto"))
             {
-                foreach (AIHeroClient target in HeroManager.Enemies.Where(t => !Bools.IsSpellShielded(t) && t.LSIsValidTarget(Variables.Q.Range) && t.HasBuff("caitlynyordletrapdebuff")))
+                foreach (var target in EntityManager.Heroes.Enemies.Where(t => !Bools.HasAnyImmunity(t) && t.LSIsValidTarget(Variables.Q.Range)))
                 {
-                    Variables.Q.Cast(Variables.Q.GetPrediction(target).CastPosition);
+                    if (target.HasBuff("caitlynyordletrapdebuff") || target.HasBuff("caitlynyordletrapinternal"))
+                    {
+                        Variables.Q.Cast(Variables.Q.GetPrediction(target).UnitPosition);
+                    }
                 }
             }
 

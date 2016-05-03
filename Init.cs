@@ -276,6 +276,9 @@ namespace PortAIO
                             case 1:
                                 new iKalistaReborn.Kalista();
                                 break;
+                            case 2:
+                                Challenger_Series.Program.Main();
+                                break;
                             default:
                                 new iKalistaReborn.Kalista();
                                 break;

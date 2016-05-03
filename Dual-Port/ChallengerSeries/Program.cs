@@ -30,6 +30,9 @@ namespace Challenger_Series
                     case "KogMaw":
                         new Plugins.KogMaw();
                         break;
+                    case "Kalista":
+                        new Plugins.Kalista();
+                        break;
                     default:
                         //Variables.Orbwalker.Enabled = false;
                         break;

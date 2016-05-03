@@ -68,7 +68,7 @@ namespace Challenger_Series
             Game.OnUpdate += this.DelayOnUpdate;
         }
 
-        public IEnumerable<AIHeroClient> ValidTargets { get {return GameObjects.EnemyHeroes.Where(enemy=>enemy.IsHPBarRendered);}}        
+        public IEnumerable<AIHeroClient> ValidTargets { get {return EntityManager.Heroes.Enemies.Where(enemy=>enemy.IsHPBarRendered);}}        
         public Menu MainMenu { get; set; }
         public virtual void OnUpdate(EventArgs args) { }
         public virtual void OnProcessSpellCast(GameObject sender, GameObjectProcessSpellCastEventArgs args) { }

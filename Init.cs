@@ -6,6 +6,9 @@ using EloBuddy;
 using EloBuddy.SDK.Events;
 using ExorAIO.Core;
 using PortAIO.Utility;
+using LeagueSharp.Common;
+using SharpDX;
+using PortAIO.Properties;
 // ReSharper disable ObjectCreationAsStatement
 
 #endregion
@@ -19,12 +22,29 @@ namespace PortAIO
             Loading.OnLoadingComplete += Initialize;
         }
 
+        private static Render.Sprite Intro;
+        private static float IntroTimer = Game.Time;
         public static SCommon.PluginBase.Champion Champion;
         public static List<string> RandomUltChampsList = new List<string>(new[] { "Ezreal", "Jinx", "Ashe", "Draven", "Gangplank", "Ziggs", "Lux", "Xerath" });
         public static List<string> BaseUltList = new List<string>(new[] { "Jinx", "Ashe", "Draven", "Ezreal", "Karthus" });
 
+        private static System.Drawing.Bitmap LoadImg(string imgName)
+        {
+            var bitmap = Resources.ResourceManager.GetObject(imgName) as System.Drawing.Bitmap;
+            if (bitmap == null)
+            {
+                Console.WriteLine(imgName + ".png not found.");
+            }
+            return bitmap;
+        }
+
         private static void Initialize(EventArgs args)
         {
+            Intro = new Render.Sprite(LoadImg("PortLogo"), new Vector2((Drawing.Width / 2) - 175, (Drawing.Height / 2) - 300));
+            Intro.Add(0);
+            Intro.OnDraw();
+            LeagueSharp.Common.Utility.DelayAction.Add(5000, () => Intro.Remove());
+
             Loader.Menu();
 
             if (!Loader.champOnly)

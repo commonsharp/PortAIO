@@ -151,7 +151,6 @@ namespace Challenger_Series.Plugins
         private int MinEnemyStacksForEMinionResetSlider;
         private Menu FarmMenu;
         private bool AlwaysUseEIf2MinionsKillableBool;
-        private Menu RendSmiteMenu;
         private Menu RendDamageMenu;
         private int ReduceRendDamageBySlider;
         private Menu DrawMenu;

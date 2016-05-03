@@ -135,12 +135,26 @@ namespace PortAIO
                     case "amumu": // Shine#
                         PortAIO.Champion.Amumu.Program.OnLoad();
                         break;
+                    case "caitlyn":
+                        switch (Loader.cait)
+                        {
+                            case 0:
+                                SebbyLib.Program.GameOnOnGameLoad();
+                                break;
+                            case 1:
+                                Bootstrap.BuildMenu();
+                                Bootstrap.LoadChampion();
+                                break;
+                            default:
+                                SebbyLib.Program.GameOnOnGameLoad();
+                                break;
+                        }
+                        break;
                     case "anivia": // OKTW - Sebby - All Seeby champs go down here
                     case "thresh":
                     case "annie":
                     case "ashe": // Or (Challenger Series Ashe)
                     case "braum":
-                    case "caitlyn":
                     case "ekko":
                     case "ezreal":
                     case "graves":

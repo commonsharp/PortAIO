@@ -193,8 +193,19 @@ namespace PortAIO
                         Bootstrap.BuildMenu();
                         Bootstrap.LoadChampion();
                         break;
-                    case "diana": // El Diana
-                        ElDiana.Diana.OnLoad();
+                    case "diana":
+                        switch (Loader.diana)
+                        {
+                            case 0:
+                                ElDiana.Diana.OnLoad();
+                                break;
+                            case 1:
+                                Nechrito_Diana.Program.Game_OnGameLoad();
+                                break;
+                            default:
+                                ElDiana.Diana.OnLoad();
+                                break;
+                        }
                         break;
                     case "drmundo": // Hestia's Mundo
                         Mundo.Mundo.OnLoad();

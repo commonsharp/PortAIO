@@ -1,13 +1,8 @@
 ﻿To-Do :
-- Check LeeSin
 - Check Kayle R
 - Fix Garen Q/E
 - Check W Mundo
-- Check Viktor Stutter
-- Fix Jinx
-- Hoola Riven burst > Nechrito Burst
-- Teemo Menu Error
-- Evelynn R not working
+- Update PortAIO Logo @ https://cloud.githubusercontent.com/assets/8278110/15001430/3f3bb8b4-114c-11e6-8c69-6490a00d3c3f.gif
 
 ------------------------------------------------------------------------
 

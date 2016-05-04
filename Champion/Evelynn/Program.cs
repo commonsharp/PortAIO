@@ -70,6 +70,7 @@ namespace Evelynn
             comboMenu.Add("UseWCombo", new CheckBox("Use W"));
             comboMenu.Add("UseECombo", new CheckBox("Use E"));
             comboMenu.Add("UseRCombo", new CheckBox("Use R"));
+            comboMenu.Add("UseRKillable", new CheckBox("Only use R Killable"));
 
             laneClearMenu = Config.AddSubMenu("LaneClear", "LaneClear");
             laneClearMenu.Add("UseQLaneClear", new CheckBox("Use Q"));
@@ -148,7 +149,10 @@ namespace Evelynn
                 if (getCheckBoxItem(comboMenu, "UseECombo") && E.IsReady())
                     E.CastOnUnit(target);
 
-                if (getCheckBoxItem(comboMenu, "UseRCombo") && R.IsReady() && GetComboDamage(target) > target.Health)
+                if (getCheckBoxItem(comboMenu, "UseRCombo") && R.IsReady())
+                    R.Cast(target, false, true);
+
+                if (getCheckBoxItem(comboMenu, "UseRCombo") && getCheckBoxItem(comboMenu, "UseRKillable") && R.IsReady() && GetComboDamage(target) > target.Health)
                     R.Cast(target, false, true);
             }
         }

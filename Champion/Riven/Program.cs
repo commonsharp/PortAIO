@@ -208,16 +208,12 @@ namespace NechritoRiven
                 }
             }
 
-            if (!MenuConfig.burstKey)
+            if (MenuConfig.burstKey)
             {
                 if (HasTitan())
                 {
                     CastTitan();
                     return;
-                }
-                if (Spells._w.IsReady())
-                {
-                    Spells._w.Cast(target.Position);
                 }
                 if (Spells._r.IsReady() && Spells._r.Instance.Name == IsSecondR)
                 {

@@ -34,6 +34,11 @@ namespace NechritoRiven
             get { return getCheckBoxItem(emoteMenu, "qReset"); }
         }
 
+        public static bool FirstHydra
+        {
+            get { return getCheckBoxItem(misc, "FirstHydra"); }
+        }
+
         public static bool Dind
         {
             get { return getCheckBoxItem(draw, "Dind"); }
@@ -195,6 +200,7 @@ namespace NechritoRiven
             misc.Add("QLD", new Slider("Spell Delay", 56, 20, 300));
             misc.Add("fastHKey", new KeyBind("Fast Harass", false, KeyBind.BindTypes.HoldActive, 'A'));
             misc.Add("burstKey", new KeyBind("Burst", false, KeyBind.BindTypes.HoldActive, 'T'));
+            misc.Add("FirstHydra", new CheckBox("Flash Burst Hydra Cast before W", false));
 
             draw = Config.AddSubMenu("Draw", "Draw");
             draw.Add("FleeSpot", new CheckBox("Draw Flee Spots"));

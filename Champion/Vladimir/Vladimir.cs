@@ -101,7 +101,7 @@ namespace ElVladimirReborn
                 && gapcloser.Sender.Distance(Player) < spells[Spells.W].Range
                 && Player.CountEnemiesInRange(spells[Spells.Q].Range) >= 1)
             {
-                spells[Spells.W].Cast(Player);
+                spells[Spells.W].Cast();
             }
         }
 

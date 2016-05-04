@@ -3,6 +3,7 @@
 - Fix Garen Q/E
 - Check W Mundo
 - Update PortAIO Logo @ https://cloud.githubusercontent.com/assets/8278110/15001430/3f3bb8b4-114c-11e6-8c69-6490a00d3c3f.gif
+- Re-Port SephKhaZix
 
 ------------------------------------------------------------------------
 

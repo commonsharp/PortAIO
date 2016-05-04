@@ -87,7 +87,6 @@ namespace Evelynn
 
             Drawing.OnDraw += Drawing_OnDraw;
             Game.OnUpdate += Game_OnGameUpdate;
-            Spellbook.OnCastSpell += Spellbook_OnCastSpell;
         }
 
         private static void Drawing_OnDraw(EventArgs args)
@@ -117,19 +116,6 @@ namespace Evelynn
             {
                 LaneClear();
                 JungleFarm();
-            }
-        }
-
-        private static void Spellbook_OnCastSpell(Spellbook sender, SpellbookCastSpellEventArgs args)
-        {
-            if (sender.Owner.IsMe && args.Slot == SpellSlot.R)
-            {
-                if (ObjectManager.Get<AIHeroClient>()
-                    .Count(
-                        hero =>
-                            hero.IsValidTarget() &&
-                            hero.Distance(args.StartPosition.To2D()) <= R.Range) == 0)
-                    args.Process = false;
             }
         }
 

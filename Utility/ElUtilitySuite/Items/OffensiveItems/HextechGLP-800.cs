@@ -4,10 +4,11 @@
 
     using LeagueSharp;
     using LeagueSharp.Common;
-
-    class HextechGLP_800 //: Item
+    using EloBuddy.SDK.Menu.Values;
+    using EloBuddy;
+    class HextechGLP_800 : Item
     {
-        /*#region Public Properties
+        #region Public Properties
 
         /// <summary>
         ///     Gets or sets the identifier.
@@ -41,13 +42,29 @@
 
         #region Public Methods and Operators
 
+        public bool getCheckBoxItem(string item)
+        {
+            return Menu[item].Cast<CheckBox>().CurrentValue;
+        }
+
+        public int getSliderItem(string item)
+        {
+            return Menu[item].Cast<Slider>().CurrentValue;
+        }
+
+        public bool getKeyBindItem(string item)
+        {
+            return Menu[item].Cast<KeyBind>().CurrentValue;
+        }
+
         /// <summary>
         ///     Creates the menu.
         /// </summary>
         public override void CreateMenu()
         {
-            this.Menu.AddItem(new MenuItem("UseHextech800Combo", "Use on Combo").SetValue(true));
-            this.Menu.AddItem(new MenuItem("Hextech800EnemyHp", "Use on Enemy Hp %").SetValue(new Slider(70)));
+            Menu.AddGroupLabel("HextechGLP - 800");
+            Menu.Add("UseHextech800Combo", new CheckBox("Use on Combo"));
+            Menu.Add("Hextech800EnemyHp", new Slider("Use on Enemy Hp %", 70));
         }
 
         /// <summary>
@@ -56,11 +73,7 @@
         /// <returns></returns>
         public override bool ShouldUseItem()
         {
-            return this.Menu.Item("UseHextech800Combo").IsActive() && this.ComboModeActive
-                   && HeroManager.Enemies.Any(
-                       x =>
-                       x.HealthPercent < this.Menu.Item("Hextech800EnemyHp").GetValue<Slider>().Value
-                       && x.Distance(this.Player) < 700 && !x.IsDead && !x.IsZombie);
+            return getCheckBoxItem("UseHextech800Combo") && this.ComboModeActive && HeroManager.Enemies.Any(x => x.HealthPercent < getSliderItem("Hextech800EnemyHp") && x.LSDistance(this.Player) < 700 && !x.IsDead && !x.IsZombie);
         }
 
         /// <summary>
@@ -70,8 +83,7 @@
         {
             var objAiHero = HeroManager.Enemies.FirstOrDefault(
                 x =>
-                x.HealthPercent < this.Menu.Item("Hextech800EnemyHp").GetValue<Slider>().Value
-                && x.Distance(this.Player) < 500 && !x.IsDead && !x.IsZombie);
+                x.HealthPercent < getSliderItem("Hextech800EnemyHp") && x.LSDistance(this.Player) < 500 && !x.IsDead && !x.IsZombie);
 
             if (objAiHero != null)
             {
@@ -79,6 +91,6 @@
             }
         }
 
-        #endregion*/
+        #endregion
     }
 }

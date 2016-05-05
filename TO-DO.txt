@@ -1,12 +1,7 @@
 ﻿To-Do :
-- Re-Port SephKhaZix
-- Re-Port NechritoRiven (The update was to big to just C&P changes)
-- Port/Update champs in new Mage-Update
-- God Jungle Tracker
-- Fiddle W Cancels & Not using E on champs
-- Check out Lucian (FPS & LaneClear)
 - Yasuo Crash @ Combo
 - Update PortAIO Logo @ https://cloud.githubusercontent.com/assets/8278110/15001430/3f3bb8b4-114c-11e6-8c69-6490a00d3c3f.gif
+- Port/Update champs in new Mage-Update
 
 ------------------------------------------------------------------------
 
@@ -16,6 +11,9 @@ To-Check :
 ------------------------------------------------------------------------
 
 Port [Will Port One at a time when I'm bored or there's nothing on the to-do] :
+- God Jungle Tracker
+- Re-Port SephKhaZix
+- Re-Port NechritoRiven (The update was to big to just C&P changes)
 - Nechrito Twitch/Nidalee (When it comes out)
 - Challenger Series Lucian/Ashe
 - iLucian

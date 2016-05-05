@@ -79,6 +79,11 @@ namespace Feedlesticks
             }
         }
 
+        public static bool IsWActive
+        {
+            get { return ObjectManager.Player.HasBuff("fiddlebuff"); }
+        }
+
         /// <summary>
         ///     Process spell cast. thats need for last w game time
         /// </summary>
@@ -110,18 +115,29 @@ namespace Feedlesticks
                 return;
             }
 
-            if (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.Combo))
+            if (IsWActive)
+            {
+                Orbwalker.DisableAttacking = true;
+                Orbwalker.DisableMovement = true;
+            }
+            else
+            {
+                Orbwalker.DisableAttacking = false;
+                Orbwalker.DisableMovement = false;
+            }
+
+            if (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.Combo) && !IsWActive)
             {
                 Combo();
             }
 
-            if (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.Harass))
+            if (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.Harass) && !IsWActive)
             {
                 Harass();
             }
 
-            if (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.LaneClear) ||
-                Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.JungleClear))
+            if ((Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.LaneClear) ||
+                Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.JungleClear)) && !IsWActive)
             {
                 Jungle();
                 WaveClear();
@@ -269,12 +285,9 @@ namespace Feedlesticks
             }
             if (Spells.E.IsReady() && getCheckBoxItem(Menus.comboMenu, "e.combo"))
             {
-                foreach (
-                    var enemy in
-                        HeroManager.Enemies.Where(o => o.IsValidTarget(Spells.E.Range) && !o.IsDead && !o.IsZombie))
+                foreach (var enemy in HeroManager.Enemies.Where(o => o.IsValidTarget(Spells.E.Range) && !o.IsDead && !o.IsZombie))
                 {
-                    if (getCheckBoxItem(Menus.eMenu, "e.enemy." + enemy.ChampionName) &&
-                        enemy.CountEnemiesInRange(Spells.E.Range) >= getSliderItem(Menus.eMenu, "e.enemy.count"))
+                    if (getCheckBoxItem(Menus.eMenu, "e.enemy." + enemy.ChampionName) && enemy.CountEnemiesInRange(Spells.E.Range) >= getSliderItem(Menus.eMenu, "e.enemy.count"))
                     {
                         Spells.E.CastOnUnit(enemy);
                     }

@@ -105,13 +105,6 @@ namespace ElVladimirReborn
             }
         }
 
-        private static BuffInstance GetEBuff()
-        {
-            return
-                Player.Buffs.FirstOrDefault(
-                    b => b.Name.Equals("vladimirtidesofbloodcost", StringComparison.OrdinalIgnoreCase));
-        }
-
         private static float GetComboDamage(Obj_AI_Base enemy)
         {
             var damage = 0d;
@@ -143,26 +136,6 @@ namespace ElVladimirReborn
             return (float)(damage + Player.GetAutoAttackDamage(enemy));
         }
 
-        //Credits to Lizzarin
-        private static Tuple<int, List<AIHeroClient>> GetEHits()
-        {
-            try
-            {
-                var hits =
-                    HeroManager.Enemies.Where(
-                        e =>
-                            e.IsValidTarget() && e.Distance(Player) < 600f * 0.8f
-                            || e.Distance(Player) < 600f && e.IsFacing(Player)).ToList();
-
-                return new Tuple<int, List<AIHeroClient>>(hits.Count, hits);
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex);
-            }
-            return new Tuple<int, List<AIHeroClient>>(0, null);
-        }
-
         private static float IgniteDamage(AIHeroClient target)
         {
             if (ignite == SpellSlot.Unknown || Player.Spellbook.CanUseSpell(ignite) != SpellState.Ready)
@@ -172,50 +145,9 @@ namespace ElVladimirReborn
             return (float)Player.GetSummonerSpellDamage(target, Damage.SummonerSpell.Ignite);
         }
 
-        private static void OnAutoHarass()
-        {
-            var target = TargetSelector.GetTarget(spells[Spells.Q].Range, DamageType.Magical);
-            if (target == null || !target.IsValid)
-            {
-                return;
-            }
-
-            var useQ = getCheckBoxItem(ElVladimirMenu.harassMenu, "ElVladimir.AutoHarass.Q");
-            var useE = getCheckBoxItem(ElVladimirMenu.harassMenu, "ElVladimir.AutoHarass.E");
-            var playerHp = getSliderItem(ElVladimirMenu.harassMenu, "ElVladimir.AutoHarass.Health.E");
-
-            if (spells[Spells.Q].IsReady() && target.IsValidTarget() && useQ)
-            {
-                spells[Spells.Q].CastOnUnit(target, true);
-            }
-
-            if (spells[Spells.E].IsReady() && target.IsValidTarget(spells[Spells.E].Range)
-                && Player.Health / Player.MaxHealth * 100 >= playerHp && useE)
-            {
-                if (GetEHits().Item1 > 0)
-                {
-                    spells[Spells.E].Cast();
-                }
-            }
-        }
-
-        private static void OnAutoStack()
-        {
-            if (Player.IsRecalling() || Player.InFountain() || MenuGUI.IsChatOpen)
-            {
-                return;
-            }
-
-            var buff = GetEBuff();
-            if (buff == null || buff.EndTime - Game.Time <= Game.Ping / 2000f + 0.5f)
-            {
-                spells[Spells.E].Cast();
-            }
-        }
-
         private static void OnCombo()
         {
-            var target = TargetSelector.GetTarget(spells[Spells.E].Range, DamageType.Magical);
+            var target = TargetSelector.GetTarget(1500, DamageType.Magical);
             if (target == null)
             {
                 return;
@@ -225,18 +157,18 @@ namespace ElVladimirReborn
 
             var comboDamage = GetComboDamage(target);
 
-            if (getCheckBoxItem(ElVladimirMenu.comboMenu, "ElVladimir.Combo.E") && spells[Spells.E].IsReady())
-            {
-                if (GetEHits().Item1 > 0)
-                {
-                    spells[Spells.E].Cast();
-                }
-            }
-
             if (getCheckBoxItem(ElVladimirMenu.comboMenu, "ElVladimir.Combo.Q") && spells[Spells.Q].IsReady()
                 && target.IsValidTarget(spells[Spells.Q].Range))
             {
                 spells[Spells.Q].CastOnUnit(target);
+            }
+
+            if (getCheckBoxItem(ElVladimirMenu.comboMenu, "ElVladimir.Combo.E") && spells[Spells.E].IsReady() && target.IsValidTarget(800))
+            {
+                if (Player.Distance(target) < 800)
+                {
+                    spells[Spells.E].StartCharging();
+                }
             }
 
             if (getCheckBoxItem(ElVladimirMenu.comboMenu, "ElVladimir.Combo.W") && spells[Spells.W].IsReady()
@@ -253,26 +185,9 @@ namespace ElVladimirReborn
                 }
                 if (getCheckBoxItem(ElVladimirMenu.comboMenu, "ElVladimir.Combo.SmartUlt"))
                 {
-                    var eQDamage = spells[Spells.Q].GetDamage(target) + spells[Spells.E].GetDamage(target);
-
                     if (spells[Spells.Q].IsReady() && target.IsValidTarget(spells[Spells.Q].Range) && spells[Spells.Q].GetDamage(target) >= target.Health)
                     {
                         spells[Spells.Q].Cast();
-                    }
-                    else if (spells[Spells.E].IsReady() && spells[Spells.E].GetDamage(target) >= target.Health)
-                    {
-                        if (GetEHits().Item1 > 0)
-                        {
-                            spells[Spells.E].Cast();
-                        }
-                    }
-                    else if (spells[Spells.Q].IsReady() && spells[Spells.E].IsReady() && target.IsValidTarget(spells[Spells.Q].Range) && eQDamage >= target.Health)
-                    {
-                        spells[Spells.Q].Cast();
-                        if (GetEHits().Item1 > 0)
-                        {
-                            spells[Spells.E].Cast();
-                        }
                     }
                     else if (spells[Spells.R].IsReady() && GetComboDamage(target) >= target.Health && !target.IsDead)
                     {
@@ -323,12 +238,11 @@ namespace ElVladimirReborn
                 spells[Spells.Q].CastOnUnit(target);
             }
 
-            if (getCheckBoxItem(ElVladimirMenu.harassMenu, "ElVladimir.Harass.E") && spells[Spells.E].IsReady()
-                && target.IsValidTarget(spells[Spells.E].Range))
+            if (getCheckBoxItem(ElVladimirMenu.harassMenu, "ElVladimir.Harass.E") && spells[Spells.E].IsReady() && target.IsValidTarget(800))
             {
-                if (GetEHits().Item1 > 0)
+                if (Player.Distance(target) < 800)
                 {
-                    spells[Spells.E].Cast();
+                    spells[Spells.E].StartCharging();
                 }
             }
         }
@@ -372,8 +286,7 @@ namespace ElVladimirReborn
 
                 if (minions.Count > 1)
                 {
-                    var farmLocation = spells[Spells.E].GetCircularFarmLocation(minions);
-                    spells[Spells.E].Cast(farmLocation.Position);
+                    spells[Spells.E].StartCharging();
                 }
             }
         }
@@ -411,7 +324,7 @@ namespace ElVladimirReborn
 
                 if (minions.Count > 1)
                 {
-                    spells[Spells.E].Cast();
+                    spells[Spells.E].StartCharging();
                 }
             }
         }
@@ -433,16 +346,6 @@ namespace ElVladimirReborn
             {
                 OnLaneClear();
                 OnJungleClear();
-            }
-
-            if (getKeyBindItem(ElVladimirMenu.harassMenu, "ElVladimir.AutoHarass.Activated"))
-            {
-                OnAutoHarass();
-            }
-
-            if (getKeyBindItem(ElVladimirMenu.settingsMenu, "ElVladimir.Settings.Stack.E"))
-            {
-                OnAutoStack();
             }
         }
 

@@ -1,6 +1,4 @@
 ﻿To-Do :
-- Check W Mundo
-- Update PortAIO Logo @ https://cloud.githubusercontent.com/assets/8278110/15001430/3f3bb8b4-114c-11e6-8c69-6490a00d3c3f.gif
 - Re-Port SephKhaZix
 - Re-Port NechritoRiven (The update was to big to just C&P changes)
 - Port/Update champs in new Mage-Update
@@ -8,6 +6,7 @@
 - Fiddle W Cancels & Not using E on champs
 - Check out Lucian (FPS & LaneClear)
 - Yasuo Crash @ Combo
+- Update PortAIO Logo @ https://cloud.githubusercontent.com/assets/8278110/15001430/3f3bb8b4-114c-11e6-8c69-6490a00d3c3f.gif
 
 ------------------------------------------------------------------------
 

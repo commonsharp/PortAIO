@@ -197,7 +197,7 @@ namespace XinZhao
             var drawEMinRange = getCheckBoxItem(drawMenu, "DrawEMinRange");
             if (drawEMinRange)
             {
-                var eMinRange = getSliderItem(drawMenu, "EMinRange");
+                var eMinRange = getSliderItem(comboMenu, "EMinRange");
                 Render.Circle.DrawCircle(Player.Position, eMinRange, Color.Aqua, 1);
             }
 

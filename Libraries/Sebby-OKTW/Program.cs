@@ -103,7 +103,7 @@ namespace SebbyLib
             Config.Add("AIOmode", new Slider("AIO mode (0 : Util & Champ | 1 : Only Champ | 2 : Only Util)", 0, 0, 2));
             AIOmode = getSliderItem("AIOmode");
 
-            Config.Add("PredictionMODE", new Slider("Prediction MODE (0 : Common Pred | 1 : OKTW© PREDICTION | 2 : SPrediction)", 0, 0, 2));
+            Config.Add("PredictionMODE", new Slider("Prediction MODE (0 : Common Pred | 1 : OKTW© PREDICTION | 2 : SPrediction | 3 : SDK)", 0, 0, 3));
             Config.Add("HitChance", new Slider("AIO mode (0 : Very High | 1 : High | 2 : Medium)", 0, 0, 2));
             Config.Add("debugPred", new CheckBox("Draw Aiming OKTW© PREDICTION", false));
 
@@ -310,6 +310,60 @@ namespace SebbyLib
 
         public static void CastSpell(Spell QWER, Obj_AI_Base target)
         {
+            if (getSliderItem("PredictionMODE") == 3)
+            {
+                SebbyLib.Movement.SkillshotType CoreType2 = SebbyLib.Movement.SkillshotType.SkillshotLine;
+                bool aoe2 = false;
+
+                if (QWER.Type == SkillshotType.SkillshotCircle)
+                {
+                    CoreType2 = SebbyLib.Movement.SkillshotType.SkillshotCircle;
+                    aoe2 = true;
+                }
+
+                if (QWER.Width > 80 && !QWER.Collision)
+                    aoe2 = true;
+
+                var predInput2 = new SebbyLib.Movement.PredictionInput
+                {
+                    Aoe = aoe2,
+                    Collision = QWER.Collision,
+                    Speed = QWER.Speed,
+                    Delay = QWER.Delay,
+                    Range = QWER.Range,
+                    From = Player.ServerPosition,
+                    Radius = QWER.Width,
+                    Unit = target,
+                    Type = CoreType2
+                };
+                var poutput2 = SebbyLib.Movement.Prediction.GetPrediction(predInput2);
+
+                if (QWER.Speed != float.MaxValue && OktwCommon.CollisionYasuo(Player.ServerPosition, poutput2.CastPosition))
+                    return;
+
+                if (getSliderItem("HitChance") == 0)
+                {
+                    if (poutput2.Hitchance >= SebbyLib.Movement.HitChance.VeryHigh)
+                        QWER.Cast(poutput2.CastPosition);
+                    else if (predInput2.Aoe && poutput2.AoeTargetsHitCount > 1 && poutput2.Hitchance >= SebbyLib.Movement.HitChance.High)
+                    {
+                        QWER.Cast(poutput2.CastPosition);
+                    }
+
+                }
+                else if (getSliderItem("HitChance") == 1)
+                {
+                    if (poutput2.Hitchance >= SebbyLib.Movement.HitChance.High)
+                        QWER.Cast(poutput2.CastPosition);
+
+                }
+                else if (getSliderItem("HitChance") == 2)
+                {
+                    if (poutput2.Hitchance >= SebbyLib.Movement.HitChance.Medium)
+                        QWER.Cast(poutput2.CastPosition);
+                }
+            }
+
             if (getSliderItem("PredictionMODE") == 1)
             {
                 var CoreType2 = Prediction.SkillshotType.SkillshotLine;

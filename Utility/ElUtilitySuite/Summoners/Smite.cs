@@ -495,7 +495,7 @@
                     return;
                 }
 
-                Minion = (Obj_AI_Minion) EntityManager.MinionsAndMonsters.Monsters.FirstOrDefault(buff => (buff.Name.StartsWith(buff.BaseSkinName) || BuffsThatActuallyMakeSenseToSmite.Contains(buff.BaseSkinName)) && !buff.Name.Contains("Mini") && !buff.Name.Contains("Spawn"));
+                Minion = (Obj_AI_Minion) EntityManager.MinionsAndMonsters.Monsters.FirstOrDefault(buff => this.Player.IsInRange(buff, 570) && (buff.Name.StartsWith(buff.BaseSkinName) || BuffsThatActuallyMakeSenseToSmite.Contains(buff.BaseSkinName)) && !buff.Name.Contains("Mini") && !buff.Name.Contains("Spawn"));
 
                 if (Minion == null)
                 {

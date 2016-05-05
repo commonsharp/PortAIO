@@ -351,8 +351,11 @@
 
             var predA = Q.GetPrediction(target, false, -1, LeagueSharp.SDK.CollisionableObjects.YasuoWall);
             var colA = predA.GetCollision();
-            if (colA == null) return;
-            if (colA.Count == 0 || (getCheckBoxItem(comboMenu, "QCol") && Common.CastSmiteKillCollision(colA)))
+            if (pred.HitChance >= EloBuddy.SDK.Enumerations.HitChance.High)
+            {
+                QELO.Cast(target);
+            }
+            else if ((getCheckBoxItem(comboMenu, "QCol") && Common.CastSmiteKillCollision(colA)))
             {
                 QELO.Cast(target);
             }
@@ -446,6 +449,7 @@
                     }
                 }
             }
+
             if (getCheckBoxItem(comboMenu, "Q") && Q.IsReady())
             {
                 if (IsQOne)
@@ -479,10 +483,12 @@
                     }
                 }
             }
+
             if (getCheckBoxItem(comboMenu, "E"))
             {
                 CastECombo();
             }
+
             if (getCheckBoxItem(comboMenu, "W"))
             {
                 CastW();

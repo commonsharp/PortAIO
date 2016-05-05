@@ -24,7 +24,7 @@ namespace ElVladimirReborn
             comboMenu.Add("ElVladimir.Combo.E", new CheckBox("Use E"));
             comboMenu.Add("ElVladimir.Combo.R", new CheckBox("Use R"));
             comboMenu.Add("ElVladimir.Combo.SmartUlt", new CheckBox("Use Smartult"));
-            comboMenu.Add("ElVladimir.Combo.Count.R", new Slider("Minimum targets for R", 1, 1, 5));
+            comboMenu.Add("ElVladimir.Combo.Count.R", new Slider("R when >= target", 2, 2, 5));
             comboMenu.Add("ElVladimir.Combo.R.Killable", new CheckBox("Use R only when killable"));
             comboMenu.Add("ElVladimir.Combo.Ignite", new CheckBox("Use ignite"));
 

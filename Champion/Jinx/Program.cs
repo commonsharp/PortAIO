@@ -231,7 +231,7 @@ namespace OneKeyToWin_AIO_Sebby
                         !Orbwalking.InAutoAttackRange(minion) && GetRealPowPowRange(minion) < GetRealDistance(minion) &&
                         bonusRange() < GetRealDistance(minion)))
                 {
-                    var hpPred = HealthPrediction.GetHealthPrediction(minion, 200);
+                    var hpPred = HealthPrediction.GetHealthPrediction(minion, 400);
                     if (hpPred < Player.GetAutoAttackDamage(minion)*1.1 && hpPred > 5)
                     {
                         Orbwalker.ForcedTarget = minion;

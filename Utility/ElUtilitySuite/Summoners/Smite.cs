@@ -607,6 +607,7 @@
                                 case "SRU_Dragon_Water":
                                 case "SRU_Dragon_Elder":
                                 case "SRU_Dragon_Fire":
+                                case "SRU_Dragon_Earth":
                                     barWidth = 145;
                                     Drawing.DrawLine(
                                         new Vector2(hpBarPosition.X + 3 + (float)(barWidth * x), hpBarPosition.Y + 22),

@@ -35,6 +35,8 @@ namespace PortAIO.Utility
         public static bool gank { get { return Miscc["gank"].Cast<CheckBox>().CurrentValue; } }
         public static int diana { get { return Miscc["diana"].Cast<ComboBox>().CurrentValue; } }
         public static int cait { get { return Miscc["cait"].Cast<ComboBox>().CurrentValue; } }
+        public static bool intro { get { return Miscc["intro"].Cast<CheckBox>().CurrentValue; } }
+        //intro
 
         public static Menu Miscc;
 
@@ -50,7 +52,8 @@ namespace PortAIO.Utility
         public static void Menu()
         {
             Miscc = MainMenu.AddMenu("PortAIO Misc", "berbsicmisc");
-
+            Miscc.Add("intro", new CheckBox("Load Intro?", true));
+            Miscc.AddSeparator();
             Miscc.AddGroupLabel("Champion Changes");
             if (Champion.Contains(ObjectManager.Player.ChampionName))
             {

@@ -320,7 +320,7 @@ namespace PortAIO
                         new UnderratedAIO.Champions.Kennen();
                         break;
                     case "khazix": // SephKhaZix
-                        KhaZix.Program.OnLoad();
+                        new SephKhazix.Khazix();
                         break;
                     case "kindred": // Yin Yang Kindred
                         Kindred___YinYang.Program.Game_OnGameLoad();

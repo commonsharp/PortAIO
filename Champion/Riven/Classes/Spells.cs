@@ -9,9 +9,7 @@ namespace NechritoRiven
         public const string IsSecondR = "RivenIzunaBlade";
         private static AIHeroClient Player = ObjectManager.Player;
         public static SpellSlot Ignite, Flash;
-        public static LeagueSharp.Common.Spell _q, _q2, _q3, _w, _e, _r;
-        public static bool _forceR;
-        public static bool _forceR2;
+        public static LeagueSharp.Common.Spell _q, _w, _e, _r;
         public static void Initialise()
         {
             _q = new LeagueSharp.Common.Spell(SpellSlot.Q, 260f);

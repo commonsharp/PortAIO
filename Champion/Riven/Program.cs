@@ -35,7 +35,6 @@ namespace NechritoRiven
         public static SpellSlot Flash;
         public static int _qstack = 1;
         public static Render.Text Timer, Timer2;
-        private static bool _forceItem;
 
 
         public static int GetWRange => Player.HasBuff("RivenFengShuiEngine") ? 330 : 265;

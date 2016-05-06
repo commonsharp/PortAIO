@@ -8,7 +8,6 @@ To-Check :
 ------------------------------------------------------------------------
 
 Port [Will Port One at a time when I'm bored or there's nothing on the to-do] :
-- God Jungle Tracker
 - Re-Port SephKhaZix
 - Re-Port NechritoRiven (The update was to big to just C&P changes)
 - Nechrito Twitch/Nidalee (When it comes out)

@@ -53,18 +53,15 @@ namespace vSupport_Series.Champions
             healMenu.AddGroupLabel("Heal Whitelist : ");
             foreach (var ally in ObjectManager.Get<AIHeroClient>().Where(o => o.IsAlly && !o.IsMe))
             {
-                healMenu.Add("heal." + ally.ChampionName,
-                    new CheckBox(string.Format("Heal: {0}", ally.CharData.BaseSkinName)));
-                healMenu.Add("heal.percent." + ally.ChampionName,
-                    new Slider(string.Format("Heal: {0} HP Percent ", ally.CharData.BaseSkinName), 30, 1, 99));
+                healMenu.Add("heal." + ally.NetworkId, new CheckBox(string.Format("Heal: {0}", ally.CharData.BaseSkinName)));
+                healMenu.Add("heal.percent." + ally.NetworkId, new Slider(string.Format("Heal: {0} HP Percent ", ally.CharData.BaseSkinName), 30, 1, 99));
             }
 
             wsettings = Config.AddSubMenu("(W) Settings", "(W) Settings");
             wsettings.AddGroupLabel("(W) Whitelist");
             foreach (var enemy in ObjectManager.Get<AIHeroClient>().Where(o => o.IsEnemy))
             {
-                wsettings.Add("wwhite." + enemy.CharData.BaseSkinName,
-                    new CheckBox(string.Format("(W): {0}", enemy.CharData.BaseSkinName)));
+                wsettings.Add("wwhite." + enemy.NetworkId, new CheckBox(string.Format("(W): {0}", enemy.CharData.BaseSkinName)));
             }
 
             esettings = Config.AddSubMenu("(E) Settings", "(E) Settings");
@@ -72,8 +69,7 @@ namespace vSupport_Series.Champions
             esettings.AddGroupLabel("(E) Whitelist");
             foreach (var ally in ObjectManager.Get<AIHeroClient>().Where(o => o.IsAlly && !o.IsMe))
             {
-                esettings.Add("ewhite." + ally.CharData.BaseSkinName,
-                    new CheckBox(string.Format("(E): {0}", ally.CharData.BaseSkinName)));
+                esettings.Add("ewhite." + ally.NetworkId, new CheckBox(string.Format("(E): {0}", ally.CharData.BaseSkinName)));
             }
 
             harass = Config.AddSubMenu("Harass Settings", "Harass Settings");
@@ -133,7 +129,7 @@ namespace vSupport_Series.Champions
                                     x.IsAlly && !x.IsMe && x.Distance(Player.Position) < E.Range && !x.IsDead &&
                                     !x.IsZombie))
                 {
-                    if (getCheckBoxItem(esettings, "ewhite." + ally.CharData.BaseSkinName))
+                    if (getCheckBoxItem(esettings, "ewhite." + ally.NetworkId))
                     {
                         E.Cast(ally);
                     }
@@ -175,7 +171,7 @@ namespace vSupport_Series.Champions
                 foreach (
                     var enemy in HeroManager.Enemies.Where(x => x.IsValidTarget(W.Range) && !x.IsDead && !x.IsZombie))
                 {
-                    if (getCheckBoxItem(wsettings, "wwhite." + enemy.CharData.BaseSkinName))
+                    if (getCheckBoxItem(wsettings, "wwhite." + enemy.NetworkId))
                     {
                         W.Cast(enemy);
                     }
@@ -217,7 +213,7 @@ namespace vSupport_Series.Champions
                 foreach (
                     var enemy in HeroManager.Enemies.Where(x => x.IsValidTarget(W.Range) && !x.IsDead && !x.IsZombie))
                 {
-                    if (getCheckBoxItem(wsettings, "wwhite." + enemy.CharData.BaseSkinName))
+                    if (getCheckBoxItem(wsettings, "wwhite." + enemy.NetworkId))
                     {
                         W.Cast(enemy);
                     }
@@ -258,8 +254,8 @@ namespace vSupport_Series.Champions
                 foreach (
                     var ally in HeroManager.Allies.Where(x => W.IsInRange(x) && !x.IsDead && !x.IsZombie && !x.IsMe))
                 {
-                    if (getCheckBoxItem(healMenu, "heal." + ally.ChampionName) &&
-                        ally.HealthPercent < getSliderItem(healMenu, "heal.percent." + ally.ChampionName))
+                    if (getCheckBoxItem(healMenu, "heal." + ally.NetworkId) &&
+                        ally.HealthPercent < getSliderItem(healMenu, "heal.percent." + ally.NetworkId))
                     {
                         W.Cast(ally);
                     }

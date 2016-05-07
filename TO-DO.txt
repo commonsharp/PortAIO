@@ -40,3 +40,4 @@ Port [Will Port One at a time when I'm bored or there's nothing on the to-do] :
 - Universal Leveler or Auto Level Up
 - Sebby Ban Wars
 - Auto Buy
+- DZAwareness

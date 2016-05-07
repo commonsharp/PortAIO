@@ -84,10 +84,10 @@ namespace OneKeyToWin_AIO_Sebby.Champions
             EMenu.Add("autoE", new CheckBox("Auto E"));
             EMenu.Add("harrasE", new CheckBox("Harras E"));
             foreach (var enemy in ObjectManager.Get<AIHeroClient>().Where(enemy => enemy.IsEnemy))
-                EMenu.Add("Eon" + enemy.ChampionName, new CheckBox("E : " + enemy.ChampionName));
+                EMenu.Add("Eon" + enemy.NetworkId, new CheckBox("E : " + enemy.ChampionName));
             EMenu.AddSeparator();
             foreach (var enemy in ObjectManager.Get<AIHeroClient>().Where(enemy => enemy.IsEnemy))
-                EMenu.Add("Egapcloser" + enemy.ChampionName, new CheckBox("Gapclose : " + enemy.ChampionName));
+                EMenu.Add("Egapcloser" + enemy.NetworkId, new CheckBox("Gapclose : " + enemy.ChampionName));
 
             RMenu = Config.AddSubMenu("R Config");
             RMenu.Add("autoR", new CheckBox("R KS "));
@@ -95,7 +95,7 @@ namespace OneKeyToWin_AIO_Sebby.Champions
 
             harassMenu = Config.AddSubMenu("Harass");
             foreach (var enemy in ObjectManager.Get<AIHeroClient>().Where(enemy => enemy.IsEnemy))
-                harassMenu.Add("harras" + enemy.ChampionName, new CheckBox(enemy.ChampionName));
+                harassMenu.Add("harras" + enemy.NetworkId, new CheckBox(enemy.ChampionName));
 
             FarmMenu = Config.AddSubMenu("Farm");
             FarmMenu.Add("farmQ", new CheckBox("Lane clear Q"));
@@ -152,7 +152,7 @@ namespace OneKeyToWin_AIO_Sebby.Champions
         private static void AntiGapcloser_OnEnemyGapcloser(ActiveGapcloser gapcloser)
         {
             if (E.IsReady() && gapcloser.Sender.IsValidTarget(E.Range) &&
-                getCheckBoxItem(EMenu, "Egapcloser" + gapcloser.Sender.ChampionName))
+                getCheckBoxItem(EMenu, "Egapcloser" + gapcloser.Sender.NetworkId))
             {
                 E.Cast(gapcloser.Sender);
             }
@@ -251,7 +251,7 @@ namespace OneKeyToWin_AIO_Sebby.Champions
                 if (Program.Combo && Player.Mana > RMANA + WMANA)
                     W.Cast();
                 else if (Program.Farm && Player.Mana > RMANA + QMANA + WMANA && getCheckBoxItem(WMenu, "harrasW") &&
-                         getCheckBoxItem(harassMenu, "harras" + t.ChampionName))
+                         getCheckBoxItem(harassMenu, "harras" + t.NetworkId))
                     W.Cast();
                 else if (W.GetDamage(t) + W.GetDamage(t, 1) + Q.GetDamage(t) * 2 >
                          t.Health - OktwCommon.GetIncomingDamage(t))
@@ -279,7 +279,7 @@ namespace OneKeyToWin_AIO_Sebby.Champions
                     if (Program.Combo && Player.Mana > RMANA + QMANA)
                         Program.CastSpell(Q, t);
                     else if (Program.Farm && Player.Mana > RMANA + WMANA + QMANA + QMANA &&
-                             getCheckBoxItem(QMenu, "harrasQ") && getCheckBoxItem(harassMenu, "harras" + t.ChampionName) &&
+                             getCheckBoxItem(QMenu, "harrasQ") && getCheckBoxItem(harassMenu, "harras" + t.NetworkId) &&
                              OktwCommon.CanHarras())
                         Program.CastSpell(Q, t);
                     else if (Q.GetDamage(t) * 2 + OktwCommon.GetEchoLudenDamage(t) >
@@ -321,10 +321,10 @@ namespace OneKeyToWin_AIO_Sebby.Champions
                 t = TargetSelector.GetTarget(E.Range, DamageType.Magical);
             if (t.IsValidTarget())
             {
-                if (Program.Combo && Player.Mana > RMANA + EMANA && getCheckBoxItem(EMenu, "Eon" + t.ChampionName))
+                if (Program.Combo && Player.Mana > RMANA + EMANA && getCheckBoxItem(EMenu, "Eon" + t.NetworkId))
                     Program.CastSpell(E, t);
                 else if (Program.Farm && getCheckBoxItem(EMenu, "harrasE") &&
-                         getCheckBoxItem(harassMenu, "harras" + t.ChampionName) &&
+                         getCheckBoxItem(harassMenu, "harras" + t.NetworkId) &&
                          Player.Mana > RMANA + EMANA + WMANA + EMANA)
                     Program.CastSpell(E, t);
                 else if (OktwCommon.GetKsDamage(t, E) > t.Health)
@@ -336,7 +336,7 @@ namespace OneKeyToWin_AIO_Sebby.Champions
                             Program.Enemies.Where(
                                 enemy =>
                                     enemy.IsValidTarget(E.Range) && !OktwCommon.CanMove(enemy) &&
-                                    getCheckBoxItem(EMenu, "Eon" + enemy.ChampionName)))
+                                    getCheckBoxItem(EMenu, "Eon" + enemy.NetworkId)))
                         E.Cast(enemy);
                 }
             }
@@ -449,7 +449,7 @@ namespace OneKeyToWin_AIO_Sebby.Champions
                     if (comboDmg > t.Health)
                     {
                         Drawing.DrawText(Drawing.Width * 0.1f, Drawing.Height * 0.5f, Color.Red,
-                            "COMBO KILL " + t.ChampionName + " have: " + t.Health + "hp");
+                            "COMBO KILL " + t.NetworkId + " have: " + t.Health + "hp");
                         drawLine(t.Position, Player.Position, 10, Color.Yellow);
                     }
                 }

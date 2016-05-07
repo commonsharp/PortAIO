@@ -150,7 +150,7 @@ namespace Feedlesticks
                         HeroManager.Enemies.Where(
                             x =>
                                 x.IsValidTarget(Spells.Q.Range) &&
-                                getCheckBoxItem(Menus.qMenu, "q.enemy." + x.ChampionName) && Helper.IsEnemyImmobile(x)))
+                                getCheckBoxItem(Menus.qMenu, "q.enemy." + x.NetworkId) && Helper.IsEnemyImmobile(x)))
                 {
                     Spells.Q.Cast(enemy);
                 }
@@ -162,7 +162,7 @@ namespace Feedlesticks
                         HeroManager.Enemies.Where(
                             x =>
                                 x.IsValidTarget(Spells.Q.Range) &&
-                                getCheckBoxItem(Menus.qMenu, "q.enemy." + x.ChampionName) &&
+                                getCheckBoxItem(Menus.qMenu, "q.enemy." + x.NetworkId) &&
                                 x.IsChannelingImportantSpell()))
                 {
                     Spells.Q.Cast(enemy);
@@ -175,7 +175,7 @@ namespace Feedlesticks
                         HeroManager.Enemies.Where(
                             x =>
                                 x.IsValidTarget(Spells.E.Range) &&
-                                getCheckBoxItem(Menus.eMenu, "e.enemy." + x.ChampionName) && Helper.IsEnemyImmobile(x)))
+                                getCheckBoxItem(Menus.eMenu, "e.enemy." + x.NetworkId) && Helper.IsEnemyImmobile(x)))
                 {
                     Spells.E.Cast(enemy);
                 }
@@ -187,7 +187,7 @@ namespace Feedlesticks
                         HeroManager.Enemies.Where(
                             x =>
                                 x.IsValidTarget(Spells.E.Range) &&
-                                getCheckBoxItem(Menus.eMenu, "e.enemy." + x.ChampionName) &&
+                                getCheckBoxItem(Menus.eMenu, "e.enemy." + x.NetworkId) &&
                                 x.IsChannelingImportantSpell()))
                 {
                     Spells.E.Cast(enemy);
@@ -208,7 +208,7 @@ namespace Feedlesticks
                     var enemy in
                         HeroManager.Enemies.Where(o => o.IsValidTarget(Spells.Q.Range) && !o.IsDead && !o.IsZombie))
                 {
-                    if (getCheckBoxItem(Menus.qMenu, "q.enemy." + enemy.ChampionName))
+                    if (getCheckBoxItem(Menus.qMenu, "q.enemy." + enemy.NetworkId))
                     {
                         Spells.Q.CastOnUnit(enemy);
                     }
@@ -220,7 +220,7 @@ namespace Feedlesticks
                     var enemy in
                         HeroManager.Enemies.Where(o => o.IsValidTarget(Spells.E.Range) && !o.IsDead && !o.IsZombie))
                 {
-                    if (getCheckBoxItem(Menus.eMenu, "e.enemy." + enemy.ChampionName))
+                    if (getCheckBoxItem(Menus.eMenu, "e.enemy." + enemy.NetworkId))
                     {
                         Spells.E.CastOnUnit(enemy);
                     }
@@ -265,7 +265,7 @@ namespace Feedlesticks
                     var enemy in
                         HeroManager.Enemies.Where(o => o.IsValidTarget(Spells.Q.Range) && !o.IsDead && !o.IsZombie))
                 {
-                    if (getCheckBoxItem(Menus.qMenu, "q.enemy." + enemy.ChampionName))
+                    if (getCheckBoxItem(Menus.qMenu, "q.enemy." + enemy.NetworkId))
                     {
                         Spells.Q.CastOnUnit(enemy);
                     }
@@ -277,7 +277,7 @@ namespace Feedlesticks
                     var enemy in
                         HeroManager.Enemies.Where(o => o.IsValidTarget(Spells.W.Range) && !o.IsDead && !o.IsZombie))
                 {
-                    if (getCheckBoxItem(Menus.wMenu, "w.enemy." + enemy.ChampionName))
+                    if (getCheckBoxItem(Menus.wMenu, "w.enemy." + enemy.NetworkId))
                     {
                         Spells.W.CastOnUnit(enemy);
                     }
@@ -287,7 +287,7 @@ namespace Feedlesticks
             {
                 foreach (var enemy in HeroManager.Enemies.Where(o => o.IsValidTarget(Spells.E.Range) && !o.IsDead && !o.IsZombie))
                 {
-                    if (getCheckBoxItem(Menus.eMenu, "e.enemy." + enemy.ChampionName) && enemy.CountEnemiesInRange(Spells.E.Range) >= getSliderItem(Menus.eMenu, "e.enemy.count"))
+                    if (getCheckBoxItem(Menus.eMenu, "e.enemy." + enemy.NetworkId) && enemy.CountEnemiesInRange(Spells.E.Range) >= getSliderItem(Menus.eMenu, "e.enemy.count"))
                     {
                         Spells.E.CastOnUnit(enemy);
                     }

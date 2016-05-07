@@ -376,7 +376,18 @@ namespace PortAIO
                         SephLissandra.Lissandra.OnLoad();
                         break;
                     case "lucian": // LCS Lucian
-                        LCS_Lucian.Program.OnLoad();
+                        switch (Loader.lucian)
+                        {
+                            case 0:
+                                LCS_Lucian.Program.OnLoad();
+                                break;
+                            case 1:
+                                Challenger_Series.Program.Main();
+                                break;
+                            default:
+                                LCS_Lucian.Program.OnLoad();
+                                break;
+                        }
                         break;
                     case "lulu": // LuluLicious
                         new LuluLicious.Lulu();

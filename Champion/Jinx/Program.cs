@@ -122,7 +122,7 @@ namespace OneKeyToWin_AIO_Sebby
             wMenu = Config.AddSubMenu("W Config");
             wMenu.Add("autoW", new CheckBox("Auto W"));
             foreach (var enemy in ObjectManager.Get<AIHeroClient>().Where(enemy => enemy.IsEnemy))
-                wMenu.Add("haras" + enemy.ChampionName, new CheckBox(enemy.ChampionName));
+                wMenu.Add("haras" + enemy.NetworkId, new CheckBox(enemy.ChampionName));
 
             qMenu = Config.AddSubMenu("Q Config");
             qMenu.Add("autoQ", new CheckBox("Auto Q"));
@@ -313,7 +313,7 @@ namespace OneKeyToWin_AIO_Sebby
                                 Program.Enemies.Where(
                                     enemy =>
                                         enemy.LSIsValidTarget(W.Range) &&
-                                        getCheckBoxItem(wMenu, "haras" + enemy.ChampionName)))
+                                        getCheckBoxItem(wMenu, "haras" + enemy.NetworkId)))
                             Program.CastSpell(W, enemy);
                     }
                 }

@@ -146,6 +146,7 @@
     <Compile Include="Champion\Riven\Classes\Spells.cs" />
     <Compile Include="Champion\Riven\Program.cs" />
     <Compile Include="Dual-Port\ChallengerSeries\CSPlugin.cs" />
+    <Compile Include="Dual-Port\ChallengerSeries\Plugins\Ashe.cs" />
     <Compile Include="Dual-Port\ChallengerSeries\Plugins\Kalista.cs" />
     <Compile Include="Dual-Port\ChallengerSeries\Plugins\KogMaw.cs" />
     <Compile Include="Dual-Port\ChallengerSeries\Plugins\Lucian.cs" />
@@ -198,6 +199,9 @@
     <Compile Include="Dual-Port\ExorCait\Properties\Utilities\Methods.cs" />
     <Compile Include="Dual-Port\ExorCait\Properties\Utilities\Spells.cs" />
     <Compile Include="Dual-Port\ExorCait\Properties\Utilities\Targets.cs" />
+    <Compile Include="Dual-Port\iLucian\Lucian.cs" />
+    <Compile Include="Dual-Port\iLucian\MenuHelper\MenuGenerator.cs" />
+    <Compile Include="Dual-Port\iLucian\Variables.cs" />
     <Compile Include="Dual-Port\NechritoDiana\Classes\Dmg.cs" />
     <Compile Include="Dual-Port\NechritoDiana\Classes\HpBarIndicator.cs" />
     <Compile Include="Dual-Port\NechritoDiana\Classes\Logic.cs" />
@@ -519,6 +523,13 @@
     <Compile Include="Champion\Twitch\Program.cs" />
     <Compile Include="Champion\Udyr\Program.cs" />
     <Compile Include="Champion\Urgot\Urgot.cs" />
+    <Compile Include="Libraries\DZLib\Core\DZAntigapcloser.cs" />
+    <Compile Include="Libraries\DZLib\Core\DZInterrupter.cs" />
+    <Compile Include="Libraries\DZLib\Geometry\DZGeometry.cs" />
+    <Compile Include="Libraries\DZLib\Geometry\DZPolygon.cs" />
+    <Compile Include="Libraries\DZLib\Hero\HeroExtensions.cs" />
+    <Compile Include="Libraries\DZLib\Positioning\PositioningHelper.cs" />
+    <Compile Include="Libraries\DZLib\Positioning\SafePosition.cs" />
     <Compile Include="Libraries\Sebby-OKTW\Movement.cs" />
     <Compile Include="Libraries\ValvraveSharp\Core\Common.cs" />
     <Compile Include="Libraries\ValvraveSharp\Evade\Collision.cs" />

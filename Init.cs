@@ -9,6 +9,7 @@ using PortAIO.Utility;
 using LeagueSharp.Common;
 using SharpDX;
 using PortAIO.Properties;
+using iLucian;
 // ReSharper disable ObjectCreationAsStatement
 
 #endregion
@@ -396,6 +397,10 @@ namespace PortAIO
                                 break;
                             case 1:
                                 Challenger_Series.Program.Main();
+                                break;
+                            case 2:
+                                var lucian = new Lucian();
+                                lucian.OnLoad();
                                 break;
                             default:
                                 LCS_Lucian.Program.OnLoad();

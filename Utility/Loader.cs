@@ -20,7 +20,7 @@ namespace PortAIO.Utility
         public static bool useActivator { get { return Miscc["activator"].Cast<CheckBox>().CurrentValue; } }
         public static bool useTracker { get { return Miscc["tracker"].Cast<CheckBox>().CurrentValue; } }
         public static bool useRecall { get { return Miscc["recall"].Cast<CheckBox>().CurrentValue; } }
-        public static bool useSkin { get { return Miscc["skin"].Cast<CheckBox>().CurrentValue; } }
+        //public static bool useSkin { get { return Miscc["skin"].Cast<CheckBox>().CurrentValue; } }
         public static bool champOnly { get { return Miscc["champ"].Cast<CheckBox>().CurrentValue; } }
         public static bool utilOnly { get { return Miscc["util"].Cast<CheckBox>().CurrentValue; } }
         public static bool evade { get { return Miscc["evade"].Cast<CheckBox>().CurrentValue; } }
@@ -106,7 +106,7 @@ namespace PortAIO.Utility
             Miscc.Add("tracker", new CheckBox("Enable NabbTracker?"));
             Miscc.Add("recall", new CheckBox("Enable Recall Tracker?"));
             Miscc.AddSeparator();
-            Miscc.Add("skin", new CheckBox("Enable Skin Hack?"));
+            //Miscc.Add("skin", new CheckBox("Enable Skin Hack?"));
             //Miscc.Add("evade", new CheckBox("Enable Evade?", false));
             Miscc.Add("godTracker", new CheckBox("Enable God Jungle Tracker?", false));
             Miscc.AddSeparator();

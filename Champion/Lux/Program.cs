@@ -515,7 +515,7 @@ namespace MoonLux
                 DoHarass();
             }
 
-            if (!Player.LSIsRecalling() && ECasted && EObject.Position.CountEnemiesInRange(350) >= 1 && ObjectManager.Get<AIHeroClient>().Count(x => x.LSIsValidTarget(350, true, EObject.Position) && !x.HasPassive()) >= 1)
+            if (!Player.LSIsRecalling() && ECasted && EObject.Position.CountEnemiesInRange(350) >= 1)
             {
                 E.Cast();
             }

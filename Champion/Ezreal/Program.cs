@@ -128,7 +128,7 @@ namespace OneKeyToWin_AIO_Sebby
             harassMenu.Add("HarassMana", new Slider("Harass Mana", 30));
             foreach (var enemy in ObjectManager.Get<AIHeroClient>().Where(enemy => enemy.Team != Player.Team))
             {
-                harassMenu.Add("haras" + enemy.ChampionName, new CheckBox(enemy.ChampionName));
+                harassMenu.Add("haras" + enemy.NetworkId, new CheckBox(enemy.ChampionName));
             }
 
             miscMenu = Config.AddSubMenu("Misc");
@@ -246,7 +246,7 @@ namespace OneKeyToWin_AIO_Sebby
 
                     if (combo)
                         Program.CastSpell(Q, t);
-                    else if (harass && getCheckBoxItem(harassMenu, "haras" + t.ChampionName))
+                    else if (harass && getCheckBoxItem(harassMenu, "haras" + t.NetworkId))
                         Program.CastSpell(Q, t);
                 }
             }
@@ -271,7 +271,7 @@ namespace OneKeyToWin_AIO_Sebby
             {
                 if (Program.Combo && Player.Mana > RMANA + WMANA + EMANA)
                     Program.CastSpell(W, t);
-                else if (Program.Farm && getCheckBoxItem(wMenu, "harrasW") && getCheckBoxItem(harassMenu, "haras" + t.ChampionName) && (Player.Mana > Player.MaxMana*0.8 || getCheckBoxItem(miscMenu, "apEz")) && Player.ManaPercent > getSliderItem(harassMenu, "HarassMana") && OktwCommon.CanHarras())
+                else if (Program.Farm && getCheckBoxItem(wMenu, "harrasW") && getCheckBoxItem(harassMenu, "haras" + t.NetworkId) && (Player.Mana > Player.MaxMana*0.8 || getCheckBoxItem(miscMenu, "apEz")) && Player.ManaPercent > getSliderItem(harassMenu, "HarassMana") && OktwCommon.CanHarras())
                     Program.CastSpell(W, t);
                 else
                 {

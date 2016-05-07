@@ -65,8 +65,7 @@ namespace PortAIO.Champion.Bard
             harassMenu.AddGroupLabel("Q Targets (Harass Only)");
             foreach (var hero in HeroManager.Enemies)
             {
-                harassMenu.Add(string.Format("dz191.bard.qtarget.{0}", hero.ChampionName.ToLower()),
-                    new CheckBox("Harass : " + hero.ChampionName));
+                harassMenu.Add(string.Format("dz191.bard.qtarget.{0}", hero.NetworkId), new CheckBox("Harass : " + hero.ChampionName));
             }
             harassMenu.AddSeparator();
             harassMenu.Add("dz191.bard.mixed.useq", new CheckBox("Use Q"));
@@ -80,8 +79,7 @@ namespace PortAIO.Champion.Bard
             miscMenu.AddGroupLabel("W Settings");
             foreach (var hero in HeroManager.Allies)
             {
-                miscMenu.Add(string.Format("dz191.bard.wtarget.{0}", hero.ChampionName.ToLower()),
-                    new CheckBox("Heal " + hero.ChampionName));
+                miscMenu.Add(string.Format("dz191.bard.wtarget.{0}", hero.NetworkId), new CheckBox("Heal " + hero.ChampionName));
             }
             miscMenu.Add("dz191.bard.wtarget.healthpercent", new Slider("Health % for W", 25, 1));
             miscMenu.AddGroupLabel("Q - Cosmic Binding");
@@ -168,7 +166,7 @@ namespace PortAIO.Champion.Bard
                 if (spells[SpellSlot.Q].IsReady() && getCheckBoxItem(harassMenu, "dz191.bard.mixed.useq") &&
                     ComboTarget.IsValidTarget() &&
                     getCheckBoxItem(harassMenu,
-                        string.Format("dz191.bard.qtarget.{0}", ComboTarget.ChampionName.ToLower())))
+                        string.Format("dz191.bard.qtarget.{0}", ComboTarget.NetworkId)))
                 {
                     HandleQ(ComboTarget);
                 }
@@ -334,7 +332,7 @@ namespace PortAIO.Champion.Bard
                     ally =>
                         ally.IsValidTarget(spells[SpellSlot.W].Range) &&
                         ally.HealthPercent <= getSliderItem(miscMenu, "dz191.bard.wtarget.healthpercent") &&
-                        getCheckBoxItem(miscMenu, string.Format("dz191.bard.wtarget.{0}", ally.ChampionName.ToLower())))
+                        getCheckBoxItem(miscMenu, string.Format("dz191.bard.wtarget.{0}", ally.NetworkId)))
                     .OrderBy(ally => ally.Health)
                     .FirstOrDefault();
 

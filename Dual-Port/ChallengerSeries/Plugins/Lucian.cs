@@ -167,12 +167,9 @@ namespace Challenger_Series.Plugins
 
         void JungleClear(AttackableUnit target)
         {
-            Console.WriteLine("1");
             var tg = target as Obj_AI_Base;
-            Console.WriteLine("2");
             if (tg != null && !HasPassive)
             {
-                Console.WriteLine("3");
                 if (tg.IsHPBarRendered && tg.CharData.BaseSkinName.Contains("SRU") && !tg.CharData.BaseSkinName.Contains("Mini"))
                 {
                     if (EJg && E.IsReady())

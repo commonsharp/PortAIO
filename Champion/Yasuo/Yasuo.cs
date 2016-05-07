@@ -113,7 +113,7 @@
             ksMenu.Add("R", new CheckBox("Use R"));
             foreach (var enemy in ObjectManager.Get<AIHeroClient>().Where(o => o.IsEnemy))
             {
-                ksMenu.Add("RCast" + enemy.ChampionName, new CheckBox("Cast On " + enemy.ChampionName, false));
+                ksMenu.Add("RCast" + enemy.NetworkId, new CheckBox("Cast On " + enemy.ChampionName, false));
             }
 
             fleeMenu = config.AddSubMenu("Flee", "Flee");
@@ -742,7 +742,7 @@
                     var target =
                         targets.Where(
                             i =>
-                            getCheckBoxItem(ksMenu, "RCast" + i.ChampionName)
+                            getCheckBoxItem(ksMenu, "RCast" + i.NetworkId)
                             && (i.Health + i.AttackShield <= R.GetDamage(i)
                                 || (Q.IsReady(1000) && i.Health + i.AttackShield <= R.GetDamage(i) + GetQDmg(i)))
                             && !Invulnerable.Check(i, R.DamageType))

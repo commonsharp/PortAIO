@@ -153,6 +153,20 @@ namespace PortAIO
                                 break;
                         }
                         break;
+                    case "twitch":
+                        switch (Loader.twitch)
+                        {
+                            case 0:
+                                SebbyLib.Program.GameOnOnGameLoad();
+                                break;
+                            case 1:
+                                Nechrito_Twitch.Program.OnGameLoad();
+                                break;
+                            default:
+                                SebbyLib.Program.GameOnOnGameLoad();
+                                break;
+                        }
+                        break;
                     case "anivia": // OKTW - Sebby - All Seeby champs go down here
                     case "thresh":
                     case "annie":
@@ -168,7 +182,6 @@ namespace PortAIO
                     case "malzahar":
                     case "orianna":
                     case "sivir":
-                    case "twitch":
                     case "syndra":
                     case "velkoz":
                     case "xerath":

@@ -204,6 +204,10 @@
     <Compile Include="Dual-Port\NechritoDiana\Classes\Modes.cs" />
     <Compile Include="Dual-Port\NechritoDiana\Classes\Spells.cs" />
     <Compile Include="Dual-Port\NechritoDiana\Program.cs" />
+    <Compile Include="Dual-Port\NechritoTwitch\HpBarIndicator.cs" />
+    <Compile Include="Dual-Port\NechritoTwitch\MenuConfig.cs" />
+    <Compile Include="Dual-Port\NechritoTwitch\Program.cs" />
+    <Compile Include="Dual-Port\NechritoTwitch\Spells.cs" />
     <Compile Include="Dual-Port\UnderratedFiora\Fiora.cs" />
     <Compile Include="Champion\Fizz\Program.cs" />
     <Compile Include="Champion\Galio\Program.cs" />

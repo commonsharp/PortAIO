@@ -167,10 +167,23 @@ namespace PortAIO
                                 break;
                         }
                         break;
+                    case "ashe":
+                        switch (Loader.ashe)
+                        {
+                            case 0:
+                                SebbyLib.Program.GameOnOnGameLoad();
+                                break;
+                            case 1:
+                                Challenger_Series.Program.Main();
+                                break;
+                            default:
+                                SebbyLib.Program.GameOnOnGameLoad();
+                                break;
+                        }
+                        break;
                     case "anivia": // OKTW - Sebby - All Seeby champs go down here
                     case "thresh":
                     case "annie":
-                    case "ashe": // Or (Challenger Series Ashe)
                     case "braum":
                     case "ekko":
                     case "ezreal":

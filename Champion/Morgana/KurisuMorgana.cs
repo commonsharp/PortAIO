@@ -64,7 +64,7 @@ namespace KurisuMorgana
             shieldMenu = _menu.AddSubMenu("Use Shield [Who?]", "usefor");
             foreach (var frn in ObjectManager.Get<AIHeroClient>().Where(x => x.Team == Me.Team))
             {
-                shieldMenu.Add("useon" + frn.ChampionName, new CheckBox("Shield " + frn.ChampionName, !frn.IsMe));
+                shieldMenu.Add("useon" + frn.NetworkId, new CheckBox("Shield " + frn.ChampionName, !frn.IsMe));
             }
             shieldMenu.AddSeparator();
             shieldMenu.AddGroupLabel("Enemy Shield :");
@@ -414,7 +414,7 @@ namespace KurisuMorgana
                         return;
 
                     if (getCheckBoxItem(shieldMenu, lib.SDataName + "on") &&
-                        getCheckBoxItem(shieldMenu, "useon" + ally.ChampionName))
+                        getCheckBoxItem(shieldMenu, "useon" + ally.NetworkId))
                     {
                         Utility.DelayAction.Add(lib.Slot != SpellSlot.R ? 100 : 0, () => _e.CastOnUnit(ally));
                     }

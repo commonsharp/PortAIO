@@ -190,7 +190,7 @@ namespace ElRengarRevamped
         {
             try
             {
-                if (!spells[Spells.W].IsReady() || Environment.TickCount - Rengar.LastE <= 200)
+                if (!spells[Spells.W].IsReady())
                 {
                     return;
                 }

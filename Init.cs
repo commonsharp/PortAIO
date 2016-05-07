@@ -427,8 +427,19 @@ namespace PortAIO
                     case "nasus": // Underrated AIO
                         new UnderratedAIO.Champions.Nasus();
                         break;
-                    case "nidalee": // Kurisu Nidalee
-                        KurisuNidalee.KurisuNidalee.Game_OnGameLoad();
+                    case "nidalee":
+                        switch (Loader.nidalee)
+                        {
+                            case 0:
+                                KurisuNidalee.KurisuNidalee.Game_OnGameLoad();
+                                break;
+                            case 1:
+                                Nechrito_Nidalee.Program.OnLoad();
+                                break;
+                            default:
+                                KurisuNidalee.KurisuNidalee.Game_OnGameLoad();
+                                break;
+                        }
                         break;
                     case "yasuo": // YasuPro
                         //new YasuoPro.Yasuo();

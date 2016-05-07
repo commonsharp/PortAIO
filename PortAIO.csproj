@@ -204,6 +204,17 @@
     <Compile Include="Dual-Port\NechritoDiana\Classes\Modes.cs" />
     <Compile Include="Dual-Port\NechritoDiana\Classes\Spells.cs" />
     <Compile Include="Dual-Port\NechritoDiana\Program.cs" />
+    <Compile Include="Dual-Port\NechritoNidalee\Core.cs" />
+    <Compile Include="Dual-Port\NechritoNidalee\Drawings\Drawing.cs" />
+    <Compile Include="Dual-Port\NechritoNidalee\Drawings\HpBarIndicator.cs" />
+    <Compile Include="Dual-Port\NechritoNidalee\Extras\FleeLogic.cs" />
+    <Compile Include="Dual-Port\NechritoNidalee\Extras\Item.cs" />
+    <Compile Include="Dual-Port\NechritoNidalee\Extras\Killsteal.cs" />
+    <Compile Include="Dual-Port\NechritoNidalee\Extras\MenuConfig.cs" />
+    <Compile Include="Dual-Port\NechritoNidalee\Handlers\Dmg.cs" />
+    <Compile Include="Dual-Port\NechritoNidalee\Handlers\HealManager.cs" />
+    <Compile Include="Dual-Port\NechritoNidalee\Handlers\Modes.cs" />
+    <Compile Include="Dual-Port\NechritoNidalee\Program.cs" />
     <Compile Include="Dual-Port\NechritoTwitch\HpBarIndicator.cs" />
     <Compile Include="Dual-Port\NechritoTwitch\MenuConfig.cs" />
     <Compile Include="Dual-Port\NechritoTwitch\Program.cs" />
@@ -800,6 +811,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="ClassDiagram1.cd" />
     <None Include="Resources\ChampionData\Aatrox.json" />
     <None Include="Resources\ChampionData\Ahri.json" />
     <None Include="Resources\ChampionData\Akali.json" />

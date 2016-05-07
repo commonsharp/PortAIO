@@ -221,7 +221,7 @@ namespace SephLissandra
                     return;
                 }
                 if (getCheckBoxItem(interruptMenu, "Interrupter.AG.UseR") &&
-                    !getCheckBoxItem(blackListMenu, "Blacklist." + sender.ChampionName) &&
+                    !getCheckBoxItem(blackListMenu, "Blacklist." + sender.NetworkId) &&
                     Vector3.Distance(sender.ServerPosition, Player.ServerPosition) <= Spells["R"].Range)
                 {
                     Spells["R"].Cast(sender);
@@ -245,7 +245,7 @@ namespace SephLissandra
                     return;
                 }
                 if (getCheckBoxItem(interruptMenu, "Interrupter.UseR") &&
-                    !getCheckBoxItem(blackListMenu, "Blacklist." + sender.ChampionName) &&
+                    !getCheckBoxItem(blackListMenu, "Blacklist." + sender.NetworkId) &&
                     Vector3.Distance(sender.ServerPosition, Player.ServerPosition) <= Spells["R"].Range)
                 {
                     Spells["R"].Cast(sender);
@@ -433,7 +433,7 @@ namespace SephLissandra
                         h =>
                             h.IsValidTarget(Spells["R"].Range) &&
                             h.CountEnemiesInRange(Spells["R"].Range) >= getSliderItem(comboMenu, "Combo.Rcount") &&
-                            !getCheckBoxItem(blackListMenu, "Blacklist." + h.ChampionName)).ToList();
+                            !getCheckBoxItem(blackListMenu, "Blacklist." + h.NetworkId)).ToList();
 
             if (Player.CountEnemiesInRange(Spells["R"].Range) >= getSliderItem(comboMenu, "Combo.Rcount"))
             {
@@ -453,7 +453,7 @@ namespace SephLissandra
                     return;
                 }
             }
-            if (getCheckBoxItem(blackListMenu, "Blacklist." + currenttarget.ChampionName))
+            if (getCheckBoxItem(blackListMenu, "Blacklist." + currenttarget.NetworkId))
             {
                 return;
             }
@@ -490,7 +490,7 @@ namespace SephLissandra
                         (h.IsValidTarget() &&
                          Vector3.Distance(h.ServerPosition, Player.ServerPosition) <= Spells["R"].Range ||
                          (h.IsKillableFromPoint(Player.ServerPosition) && h.IsValidTarget() && !h.IsInvulnerable)) &&
-                        !getCheckBoxItem(blackListMenu, "Blacklist." + h.ChampionName)).ToList();
+                        !getCheckBoxItem(blackListMenu, "Blacklist." + h.NetworkId)).ToList();
 
             var arranged = possibilities.OrderByDescending(h => h.CountEnemiesInRange(Spells["R"].Range));
             if (getCheckBoxItem(miscMenu, "Misc.PrioritizeUnderTurret"))
@@ -618,7 +618,7 @@ namespace SephLissandra
                             (Vector3.Distance(Player.ServerPosition, h.ServerPosition) < Spells["R"].Range) &&
                             h.CountEnemiesInRange(Spells["R"].Range) > 1 &&
                             h.Health < Player.GetSpellDamage(h, SpellSlot.R) &&
-                            !getCheckBoxItem(blackListMenu, "Blacklist." + h.ChampionName)).MinOrDefault(h => h.Health);
+                            !getCheckBoxItem(blackListMenu, "Blacklist." + h.NetworkId)).MinOrDefault(h => h.Health);
                 if (Rtarget != null)
                 {
                     Spells["R"].Cast(Rtarget);

@@ -33,8 +33,7 @@ namespace NabbTracker
             Variables.Menu = MainMenu.AddMenu(Variables.MainMenuCodeName, Variables.MainMenuName);
             Variables.Menu.Add("allies", new CheckBox("Enable Allies"));
             Variables.Menu.Add("enemies", new CheckBox("Enable Enemies"));
-
-            //WardTracker.AttachToMenu(Variables.Menu);
+            Variables.Menu.Add("ward", new CheckBox("Enable Ward Tracker"));
         }
     }
 }

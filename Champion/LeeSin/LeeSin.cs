@@ -128,7 +128,7 @@
             ksMenu.AddGroupLabel("Extra R Settings");
             foreach (var enemy in ObjectManager.Get<AIHeroClient>().Where(o => o.IsEnemy))
             {
-                ksMenu.Add("RCast" + enemy.ChampionName, new CheckBox("Cast On " + enemy.ChampionName, false));
+                ksMenu.Add("RCast" + enemy.NetworkId, new CheckBox("Cast On " + enemy.ChampionName, false));
             }
 
             drawMenu = config.AddSubMenu("Draw", "Draw");
@@ -652,7 +652,7 @@
             }
             if (getCheckBoxItem(ksMenu, "R") && R.IsReady())
             {
-                var targetList = EntityManager.Heroes.Enemies.Where(x => !x.IsDead && R.IsInRange(x) && getCheckBoxItem(ksMenu, "RCast" + x.ChampionName) && x.LSIsValidTarget()).ToList();
+                var targetList = EntityManager.Heroes.Enemies.Where(x => !x.IsDead && R.IsInRange(x) && getCheckBoxItem(ksMenu, "RCast" + x.NetworkId) && x.LSIsValidTarget()).ToList();
                 if (targetList == null)
                 {
                     return;

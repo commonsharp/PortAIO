@@ -101,7 +101,7 @@ namespace PortAIO.Champion.Caitlyn
             wMenu.Add("Wspell", new CheckBox("W on special spell detection"));
             wMenu.Add("WmodeGC", new Slider("Gap Closer position mode (0 : Dash end position | 1 : My Hero Position)", 0, 0, 1));
             foreach (var enemy in ObjectManager.Get<AIHeroClient>().Where(enemy => enemy.IsEnemy))
-                wMenu.Add("WGCchampion" + enemy.ChampionName, new CheckBox("[GapClose] Cast on enemy : " + enemy.ChampionName));
+                wMenu.Add("WGCchampion" + enemy.NetworkId, new CheckBox("[GapClose] Cast on enemy : " + enemy.ChampionName));
 
             eMenu = Config.AddSubMenu("E Config");
             eMenu.Add("autoE", new CheckBox("Auto E"));
@@ -112,7 +112,7 @@ namespace PortAIO.Champion.Caitlyn
                 new Slider("Gap Closer position mode (0 : Dash end position | 1 : Cursor Pos | 2 : Enemy Position)", 2,
                     0, 2));
             foreach (var enemy in ObjectManager.Get<AIHeroClient>().Where(enemy => enemy.IsEnemy))
-                eMenu.Add("EGCchampion" + enemy.ChampionName, new CheckBox("Cast on enemy:" + enemy.ChampionName));
+                eMenu.Add("EGCchampion" + enemy.NetworkId, new CheckBox("Cast on enemy:" + enemy.ChampionName));
 
             rMenu = Config.AddSubMenu("R Config");
             rMenu.Add("autoR", new CheckBox("Auto R KS"));
@@ -151,7 +151,7 @@ namespace PortAIO.Champion.Caitlyn
                 var t = gapcloser.Sender;
                 if (t == null) { return; }
 
-                if (E.IsReady() && t.IsValidTarget(E.Range) && getCheckBoxItem(eMenu, "EGCchampion" + t.ChampionName))
+                if (E.IsReady() && t.IsValidTarget(E.Range) && getCheckBoxItem(eMenu, "EGCchampion" + t.NetworkId))
                 {
                     if (getSliderItem(eMenu, "EmodeGC") == 0)
                         E.Cast(gapcloser.End);
@@ -160,7 +160,7 @@ namespace PortAIO.Champion.Caitlyn
                     else
                         E.Cast(t.ServerPosition);
                 }
-                else if (W.IsReady() && t.IsValidTarget(W.Range) && getCheckBoxItem(wMenu, "WGCchampion" + t.ChampionName))
+                else if (W.IsReady() && t.IsValidTarget(W.Range) && getCheckBoxItem(wMenu, "WGCchampion" + t.NetworkId))
                 {
                     if (getSliderItem(wMenu, "WmodeGC") == 0)
                         W.Cast(gapcloser.End);

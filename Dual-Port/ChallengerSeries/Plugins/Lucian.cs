@@ -70,8 +70,9 @@ namespace Challenger_Series.Plugins
         private void Orbwalker_OnPostAttack(AttackableUnit target, EventArgs args)
         {
             //JungleClear
-            if (target is Obj_AI_Minion)
+            if (target is Obj_AI_Base)
             {
+                Console.WriteLine("A");
                 JungleClear(target);
             }
         }
@@ -166,11 +167,13 @@ namespace Challenger_Series.Plugins
 
         void JungleClear(AttackableUnit target)
         {
-            var tg = target as Obj_AI_Minion;
-            if (tg != null && !HasPassive && Orbwalker.CanMove)
+            Console.WriteLine("1");
+            var tg = target as Obj_AI_Base;
+            Console.WriteLine("2");
+            if (tg != null && !HasPassive)
             {
-                if (tg.IsHPBarRendered && tg.CharData.BaseSkinName.Contains("SRU")
-                    && !tg.CharData.BaseSkinName.Contains("Mini"))
+                Console.WriteLine("3");
+                if (tg.IsHPBarRendered && tg.CharData.BaseSkinName.Contains("SRU") && !tg.CharData.BaseSkinName.Contains("Mini"))
                 {
                     if (EJg && E.IsReady())
                     {

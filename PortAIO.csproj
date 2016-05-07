@@ -148,6 +148,7 @@
     <Compile Include="Dual-Port\ChallengerSeries\CSPlugin.cs" />
     <Compile Include="Dual-Port\ChallengerSeries\Plugins\Kalista.cs" />
     <Compile Include="Dual-Port\ChallengerSeries\Plugins\KogMaw.cs" />
+    <Compile Include="Dual-Port\ChallengerSeries\Plugins\Lucian.cs" />
     <Compile Include="Dual-Port\ChallengerSeries\Plugins\Soraka.cs" />
     <Compile Include="Dual-Port\ChallengerSeries\Program.cs" />
     <Compile Include="Dual-Port\ChallengerSeries\Utils\FileOperations.cs" />

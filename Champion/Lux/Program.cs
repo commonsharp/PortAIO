@@ -121,7 +121,7 @@ namespace MoonLux
             var hero = (AIHeroClient)obj;
 
             if (hero.IsEnemy || (!hero.IsMe && !W.IsInRange(obj))
-                || !getCheckBoxItem(shieldMenu, string.Format("{0}", hero.ChampionName)))
+                || !getCheckBoxItem(shieldMenu, hero.NetworkId + ""))
             {
                 return;
             }
@@ -226,7 +226,7 @@ namespace MoonLux
             shieldMenu = Menu.AddSubMenu("Auto Shield Settings", "ASSettings");
             shieldMenu.Add("ASHealthPercent", new Slider("Health Percent", 25));
             shieldMenu.Add("ASDamagePercent", new Slider("Damage Percent", 20));
-            HeroManager.Allies.ForEach(x => shieldMenu.Add(x.ChampionName, new CheckBox("Shield " + x.ChampionName)));
+            HeroManager.Allies.ForEach(x => shieldMenu.Add(x.NetworkId + "", new CheckBox("Shield " + x.ChampionName)));
 
             jungleKsMenu = Menu.AddSubMenu("Jungle Steal Settings", "JungleKS");
             jungleKsMenu.Add("StealBaron", new CheckBox("Steal Baron"));

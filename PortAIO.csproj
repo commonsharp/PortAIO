@@ -190,6 +190,7 @@
     <Compile Include="Champion\FiddleSticks\Core\Piorty.cs" />
     <Compile Include="Champion\FiddleSticks\Core\Spells.cs" />
     <Compile Include="Champion\FiddleSticks\Programs.cs" />
+    <Compile Include="Dual-Port\e.MotionKatarina\Program.cs" />
     <Compile Include="Dual-Port\ExorCait\Caitlyn.cs" />
     <Compile Include="Dual-Port\ExorCait\Properties\Modes\Automatic.cs" />
     <Compile Include="Dual-Port\ExorCait\Properties\Modes\PvM\Clear.cs" />

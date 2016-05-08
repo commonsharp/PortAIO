@@ -355,7 +355,18 @@ namespace PortAIO
                         Kassawin.Kassadin.OnLoad();
                         break;
                     case "katarina": // Staberina
-                        new Staberina.Katarina();
+                        switch (Loader.katarina)
+                        {
+                            case 0:
+                                new Staberina.Katarina();
+                                break;
+                            case 1:
+                                e.Motion_Katarina.Program.Game_OnGameLoad();
+                                break;
+                            default:
+                                new Staberina.Katarina();
+                                break;
+                        }
                         break;
                     case "kayle": // SephKayle
                         SephKayle.Program.OnGameLoad();

@@ -42,6 +42,7 @@ namespace PortAIO.Utility
         public static int ashe { get { return Miscc["ashe"].Cast<ComboBox>().CurrentValue; } }
         public static int vayne { get { return Miscc["vayne"].Cast<ComboBox>().CurrentValue; } }
         public static int jayce { get { return Miscc["jayce"].Cast<ComboBox>().CurrentValue; } }
+        public static int yasuo { get { return Miscc["yasuo"].Cast<ComboBox>().CurrentValue; } }
 
 
         public static Menu Miscc;
@@ -53,7 +54,7 @@ namespace PortAIO.Utility
 
         public static List<string> RandomUltChampsList = new List<string>(new[] { "Ezreal", "Jinx", "Ashe", "Draven", "Gangplank", "Ziggs", "Lux", "Xerath" });
         public static List<string> BaseUltList = new List<string>(new[] { "Jinx", "Ashe", "Draven", "Ezreal", "Karthus"});
-        public static List<string> Champion = new List<string>(new[] { "Soraka", "KogMaw", "LeeSin", "Kalista", "Diana", "Caitlyn", "Twitch", "Nidalee", "Lucian", "Ashe", "Vayne", "Jayce" });
+        public static List<string> Champion = new List<string>(new[] { "Soraka", "KogMaw", "LeeSin", "Kalista", "Diana", "Caitlyn", "Twitch", "Nidalee", "Lucian", "Ashe", "Vayne", "Jayce", "Yasuo" });
 
         public static void Menu()
         {
@@ -110,6 +111,10 @@ namespace PortAIO.Utility
                 if (Player.ChampionName.Equals(Champion[11]))
                 {
                     Miscc.Add("jayce", new ComboBox("Use addon for Jayce : ", 0, "OKTW", "Hoe's Jayce"));
+                }
+                if (Player.ChampionName.Equals(Champion[12]))
+                {
+                    Miscc.Add("yasuo", new ComboBox("Use addon for Yasuo : ", 0, "ValvraveSharp", "YasuoPro"));
                 }
             }
             else

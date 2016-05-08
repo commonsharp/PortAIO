@@ -502,8 +502,18 @@ namespace PortAIO
                         }
                         break;
                     case "yasuo": // YasuPro
-                        //new YasuoPro.Yasuo();
-                        Valvrave_Sharp.Program.MainA();
+                        switch (Loader.yasuo)
+                        {
+                            case 0:
+                                Valvrave_Sharp.Program.MainA();
+                                break;
+                            case 1:
+                                YasuoPro.Initalization.Main();
+                                break;
+                            default:
+                                Valvrave_Sharp.Program.MainA();
+                                break;
+                        }
                         break;
                     case "nocturne": // Underrated AIO
                         new UnderratedAIO.Champions.Nocturne();

@@ -15,6 +15,7 @@ using HitChance = SebbyLib.Prediction.HitChance;
 using PredictionInput = SebbyLib.Prediction.PredictionInput;
 using PredictionOutput = SebbyLib.Prediction.PredictionOutput;
 using Spell = LeagueSharp.Common.Spell;
+using SPrediction;
 
 namespace SebbyLib
 {
@@ -53,7 +54,7 @@ namespace SebbyLib
 
         public static bool LaneClear
         {
-            get { return Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.LaneClear); }
+            get { return Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.LaneClear) || Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.JungleClear); }
         }
 
         private static AIHeroClient Player
@@ -80,7 +81,7 @@ namespace SebbyLib
         {
             return Config[item].Cast<KeyBind>().CurrentValue;
         }
-
+        public static bool SPredictionLoad;
         public static void GameOnOnGameLoad()
         {
             enemySpawn = ObjectManager.Get<Obj_SpawnPoint>().FirstOrDefault(x => x.IsEnemy);
@@ -102,17 +103,19 @@ namespace SebbyLib
             Config.Add("AIOmode", new Slider("AIO mode (0 : Util & Champ | 1 : Only Champ | 2 : Only Util)", 0, 0, 2));
             AIOmode = getSliderItem("AIOmode");
 
-            if (AIOmode != 2)
-            {
-                if (Player.ChampionName != "MissFortune")
-                {
-                    new OktwTs().LoadOKTW();
-                }
-            }
-
-            Config.Add("PredictionMODE", new Slider("Prediction MODE (0 : Common Pred | 1 : OKTW© PREDICTION)", 0, 0, 1));
+            Config.Add("PredictionMODE", new Slider("Prediction MODE (0 : Common Pred | 1 : OKTW© PREDICTION | 2 : SPrediction | 3 : SDK)", 0, 0, 3));
             Config.Add("HitChance", new Slider("AIO mode (0 : Very High | 1 : High | 2 : Medium)", 0, 0, 2));
             Config.Add("debugPred", new CheckBox("Draw Aiming OKTW© PREDICTION", false));
+
+            if (getSliderItem("PredictionMODE") == 2)
+            {
+                SPrediction.Prediction.Initialize(Config);
+                SPredictionLoad = true;
+            }
+            else
+            {
+                Config.AddLabel("SPREDICTION NOT LOADED");
+            }
 
             if (AIOmode != 2)
             {
@@ -150,7 +153,7 @@ namespace SebbyLib
                         Graves.LoadOKTW();
                         break;
                     case "Jayce":
-                        Jayce.LoadOKTW();
+                        OneKeyToWin_AIO_Sebby.Champions.Jayce.LoadOKTW();
                         break;
                     case "Jinx":
                         Jinx.LoadOKTW();
@@ -215,6 +218,12 @@ namespace SebbyLib
                     Allies.Add(hero);
             }
 
+            if (AIOmode != 1)
+            {
+                new OKTWward().LoadOKTW();
+                new OKTWtracker().LoadOKTW();
+            }
+
             Game.OnUpdate += OnUpdate;
             Orbwalker.OnPreAttack += Orbwalking_BeforeAttack;
             Drawing.OnDraw += OnDraw;
@@ -258,7 +267,7 @@ namespace SebbyLib
             if (Game.Time - DrawSpellTime < 0.5 && getCheckBoxItem("debugPred") && getSliderItem("PredictionMODE") == 1)
             {
                 if (DrawSpell.Type == SkillshotType.SkillshotLine)
-                    OktwCommon.DrawLineRectangle(DrawSpellPos.CastPosition, Player.Position, (int) DrawSpell.Width, 1,
+                    OktwCommon.DrawLineRectangle(DrawSpellPos.CastPosition, Player.Position, (int)DrawSpell.Width, 1,
                         Color.DimGray);
                 if (DrawSpell.Type == SkillshotType.SkillshotCircle)
                     Render.Circle.DrawCircle(DrawSpellPos.CastPosition, DrawSpell.Width, Color.DimGray, 1);
@@ -275,9 +284,9 @@ namespace SebbyLib
 
             if (Combo && getCheckBoxItem("comboDisableMode"))
             {
-                var t = (AIHeroClient) args.Target;
-                if (6*Player.GetAutoAttackDamage(t) < t.Health - OktwCommon.GetIncomingDamage(t) &&
-                    !t.HasBuff("luxilluminatingfraulein") && !Player.HasBuff("sheen"))
+                var t = (AIHeroClient)args.Target;
+                if (6 * Player.GetAutoAttackDamage(t) < t.Health - OktwCommon.GetIncomingDamage(t) &&
+                    !t.HasBuff("luxilluminatingfraulein") && !Player.HasBuff("sheen") && !Player.HasBuff("Mastery6261"))
                     args.Process = false;
             }
 
@@ -296,11 +305,65 @@ namespace SebbyLib
         public static void drawText(string msg, Vector3 Hero, Color color, int weight = 0)
         {
             var wts = Drawing.WorldToScreen(Hero);
-            Drawing.DrawText(wts[0] - msg.Length*5, wts[1] + weight, color, msg);
+            Drawing.DrawText(wts[0] - msg.Length * 5, wts[1] + weight, color, msg);
         }
 
         public static void CastSpell(Spell QWER, Obj_AI_Base target)
         {
+            if (getSliderItem("PredictionMODE") == 3)
+            {
+                SebbyLib.Movement.SkillshotType CoreType2 = SebbyLib.Movement.SkillshotType.SkillshotLine;
+                bool aoe2 = false;
+
+                if (QWER.Type == SkillshotType.SkillshotCircle)
+                {
+                    CoreType2 = SebbyLib.Movement.SkillshotType.SkillshotCircle;
+                    aoe2 = true;
+                }
+
+                if (QWER.Width > 80 && !QWER.Collision)
+                    aoe2 = true;
+
+                var predInput2 = new SebbyLib.Movement.PredictionInput
+                {
+                    Aoe = aoe2,
+                    Collision = QWER.Collision,
+                    Speed = QWER.Speed,
+                    Delay = QWER.Delay,
+                    Range = QWER.Range,
+                    From = Player.ServerPosition,
+                    Radius = QWER.Width,
+                    Unit = target,
+                    Type = CoreType2
+                };
+                var poutput2 = SebbyLib.Movement.Prediction.GetPrediction(predInput2);
+
+                if (QWER.Speed != float.MaxValue && OktwCommon.CollisionYasuo(Player.ServerPosition, poutput2.CastPosition))
+                    return;
+
+                if (getSliderItem("HitChance") == 0)
+                {
+                    if (poutput2.Hitchance >= SebbyLib.Movement.HitChance.VeryHigh)
+                        QWER.Cast(poutput2.CastPosition);
+                    else if (predInput2.Aoe && poutput2.AoeTargetsHitCount > 1 && poutput2.Hitchance >= SebbyLib.Movement.HitChance.High)
+                    {
+                        QWER.Cast(poutput2.CastPosition);
+                    }
+
+                }
+                else if (getSliderItem("HitChance") == 1)
+                {
+                    if (poutput2.Hitchance >= SebbyLib.Movement.HitChance.High)
+                        QWER.Cast(poutput2.CastPosition);
+
+                }
+                else if (getSliderItem("HitChance") == 2)
+                {
+                    if (poutput2.Hitchance >= SebbyLib.Movement.HitChance.Medium)
+                        QWER.Cast(poutput2.CastPosition);
+                }
+            }
+
             if (getSliderItem("PredictionMODE") == 1)
             {
                 var CoreType2 = Prediction.SkillshotType.SkillshotLine;
@@ -359,7 +422,8 @@ namespace SebbyLib
                 }
                 DrawSpellPos = poutput2;
             }
-            else if (getSliderItem("PredictionMODE") == 0)
+
+            if (getSliderItem("PredictionMODE") == 0)
             {
                 if (getSliderItem("HitChance") == 0)
                 {
@@ -372,6 +436,30 @@ namespace SebbyLib
                 else if (getSliderItem("HitChance") == 2)
                 {
                     QWER.CastIfHitchanceEquals(target, LeagueSharp.Common.HitChance.Medium);
+                }
+            }
+
+            if (getSliderItem("PredictionMODE") == 2)
+            {
+                if (target is AIHeroClient && target.IsValid)
+                {
+                    var t = target as AIHeroClient;
+                    if (getSliderItem("HitChance") == 0)
+                    {
+                        QWER.SPredictionCast(t, LeagueSharp.Common.HitChance.VeryHigh);
+                    }
+                    else if (getSliderItem("HitChance") == 1)
+                    {
+                        QWER.SPredictionCast(t, LeagueSharp.Common.HitChance.High);
+                    }
+                    else if (getSliderItem("HitChance") == 2)
+                    {
+                        QWER.SPredictionCast(t, LeagueSharp.Common.HitChance.Medium);
+                    }
+                }
+                else
+                {
+                    QWER.CastIfHitchanceEquals(target, LeagueSharp.Common.HitChance.High);
                 }
             }
         }

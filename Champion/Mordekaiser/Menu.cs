@@ -40,17 +40,11 @@ namespace Mordekaiser
             MenuW.Add("UseW.DamageRadius", new Slider("W Damage Radius Range (Default = 350):", 350, 250, 400));
             MenuW.AddSeparator();
             MenuW.Add("Allies.Active", new CheckBox("Combo"));
-            MenuW.Add("Selected" + Utils.Player.Self.ChampionName,
-                new ComboBox(Utils.Player.Self.ChampionName + " (Yourself)",
-                    Utils.TargetSelector.Ally.GetPriority(Utils.Player.Self.ChampionName), "Don't", "Combo", "Everytime"));
-            MenuW.Add("SelectedGhost",
-                new ComboBox("Dragon / Ghost Enemy", Utils.TargetSelector.Ally.GetPriority("Dragon"), "Don't", "Combo",
-                    "Everytime"));
+            MenuW.Add("Selected" + Utils.Player.Self.ChampionName, new ComboBox(Utils.Player.Self.ChampionName + " (Yourself)", Utils.TargetSelector.Ally.GetPriority(Utils.Player.Self.ChampionName), "Don't", "Combo", "Everytime"));
+            MenuW.Add("SelectedGhost", new ComboBox("Dragon / Ghost Enemy", Utils.TargetSelector.Ally.GetPriority("Dragon"), "Don't", "Combo", "Everytime"));
             foreach (var ally in HeroManager.Allies.Where(a => !a.IsMe))
             {
-                MenuW.Add("Selected" + ally.ChampionName,
-                    new ComboBox(ally.CharData.BaseSkinName, Utils.TargetSelector.Ally.GetPriority(ally.ChampionName),
-                        "Don't", "Combo", "Everytime"));
+                MenuW.Add("Selected" + ally.NetworkId, new ComboBox(ally.CharData.BaseSkinName, Utils.TargetSelector.Ally.GetPriority(ally.ChampionName), "Don't", "Combo", "Everytime"));
             }
             MenuW.AddSeparator();
             MenuW.AddGroupLabel("Lane / Jungle Settings:");
@@ -61,7 +55,6 @@ namespace Mordekaiser
             MenuW.AddGroupLabel("Drawings");
             MenuW.Add("DrawW.Search", new CheckBox("W Range")); //.SetValue(new Circle(true, Color.Aqua)));
             MenuW.Add("DrawW.DamageRadius", new CheckBox("W Damage Radius"));
-                //.SetValue(new Circle(true, Color.Coral)));
 
             // E
             MenuE = Config.AddSubMenu("E", "E");
@@ -86,10 +79,7 @@ namespace Mordekaiser
             MenuR.Add("UseR.Active", new CheckBox("Use R"));
             foreach (var enemy in HeroManager.Enemies)
             {
-                MenuR.Add("Selected" + enemy.ChampionName,
-                    new ComboBox(enemy.ChampionName, Utils.TargetSelector.Enemy.GetPriority(enemy.ChampionName),
-                        "Don't Use", "Low", "Medium", "High"));
-                    //.SetValue(new StringList(new[] { "Don't Use", "Low", "Medium", "High" }, Utils.TargetSelector.Enemy.GetPriority(enemy.ChampionName))));
+                MenuR.Add("Selected" + enemy.NetworkId, new ComboBox(enemy.ChampionName, Utils.TargetSelector.Enemy.GetPriority(enemy.ChampionName), "Don't Use", "Low", "Medium", "High"));
             }
 
             MenuR.AddSeparator();
@@ -104,11 +94,8 @@ namespace Mordekaiser
             MenuGhost.AddSeparator();
             MenuGhost.AddGroupLabel("Drawings");
             MenuGhost.Add("Ghost.Draw.Position", new CheckBox("Ghost Position"));
-                //.SetValue(new Circle(true, Color.DarkRed)));
             MenuGhost.Add("Ghost.Draw.AARange", new CheckBox("Ghost AA Range"));
-                //.SetValue(new Circle(true, Color.DarkRed)));
             MenuGhost.Add("Ghost.Draw.ControlRange", new CheckBox("Ghost Control Range"));
-                //.SetValue(new Circle(true, Color.WhiteSmoke)));
 
             //items
             MenuItems = Config.AddSubMenu("Items");

@@ -31,7 +31,7 @@ namespace ExorAIO.Champions.Darius
                 !Targets.Target.IsValidTarget(Variables.AARange) &&
                 Variables.getCheckBoxItem(Variables.EMenu, "espell.combo"))
             {
-                Variables.E.Cast(Variables.E.GetPrediction(Targets.Target).CastPosition);
+                Variables.E.Cast(Targets.Target);
             }
 
             /// <summary>

@@ -56,7 +56,7 @@ namespace SPrediction
         public static void Initialize(string prefMenuName = "SPRED")
         {
             s_Menu = MainMenu.AddMenu("SPrediction", prefMenuName);
-            s_Menu.Add("PREDICTONLIST", new Slider("Pred. Method (0 : Common/EB Pred)", 0, 0, 0));
+            s_Menu.Add("PREDICTONLIST", new Slider("Pred. Method (0 : SPred | 1 : Common/EB Pred)", 0, 0, 1));
             s_Menu.Add("SPREDWINDUP", new CheckBox("Check for target AA Windup", false));
             s_Menu.Add("SPREDMAXRANGEIGNORE", new Slider("Max Range Dodge Ignore (%)", 50));
             s_Menu.Add("SPREDREACTIONDELAY", new Slider("Ignore Rection Delay", 0, 0, 200));

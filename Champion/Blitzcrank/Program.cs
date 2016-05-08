@@ -19,6 +19,7 @@ namespace PortAIO.Champion.Blitzcrank
         public static int ErrorTime;
         public static AIHeroClient Player;
         public static Spell _Q, _W, _E, _R;
+        private static SpellSlot FlashSlot;
 
         public static Menu _Menu, ComboMenu, HarassMenu, KSMenu, MiscMenu, DrawMenu;
         // Default Setting
@@ -63,6 +64,19 @@ namespace PortAIO.Champion.Blitzcrank
             return ComboMenu["Blitzcrank_CUseQ_Hit"].Cast<Slider>().CurrentValue;
         }
 
+        private static void flashq()
+        {
+            EloBuddy.Player.IssueOrder(GameObjectOrder.MoveTo, Game.CursorPos);
+
+            var target = TargetSelector.GetTarget(_Q.Range + 425, DamageType.Magical);
+            if (target == null || !_Q.IsReady())
+                return;
+            var x = target.Position.Extend(target, 450f).To3D();
+            var pred = _Q.GetPrediction(target).CastPosition;
+            Player.Spellbook.CastSpell(FlashSlot, x);
+            _Q.Cast(pred);
+        }
+
         private static void Menu()
         {
             try
@@ -74,6 +88,7 @@ namespace PortAIO.Champion.Blitzcrank
                 ComboMenu.Add("Blitzcrank_CUse_W", new CheckBox("Use W"));
                 ComboMenu.Add("Blitzcrank_CUse_E", new CheckBox("Use E"));
                 ComboMenu.Add("Blitzcrank_CUse_R", new CheckBox("Use R"));
+                ComboMenu.Add("Blitzcrank_CUse_FlashQ", new KeyBind("Flash Q", false, KeyBind.BindTypes.HoldActive, 'T'));
                 ComboMenu.AddSeparator();
                 ComboMenu.AddLabel("1 : Out of Range");
                 ComboMenu.AddLabel("2 : Impossible");
@@ -99,7 +114,7 @@ namespace PortAIO.Champion.Blitzcrank
                 {
                     if (enemy.Team != Player.Team)
                     {
-                        MiscMenu.Add("Blitzcrank_GrabSelect" + enemy.ChampionName,
+                        MiscMenu.Add("Blitzcrank_GrabSelect" + enemy.NetworkId,
                             new Slider("Grab Mode (0 : Enable | 1 : Don't | 2 : Auto) " + enemy.ChampionName, 0, 0, 2));
                         MiscMenu.AddSeparator();
                     }
@@ -155,6 +170,7 @@ namespace PortAIO.Champion.Blitzcrank
         {
             Player = ObjectManager.Player;
             SkillSet();
+            FlashSlot = Player.GetSpellSlot("SummonerFlash");
             Menu();
             Game.OnUpdate += OnGameUpdate;
             Drawing.OnDraw += Drawing_OnDraw;
@@ -163,6 +179,8 @@ namespace PortAIO.Champion.Blitzcrank
             Interrupter.OnInterruptableSpell += Interrupter2_OnInterruptableTarget;
             Orbwalker.OnPreAttack += Orbwalking_BeforeAttack;
             EloBuddy.Player.OnIssueOrder += Obj_AI_Base_OnIssueOrder;
+
+            Chat.Print("Flash Q is pretty bad, keep that in mind when using it.");
         }
 
         private static void OnGameUpdate(EventArgs args)
@@ -196,7 +214,7 @@ namespace PortAIO.Champion.Blitzcrank
                 foreach (var enemy in ObjectManager.Get<AIHeroClient>())
                 {
                     if (enemy.Team != Player.Team && QTarget != null &&
-                        getSliderItem(MiscMenu, "Blitzcrank_GrabSelect" + enemy.ChampionName) == 2 && _Q.IsReady() &&
+                        getSliderItem(MiscMenu, "Blitzcrank_GrabSelect" + enemy.NetworkId) == 2 && _Q.IsReady() &&
                         QTarget.ChampionName == enemy.ChampionName)
                     {
                         if (QTarget.CanMove && QTarget.Distance(Player.Position) < _Q.Range*0.9)
@@ -206,11 +224,16 @@ namespace PortAIO.Champion.Blitzcrank
                     }
                 }
 
+                if (getKeyBindItem(ComboMenu, "Blitzcrank_CUse_FlashQ"))
+                {
+                    flashq();
+                }
+
                 // Combo
                 if (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.Combo))
                 {
                     if (getCheckBoxItem(ComboMenu, "Blitzcrank_CUse_Q") && _Q.IsReady() && QTarget != null &&
-                        getSliderItem(MiscMenu, "Blitzcrank_GrabSelect" + QTarget.ChampionName) != 1)
+                        getSliderItem(MiscMenu, "Blitzcrank_GrabSelect" + QTarget.NetworkId) != 1)
                     {
                         _Q.CastIfHitchanceEquals(QTarget, FreshCommon.Hitchance("Blitzcrank_CUseQ_Hit"), true);
                     }
@@ -228,7 +251,7 @@ namespace PortAIO.Champion.Blitzcrank
                     getSliderItem(HarassMenu, "Blitzcrank_AManarate") < Player.ManaPercent)
                 {
                     if (getCheckBoxItem(HarassMenu, "Blitzcrank_HUse_Q") && _Q.IsReady() && QTarget != null &&
-                        getSliderItem(MiscMenu, "Blitzcrank_GrabSelect" + QTarget.ChampionName) != 1)
+                        getSliderItem(MiscMenu, "Blitzcrank_GrabSelect" + QTarget.NetworkId) != 1)
                     {
                         _Q.CastIfHitchanceEquals(QTarget, FreshCommon.Hitchance("Blitzcrank_CUseQ_Hit"), true);
                     }

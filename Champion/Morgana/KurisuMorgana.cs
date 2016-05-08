@@ -64,7 +64,7 @@ namespace KurisuMorgana
             shieldMenu = _menu.AddSubMenu("Use Shield [Who?]", "usefor");
             foreach (var frn in ObjectManager.Get<AIHeroClient>().Where(x => x.Team == Me.Team))
             {
-                shieldMenu.Add("useon" + frn.ChampionName, new CheckBox("Shield " + frn.ChampionName, !frn.IsMe));
+                shieldMenu.Add("useon" + frn.NetworkId, new CheckBox("Shield " + frn.ChampionName, !frn.IsMe));
             }
             shieldMenu.AddSeparator();
             shieldMenu.AddGroupLabel("Enemy Shield :");
@@ -217,7 +217,7 @@ namespace KurisuMorgana
                     var poutput = _q.GetPrediction(qtarget);
                     if (poutput.Hitchance >= (HitChance) getSliderItem(menuQ, "hitchanceq") + 2)
                     {
-                        _q.Cast(poutput.CastPosition);
+                        _q.Cast(qtarget);
                     }
                 }
             }
@@ -232,7 +232,7 @@ namespace KurisuMorgana
                         var poutput = _w.GetPrediction(wtarget);
                         if (poutput.Hitchance >= (HitChance) getSliderItem(menuW, "hitchancew") + 2)
                         {
-                            _w.Cast(poutput.CastPosition);
+                            _w.Cast(wtarget);
                         }
                     }
                 }
@@ -277,7 +277,7 @@ namespace KurisuMorgana
                         var poutput = _q.GetPrediction(qtarget);
                         if (poutput.Hitchance >= (HitChance) getSliderItem(menuQ, "hitchanceq") + 2)
                         {
-                            _q.Cast(poutput.CastPosition);
+                            _q.Cast(qtarget);
                         }
                     }
                 }
@@ -295,7 +295,7 @@ namespace KurisuMorgana
                             var poutput = _w.GetPrediction(wtarget);
                             if (poutput.Hitchance >= (HitChance) getSliderItem(menuW, "hitchancew") + 2)
                             {
-                                _w.Cast(poutput.CastPosition);
+                                _w.Cast(wtarget);
                             }
                         }
                     }
@@ -414,7 +414,7 @@ namespace KurisuMorgana
                         return;
 
                     if (getCheckBoxItem(shieldMenu, lib.SDataName + "on") &&
-                        getCheckBoxItem(shieldMenu, "useon" + ally.ChampionName))
+                        getCheckBoxItem(shieldMenu, "useon" + ally.NetworkId))
                     {
                         Utility.DelayAction.Add(lib.Slot != SpellSlot.R ? 100 : 0, () => _e.CastOnUnit(ally));
                     }

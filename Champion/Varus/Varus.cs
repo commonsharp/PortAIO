@@ -91,6 +91,13 @@ namespace Elvarus
             ElVarusMenu.Initialize();
             Game.OnUpdate += OnGameUpdate;
             Drawing.OnDraw += Drawings.Drawing_OnDraw;
+
+            Menu = ElVarusMenu.Menu;
+            cMenu = ElVarusMenu.cMenu;
+            hMenu = ElVarusMenu.hMenu;
+            itemMenu = ElVarusMenu.itemMenu;
+            lMenu = ElVarusMenu.lMenu;
+            miscMenu = ElVarusMenu.miscMenu;
         }
 
         #endregion
@@ -99,22 +106,10 @@ namespace Elvarus
 
         private static void Combo()
         {
-            var wTarget =
-                HeroManager.Enemies.Find(
-                    x => x.HasBuff("varuswdebuff") && x.IsValidTarget(Orbwalking.GetRealAutoAttackRange(Player)));
-            var target = wTarget
-                         ?? TargetSelector.GetTarget(
-                             spells[Spells.Q].ChargedMaxRange,
-                             DamageType.Physical);
-
-            if (target == null || !target.IsValidTarget())
+            var target = TargetSelector.GetTarget((spells[Spells.Q].ChargedMaxRange + spells[Spells.Q].Width) * 1.1f, DamageType.Magical);
+            if (target == null)
             {
                 return;
-            }
-
-            if (wTarget != null && getCheckBoxItem(cMenu, "ElVarus.Combo.W.Focus"))
-            {
-                Orbwalker.ForcedTarget = target;
             }
 
             var stackCount = getSliderItem(cMenu, "ElVarus.Combo.Stack.Count");
@@ -124,48 +119,55 @@ namespace Elvarus
             var comboR = getCheckBoxItem(cMenu, "ElVarus.Combo.R");
             var alwaysQ = getCheckBoxItem(cMenu, "ElVarus.combo.always.Q");
 
-            if (comboE && spells[Spells.E].IsReady() && target.IsValidTarget(spells[Spells.E].Range))
-            {
-                spells[Spells.E].Cast(target);
-            }
-
             Items(target);
 
-            if (spells[Spells.Q].IsReady() && comboQ && target.IsValidTarget(spells[Spells.Q].ChargedMaxRange))
+            if (spells[Spells.E].IsReady() && !spells[Spells.Q].IsCharging && comboE)
             {
-                if (alwaysQ)
+                if (spells[Spells.E].IsKillable(target) || GetWStacks(target) >= 1)
                 {
-                    spells[Spells.Q].StartCharging();
-                }
-                else if (spells[Spells.W].Level == 0 || GetStacksOn(target) >= stackCount ||
-                         spells[Spells.Q].GetDamage(target) > target.Health)
-                {
-                    spells[Spells.Q].StartCharging();
-                }
-
-                if (spells[Spells.Q].IsCharging)
-                {
-                    spells[Spells.Q].Cast(target);
+                    var prediction = spells[Spells.E].GetPrediction(target);
+                    if (prediction.Hitchance >= HitChance.VeryHigh)
+                    {
+                        spells[Spells.E].Cast(prediction.CastPosition);
+                    }
                 }
             }
 
-            if (IsQKillable(target))
+            if (spells[Spells.Q].IsReady() && comboQ)
             {
-                if (!spells[Spells.Q].IsCharging)
+                if (spells[Spells.Q].IsCharging || alwaysQ
+                    || target.Distance(Player) > Orbwalking.GetRealAutoAttackRange(target) * 1.2f
+                    || GetWStacks(target) >= stackCount
+                    || spells[Spells.Q].IsKillable(target))
                 {
-                    spells[Spells.Q].StartCharging();
-                }
+                    if (!spells[Spells.Q].IsCharging)
+                    {
+                        spells[Spells.Q].StartCharging();
+                    }
 
-                if (spells[Spells.Q].IsCharging)
-                {
-                    spells[Spells.Q].Cast(target);
+                    if (spells[Spells.Q].IsCharging)
+                    {
+                        var prediction = spells[Spells.Q].GetPrediction(target);
+                        if (prediction.Hitchance >= HitChance.VeryHigh)
+                        {
+                            spells[Spells.Q].Cast(prediction.CastPosition);
+                        }
+                    }
                 }
             }
 
-            if (comboR && Player.CountEnemiesInRange(spells[Spells.R].Range) >= rCount && spells[Spells.R].IsReady()
-                && target.IsValidTarget(spells[Spells.R].Range))
+            if (spells[Spells.R].IsReady() && !spells[Spells.Q].IsCharging
+                && target.IsValidTarget(spells[Spells.R].Range) && comboR)
             {
-                spells[Spells.R].CastOnBestTarget();
+                var pred = spells[Spells.R].GetPrediction(target);
+                if (pred.Hitchance >= HitChance.VeryHigh)
+                {
+                    var ultimateHits = HeroManager.Enemies.Where(x => x.Distance(target) <= 450f).ToList();
+                    if (ultimateHits.Count >= rCount)
+                    {
+                        spells[Spells.R].Cast(pred.CastPosition);
+                    }
+                }
             }
         }
 
@@ -179,18 +181,9 @@ namespace Elvarus
             return 0;
         }
 
-        private static float GetHealth(Obj_AI_Base target)
+        private static int GetWStacks(Obj_AI_Base target)
         {
-            return target.Health;
-        }
-
-        private static int GetStacksOn(Obj_AI_Base target)
-        {
-            return
-                target.Buffs.Where(
-                    xBuff => xBuff.Name == "varuswdebuff" && target.IsValidTarget(spells[Spells.Q].ChargedMaxRange))
-                    .Select(xBuff => xBuff.Count)
-                    .FirstOrDefault();
+            return target.GetBuffCount("varuswdebuff");
         }
 
         private static void Harass()
@@ -212,36 +205,23 @@ namespace Elvarus
                     spells[Spells.E].CastOnBestTarget();
                 }
 
-                if (harassQ)
+                if (harassQ && spells[Spells.Q].IsReady())
                 {
                     if (!spells[Spells.Q].IsCharging)
                     {
                         spells[Spells.Q].StartCharging();
                     }
 
-                    if (spells[Spells.Q].IsReady())
+                    if (spells[Spells.Q].IsCharging)
                     {
                         var prediction = spells[Spells.Q].GetPrediction(target);
-                        var distance =
-                            Player.ServerPosition.Distance(
-                                prediction.UnitPosition
-                                + 200*(prediction.UnitPosition - Player.ServerPosition).Normalized(),
-                                true);
-                        if (distance < spells[Spells.Q].RangeSqr)
+                        if (prediction.Hitchance >= HitChance.VeryHigh)
                         {
-                            if (spells[Spells.Q].Cast(prediction.CastPosition))
-                            {
-                            }
+                            spells[Spells.Q].Cast(prediction.CastPosition);
                         }
                     }
                 }
             }
-        }
-
-        private static bool IsQKillable(Obj_AI_Base target)
-        {
-            var hero = target as AIHeroClient;
-            return GetExecuteDamage(target) > GetHealth(target) && (hero == null);
         }
 
         private static void Items(Obj_AI_Base target)
@@ -325,22 +305,21 @@ namespace Elvarus
                     var target in
                         HeroManager.Enemies.Where(
                             enemy =>
-                                enemy.IsValidTarget() && IsQKillable(enemy) &&
+                                enemy.IsValidTarget() && spells[Spells.Q].IsKillable(enemy) &&
                                 Player.Distance(enemy.Position) <= spells[Spells.Q].ChargedMaxRange))
                 {
-                    spells[Spells.Q].StartCharging();
+                    if (!spells[Spells.Q].IsCharging)
+                    {
+                        spells[Spells.Q].StartCharging();
+                    }
 
                     if (spells[Spells.Q].IsCharging)
                     {
-                        Orbwalker.DisableAttacking = true;
-                        if (IsQKillable(target) && !target.IsInvulnerable)
+                        var prediction = spells[Spells.Q].GetPrediction(target);
+                        if (prediction.Hitchance >= HitChance.VeryHigh)
                         {
-                            spells[Spells.Q].Cast(target);
+                            spells[Spells.Q].Cast(prediction.CastPosition);
                         }
-                    }
-                    else
-                    {
-                        Orbwalker.DisableAttacking = false;
                     }
                 }
             }
@@ -370,8 +349,7 @@ namespace Elvarus
                 var allMinions = MinionManager.GetMinions(Player.ServerPosition, spells[Spells.Q].Range);
                 {
                     foreach (var minion in
-                        allMinions.Where(
-                            minion => minion.Health <= Player.GetSpellDamage(minion, SpellSlot.Q)))
+                         allMinions.Where(minion => minion.Health <= Player.GetSpellDamage(minion, SpellSlot.Q)))
                     {
                         var killcount = 0;
 
@@ -436,29 +414,6 @@ namespace Elvarus
             }
 
             Killsteal();
-
-            if (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.Combo))
-            {
-                if (Player.Buffs.Count(buf => buf.Name == "Muramana") == 0)
-                {
-                    var muramana = ItemData.Muramana.GetItem();
-                    if (muramana.IsOwned(Player))
-                    {
-                        muramana.Cast();
-                    }
-                }
-            }
-            else
-            {
-                if (Player.Buffs.Count(buf => buf.Name == "Muramana") != 0)
-                {
-                    var muramana = ItemData.Muramana.GetItem();
-                    if (muramana.IsOwned(Player))
-                    {
-                        muramana.Cast();
-                    }
-                }
-            }
 
             var target = TargetSelector.GetTarget(spells[Spells.R].Range, DamageType.Physical);
 

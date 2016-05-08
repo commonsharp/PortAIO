@@ -91,6 +91,12 @@ namespace ElZilean
             Game.OnUpdate += OnGameUpdate;
             Drawing.OnDraw += Drawings.Drawing_OnDraw;
             Orbwalker.OnPreAttack += OrbwalkingBeforeAttack;
+
+            comboMenu = ZileanMenu.comboMenu;
+            harassMenu = ZileanMenu.harassMenu;
+            clearMenu = ZileanMenu.clearMenu;
+            castUltMenu = ZileanMenu.castUltMenu;
+            miscMenu = ZileanMenu.miscMenu;
         }
 
         public static float GetComboDamage(Obj_AI_Base enemy)
@@ -139,6 +145,10 @@ namespace ElZilean
             if (getCheckBoxItem(comboMenu, "ElZilean.Combo.E") && spells[Spells.E].IsReady()
                 && target.IsValidTarget(spells[Spells.E].Range))
             {
+                if (!spells[Spells.Q].IsReady())
+                {
+                    return;
+                }
                 spells[Spells.E].Cast(target);
             }
 
@@ -151,7 +161,7 @@ namespace ElZilean
                 var pred = spells[Spells.Q].GetPrediction(target);
                 if (pred.Hitchance >= HitChance.High)
                 {
-                    spells[Spells.Q].Cast(pred.UnitPosition);
+                    spells[Spells.Q].Cast(target);
                 }
             }
 
@@ -196,7 +206,7 @@ namespace ElZilean
                 var pred = spells[Spells.Q].GetPrediction(target);
                 if (pred.Hitchance >= HitChance.High)
                 {
-                    spells[Spells.Q].Cast(pred.UnitPosition);
+                    spells[Spells.Q].Cast(target);
                 }
             }
 
@@ -213,7 +223,7 @@ namespace ElZilean
             {
                 return 0f;
             }
-            return (float) Player.GetSummonerSpellDamage(target, Damage.SummonerSpell.Ignite);
+            return (float)Player.GetSummonerSpellDamage(target, Damage.SummonerSpell.Ignite);
         }
 
         private static void LaneClear()
@@ -331,7 +341,7 @@ namespace ElZilean
             }
 
             var useSelftHp = getSliderItem(castUltMenu, "ElZilean.HP");
-            if (getCheckBoxItem(castUltMenu, "ElZilean.R") && Player.Health/Player.MaxHealth*100 <= useSelftHp
+            if (getCheckBoxItem(castUltMenu, "ElZilean.R") && Player.Health / Player.MaxHealth * 100 <= useSelftHp
                 && spells[Spells.R].IsReady() && Player.CountEnemiesInRange(650) > 0)
             {
                 spells[Spells.R].Cast(Player);
@@ -348,7 +358,7 @@ namespace ElZilean
             foreach (var hero in ObjectManager.Get<AIHeroClient>().Where(x => x.IsAlly && !x.IsMe))
             {
                 if (getCheckBoxItem(castUltMenu, "ElZilean.useult")
-                    && (hero.Health/hero.MaxHealth*100
+                    && (hero.Health / hero.MaxHealth * 100
                         <= getSliderItem(castUltMenu, "ElZilean.Ally.HP"))
                     && spells[Spells.R].IsReady() && Player.CountEnemiesInRange(1000) > 0
                     && (hero.Distance(Player.ServerPosition) <= spells[Spells.R].Range))

@@ -73,7 +73,7 @@ namespace SephLissandra
             blackListMenu = Config.AddSubMenu("Ultimate BlackList", "BlackList");
             foreach (var hero in ObjectManager.Get<AIHeroClient>().Where(h => h.IsEnemy))
             {
-                blackListMenu.Add("Blacklist." + hero.ChampionName, new CheckBox(hero.ChampionName, false));
+                blackListMenu.Add("Blacklist." + hero.NetworkId, new CheckBox(hero.ChampionName, false));
             }
 
             miscMenu = Config.AddSubMenu("Misc", "Misc");

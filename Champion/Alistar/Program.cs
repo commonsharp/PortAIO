@@ -183,7 +183,7 @@ namespace PortAIO.Champion.Alistar
                 healMenu.AddSeparator();
                 foreach (var x in ObjectManager.Get<AIHeroClient>().Where(x => x.IsAlly))
                 {
-                    healMenu.Add("healon" + x.ChampionName, new CheckBox("Use for " + x.ChampionName));
+                    healMenu.Add("healon" + x.NetworkId, new CheckBox("Use for " + x.ChampionName));
                 }
 
 
@@ -329,17 +329,19 @@ namespace PortAIO.Champion.Alistar
             }
         }
 
-        private static void OnInterruptableTarget(
-            AIHeroClient sender,
-            Interrupter2.InterruptableTargetEventArgs args)
+        private static void OnInterruptableTarget(AIHeroClient sender, Interrupter2.InterruptableTargetEventArgs args)
         {
+            if (sender.IsAlly || sender.IsMe)
+            {
+                return;
+            }
+
             if (args.DangerLevel != Interrupter2.DangerLevel.High || sender.Distance(Player) > W.Range)
             {
                 return;
             }
 
-            if (sender.IsValidTarget(Q.Range) && Q.IsReady() &&
-                getCheckBoxItem(interrupterMenu, "ElAlistar.Interrupter.Q"))
+            if (sender.IsValidTarget(Q.Range) && Q.IsReady() && getCheckBoxItem(interrupterMenu, "ElAlistar.Interrupter.Q"))
             {
                 Q.Cast();
             }
@@ -353,10 +355,13 @@ namespace PortAIO.Champion.Alistar
 
         private static void OnEnemyGapcloser(ActiveGapcloser gapcloser)
         {
+            if (gapcloser.Sender.IsAlly || gapcloser.Sender.IsMe)
+            {
+                return;
+            }
             if (getCheckBoxItem(interrupterMenu, "ElAlistar.GapCloser"))
             {
-                if (Q.IsReady()
-                    && gapcloser.Sender.Distance(Player) < Q.Range)
+                if (Q.IsReady() && gapcloser.Sender.Distance(Player) < Q.Range)
                 {
                     Q.Cast();
                 }
@@ -408,7 +413,7 @@ namespace PortAIO.Champion.Alistar
                         .Any(
                             x =>
                                 x.IsAlly && !x.IsDead &&
-                                getCheckBoxItem(healMenu, string.Format("healon{0}", x.ChampionName)) &&
+                                getCheckBoxItem(healMenu, string.Format("healon{0}", x.NetworkId)) &&
                                 ((int) (args.Damage/x.MaxHealth*100) > getSliderItem(healMenu, "Heal.Damage") ||
                                  x.HealthPercent < getSliderItem(healMenu, "Heal.HP")) && x.Distance(Player) < E.Range &&
                                 x.CountEnemiesInRange(1000) >= 1))

@@ -124,7 +124,7 @@ namespace OneKeyToWin_AIO_Sebby.Core
 
         public Vector3 CalculateReturnPos()
         {
-            if (Missile != null && Missile.IsValid && Target.IsValidTarget())
+            if (Missile != null && Missile.IsValidMissile() && Target.IsValidTarget())
             {
                 var finishPosition = Missile.Position;
                 if (Missile.SData.Name.ToLower() == MissileName.ToLower())

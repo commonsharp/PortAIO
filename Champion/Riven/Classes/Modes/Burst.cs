@@ -59,12 +59,8 @@ namespace NechritoRiven
                     { Spells._r.Cast(target.ServerPosition); }
                     if (Spells._q.IsReady())
                     { Utility.DelayAction.Add(150, () => Logic.ForceCastQ(target)); }
-
                 }
-
             }
-
-
         }
     }
 }

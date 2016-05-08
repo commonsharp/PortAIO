@@ -38,7 +38,7 @@ namespace ExorAIO.Champions.Nautilus
             Variables.WhiteListMenu = Variables.Menu.AddSubMenu("Ultimate: Whitelist Menu", "rmenu.whitelistmenu");
             foreach (var champ in HeroManager.Enemies)
             {
-                Variables.WhiteListMenu.Add("rspell.whitelist." + champ.ChampionName.ToLower(),
+                Variables.WhiteListMenu.Add("rspell.whitelist." + champ.NetworkId,
                     new CheckBox("Use against: " + champ.ChampionName));
             }
 

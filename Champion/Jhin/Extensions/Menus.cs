@@ -47,16 +47,12 @@ namespace Jhin___The_Virtuoso.Extensions
             wMenu.Add("w.combo.min.distance", new Slider("Min. Distance", 400, 1, 2500));
             wMenu.Add("w.combo.max.distance", new Slider("Max. Distance", 1000, 1, 2500));
             wMenu.Add("w.passive.combo", new CheckBox("Use (W) If Enemy Is Marked", false));
-            wMenu.Add("w.hit.chance",
-                new ComboBox("(W) Hit Chance", 2, "Low", "Medium", "High", "Very High", "Only Immobile"));
-                //.SetValue(new StringList(Provider.HitchanceNameArray, 2)));
+            wMenu.Add("w.hit.chance", new ComboBox("(W) Hit Chance", 2, "Low", "Medium", "High", "Very High", "Only Immobile"));
 
             eMenu = Config.AddSubMenu(":: E", ":: E");
             eMenu.Add("e.combo", new CheckBox("Use (E)"));
             eMenu.Add("e.combo.teleport", new CheckBox("Auto (E) Teleport"));
-            eMenu.Add("e.hit.chance",
-                new ComboBox("(E) Hit Chance", 2, "Low", "Medium", "High", "Very High", "Only Immobile"));
-                //.SetValue(new StringList(Provider.HitchanceNameArray, 2)));
+            eMenu.Add("e.hit.chance", new ComboBox("(E) Hit Chance", 2, "Low", "Medium", "High", "Very High", "Only Immobile"));
 
             harassMenu = Config.AddSubMenu(":: Harass Settings", ":: Harass Settings");
             harassMenu.AddGroupLabel(":: W");
@@ -87,13 +83,11 @@ namespace Jhin___The_Virtuoso.Extensions
             miscMenu.AddLabel(":: R - Whitelist");
             foreach (var enemy in HeroManager.Enemies.Where(enemy => enemy.IsValid))
             {
-                miscMenu.Add("r.combo." + enemy.ChampionName, new CheckBox("(R): " + enemy.ChampionName));
+                miscMenu.Add("r.combo." + enemy.NetworkId, new CheckBox("(R): " + enemy.ChampionName));
             }
             miscMenu.Add("r.combo", new CheckBox("Use (R)"));
             miscMenu.Add("auto.shoot.bullets", new CheckBox("If Jhin Casting (R) Auto Cast Bullets"));
-            miscMenu.Add("r.hit.chance",
-                new ComboBox("(R) Hit Chance", 1, "Low", "Medium", "High", "Very High", "Only Immobile"));
-                //.SetValue(new StringList(Provider.HitchanceNameArray, 1)));
+            miscMenu.Add("r.hit.chance", new ComboBox("(R) Hit Chance", 1, "Low", "Medium", "High", "Very High", "Only Immobile"));
             miscMenu.Add("semi.manual.ult", new KeyBind("Semi-Manual (R)!", false, KeyBind.BindTypes.HoldActive, 'A'));
 
             drawMenu = Config.AddSubMenu(":: Drawings", ":: Drawings");

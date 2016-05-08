@@ -82,7 +82,7 @@ namespace PortAIO.Champion.Annie
             RMenu.AddLabel("3 : Always Stun");
             foreach (var enemy in ObjectManager.Get<AIHeroClient>().Where(enemy => enemy.IsEnemy))
             {
-                RMenu.Add("UM" + enemy.ChampionName, new Slider(enemy.ChampionName, 0, 0, 3));
+                RMenu.Add("UM" + enemy.NetworkId, new Slider(enemy.ChampionName, 0, 0, 3));
             }
             RMenu.AddSeparator();
             RMenu.Add("autoRks", new CheckBox("Auto R KS"));
@@ -136,7 +136,7 @@ namespace PortAIO.Champion.Annie
                 {
                     if (enemy.IsValidTarget(R.Range))
                     {
-                        var Rmode = getSliderItem(RMenu, "UM" + enemy.ChampionName);
+                        var Rmode = getSliderItem(RMenu, "UM" + enemy.NetworkId);
 
                         if (Rmode == 2)
                             continue;
@@ -145,15 +145,15 @@ namespace PortAIO.Champion.Annie
                         var aoeCount = poutput.AoeTargetsHitCount;
 
                         if (Rmode == 1)
-                            R.Cast(poutput.CastPosition);
+                            R.Cast(enemy);
 
                         if (Rmode == 3 && HaveStun)
-                            R.Cast(poutput.CastPosition);
+                            R.Cast(enemy);
 
                         if (aoeCount >= getSliderItem(RMenu, "rCount") && getSliderItem(RMenu, "rCount") > 0)
-                            R.Cast(poutput.CastPosition);
+                            R.Cast(enemy);
                         else if (SebbyLib.Program.Combo && HaveStun && getCheckBoxItem(RMenu, "autoRcombo"))
-                            R.Cast(poutput.CastPosition);
+                            R.Cast(enemy);
                         else if (getCheckBoxItem(RMenu, "autoRks"))
                         {
                             var comboDmg = OktwCommon.GetKsDamage(enemy, R);

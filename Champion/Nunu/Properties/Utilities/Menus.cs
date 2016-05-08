@@ -29,8 +29,7 @@ namespace ExorAIO.Champions.Nunu
             {
                 foreach (var champ in HeroManager.Allies.Where(h => !h.IsMe))
                 {
-                    Variables.WhiteListMenu.Add("wspell.whitelist." + champ.ChampionName.ToLower(),
-                        new CheckBox("Use on: " + champ.ChampionName));
+                    Variables.WhiteListMenu.Add("wspell.whitelist." + champ.NetworkId, new CheckBox("Use on: " + champ.ChampionName));
                 }
             }
 

@@ -7,7 +7,7 @@ using EloBuddy.SDK.Enumerations;
 using EloBuddy.SDK.Events;
 using EloBuddy.SDK.Menu;
 using EloBuddy.SDK.Menu.Values;
-using Evade;
+using EvadeB;
 using SAutoCarry.Champions.Helpers;
 using SharpDX;
 using SOLOVayne;
@@ -298,7 +298,7 @@ namespace Vayne
 
             if (_Clean)
             {
-                Cleansers();
+                //Cleansers();
             }
 
             if (Item.CanUseItem(ItemId.Blade_of_the_Ruined_King) && useBotrk)
@@ -754,7 +754,7 @@ namespace Vayne
             }
             if (target is AIHeroClient && UseQBool)
             {
-                if (Q.IsReady())
+                if (Q.IsReady() && !Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.None))
                 {
                     var tg = target as AIHeroClient;
                     if (tg != null)

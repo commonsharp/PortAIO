@@ -20,7 +20,8 @@
 
         private static readonly string[] BuffsThatActuallyMakeSenseToSmite =
             {
-                "SRU_Red", "SRU_Blue", "SRU_Dragon",
+                "SRU_Red", "SRU_Blue",
+                "SRU_Dragon_Water",  "SRU_Dragon_Fire", "SRU_Dragon_Earth", "SRU_Dragon_Air", "SRU_Dragon_Elder",
                 "SRU_Baron", "SRU_Gromp", "SRU_Murkwolf",
                 "SRU_Razorbeak", "SRU_RiftHerald",
                 "SRU_Krug", "Sru_Crab", "TT_Spiderboss",
@@ -383,8 +384,12 @@
             {
                 smiteMenu.AddSeparator();
                 smiteMenu.AddGroupLabel("Mob Smites");
-                smiteMenu.Add("SRU_Dragon", new CheckBox("Dragon"));
-                smiteMenu.Add("SRU_Baron", new CheckBox("Baron"));
+                smiteMenu.Add("SRU_Dragon_Air", new CheckBox("Air Dragon"));
+                smiteMenu.Add("SRU_Dragon_Earth", new CheckBox("Earth Dragon"));
+                smiteMenu.Add("SRU_Dragon_Fire", new CheckBox("Fire Dragon"));
+                smiteMenu.Add("SRU_Dragon_Water", new CheckBox("Water Dragon"));
+                smiteMenu.Add("SRU_Dragon_Elder", new CheckBox("Elder Dragon"));
+                smiteMenu.Add("SRU_Baron", new CheckBox("Baron"));  
                 smiteMenu.Add("SRU_Red", new CheckBox("Red buff"));
                 smiteMenu.Add("SRU_Blue", new CheckBox("Blue buff"));
                 smiteMenu.Add("SRU_RiftHerald", new CheckBox("Rift Herald"));
@@ -490,14 +495,7 @@
                     return;
                 }
 
-                Minion =
-                    (Obj_AI_Minion)
-                    MinionManager.GetMinions(this.Player.ServerPosition, 570f, MinionTypes.All, MinionTeam.Neutral)
-                        .FirstOrDefault(
-                            buff =>
-                            buff.IsValid && buff.Name.StartsWith(buff.CharData.BaseSkinName)
-                            && BuffsThatActuallyMakeSenseToSmite.Contains(buff.CharData.BaseSkinName)
-                            && !buff.Name.Contains("Mini") && !buff.Name.Contains("Spawn"));
+                Minion = (Obj_AI_Minion) EntityManager.MinionsAndMonsters.Monsters.FirstOrDefault(buff => this.Player.IsInRange(buff, 570) && (buff.Name.StartsWith(buff.BaseSkinName) || BuffsThatActuallyMakeSenseToSmite.Contains(buff.BaseSkinName)) && !buff.Name.Contains("Mini") && !buff.Name.Contains("Spawn"));
 
                 if (Minion == null)
                 {
@@ -600,7 +598,11 @@
                                         sDamage.ToString());
                                     break;
 
-                                case "SRU_Dragon":
+                                case "SRU_Dragon_Air":
+                                case "SRU_Dragon_Water":
+                                case "SRU_Dragon_Elder":
+                                case "SRU_Dragon_Fire":
+                                case "SRU_Dragon_Earth":
                                     barWidth = 145;
                                     Drawing.DrawLine(
                                         new Vector2(hpBarPosition.X + 3 + (float)(barWidth * x), hpBarPosition.Y + 22),

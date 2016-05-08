@@ -31,11 +31,13 @@ namespace PortAIO.Champion.Anivia
             Q = new Spell(SpellSlot.Q, 1000);
             W = new Spell(SpellSlot.W, 950);
             E = new Spell(SpellSlot.E, 650);
-            R = new Spell(SpellSlot.R, 650);
+            R = new Spell(SpellSlot.R, 685);
 
             Q.SetSkillshot(0.25f, 110f, 870f, false, SkillshotType.SkillshotLine);
             W.SetSkillshot(0.6f, 1f, float.MaxValue, false, SkillshotType.SkillshotLine);
-            R.SetSkillshot(2f, 420f, float.MaxValue, false, SkillshotType.SkillshotCircle);
+            R.SetSkillshot(2f, 400f, float.MaxValue, false, SkillshotType.SkillshotCircle);
+
+            Chat.Print("Berb : Using Common Pred w/ Medium Hitchance is the best for Anivia!");
 
             LoadMenuOKTW();
 
@@ -104,7 +106,7 @@ namespace PortAIO.Champion.Anivia
             QMenu.Add("harrasQ", new CheckBox("Harass Q"));
             foreach (var enemy in ObjectManager.Get<AIHeroClient>().Where(enemy => enemy.Team != Player.Team))
             {
-                QMenu.Add("haras" + enemy.ChampionName, new CheckBox("Harass :" + enemy.ChampionName));
+                QMenu.Add("haras" + enemy.NetworkId, new CheckBox("Harass :" + enemy.ChampionName));
             }
 
             WMenu = Config.AddSubMenu("W Config");
@@ -201,9 +203,7 @@ namespace PortAIO.Champion.Anivia
             {
                 if (SebbyLib.Program.Combo && Player.Mana > EMANA + QMANA - 10)
                     SebbyLib.Program.CastSpell(Q, t);
-                else if (SebbyLib.Program.Farm && getCheckBoxItem(QMenu, "harrasQ") &&
-                         getCheckBoxItem(QMenu, "haras" + t.ChampionName) && Player.Mana > RMANA + EMANA + QMANA + WMANA &&
-                         OktwCommon.CanHarras())
+                else if (SebbyLib.Program.Farm && getCheckBoxItem(QMenu, "harrasQ") && getCheckBoxItem(QMenu, "haras" + t.NetworkId) && Player.Mana > RMANA + EMANA + QMANA + WMANA && OktwCommon.CanHarras())
                 {
                     SebbyLib.Program.CastSpell(Q, t);
                 }
@@ -353,8 +353,7 @@ namespace PortAIO.Champion.Anivia
                     else
                         R.Cast();
                 }
-                else if (!SebbyLib.Program.None &&
-                         (RMissile.Position.CountEnemiesInRange(470) == 0 || Player.Mana < EMANA + QMANA))
+                else if ((RMissile.Position.CountEnemiesInRange(470) == 0 || Player.Mana < EMANA + QMANA))
                 {
                     R.Cast();
                 }

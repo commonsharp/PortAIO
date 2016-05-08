@@ -99,14 +99,14 @@ namespace OneKeyToWin_AIO_Sebby.Champions
             rMenu.Add("autoR", new CheckBox("Auto R 2 x dmg R"));
             rMenu.Add("autoRlast", new CheckBox("Cast last position if no target"));
             rMenu.Add("useR", new KeyBind("Semi-manual cast R key", false, KeyBind.BindTypes.HoldActive, 'T'));
-                //32 == space
+            //32 == space
             rMenu.Add("trinkiet", new CheckBox("Auto blue trinkiet"));
             rMenu.Add("delayR", new Slider("custome R delay ms (1000ms = 1 sec)", 0, 0, 3000));
             rMenu.Add("MaxRangeR", new Slider("Max R adjustment (R range - slider)", 0, 0, 5000));
 
             harassMenu = Config.AddSubMenu("Harass");
             foreach (var enemy in ObjectManager.Get<AIHeroClient>().Where(enemy => enemy.IsEnemy))
-                harassMenu.Add("harras" + enemy.ChampionName, new CheckBox(enemy.ChampionName));
+                harassMenu.Add("harras" + enemy.NetworkId, new CheckBox(enemy.ChampionName));
 
             farmMenu = Config.AddSubMenu("Farm");
             farmMenu.Add("separate", new CheckBox("Separate laneclear from harras", false));
@@ -225,14 +225,14 @@ namespace OneKeyToWin_AIO_Sebby.Champions
             {
                 SetMana();
                 Jungle();
-                int[] mana = {0, 30, 33, 36, 42, 48, 54, 63, 72, 81, 90, 102, 114, 126, 138, 150, 165, 180, 195};
+                int[] mana = { 0, 30, 33, 36, 42, 48, 54, 63, 72, 81, 90, 102, 114, 126, 138, 150, 165, 180, 195 };
                 if (!Player.HasBuff("xerathascended2onhit") || Player.Mana + mana[Player.Level] > Player.MaxMana)
                     Orbwalker.ForcedTarget = null;
                 else if ((Program.Combo || Program.Farm) && getCheckBoxItem(miscMenu, "force") &&
                          Orbwalker.LastTarget == null)
                 {
                     var minion =
-                        Cache.GetMinions(Player.ServerPosition, Player.AttackRange + Player.BoundingRadius*2)
+                        Cache.GetMinions(Player.ServerPosition, Player.AttackRange + Player.BoundingRadius * 2)
                             .OrderByDescending(x => x.Health)
                             .FirstOrDefault();
 
@@ -253,32 +253,31 @@ namespace OneKeyToWin_AIO_Sebby.Champions
 
         private static void LogicR()
         {
-            R.Range = 2000 + R.Level*1200;
+            R.Range = 2000 + R.Level * 1200;
             if (!IsCastingR)
                 R.Range = R.Range - getSliderItem(rMenu, "MaxRangeR");
 
             var t = TargetSelector.GetTarget(R.Range, DamageType.Magical);
-            if (t.IsValidTarget())
+            if (t.LSIsValidTarget())
             {
                 if (getKeyBindItem(rMenu, "useR") && !IsCastingR)
                 {
                     R.Cast();
                 }
-                if (!t.IsValidTarget(W.Range) && !IsCastingR && t.CountAlliesInRange(500) == 0 &&
-                    Player.CountEnemiesInRange(1100) == 0)
+                if (!t.IsValidTarget(W.Range) && !IsCastingR && t.CountAlliesInRange(500) == 0 && Player.CountEnemiesInRange(1100) == 0)
                 {
-                    if (OktwCommon.GetKsDamage(t, R) + R.GetDamage(t) > t.Health)
+                    if (OktwCommon.GetKsDamage(t, R) + (R.GetDamage(t) * R.Level) > t.Health)
                     {
                         R.Cast();
                     }
                 }
-                if (Game.Time - lastR > 0.001*getSliderItem(rMenu, "delayR") && IsCastingR)
+                if (Game.Time - lastR > 0.001 * getSliderItem(rMenu, "delayR") && IsCastingR)
                 {
                     Program.CastSpell(R, t);
                 }
                 Rtarget = R.GetPrediction(t).CastPosition;
             }
-            else if (getCheckBoxItem(rMenu, "autoRlast") && Game.Time - lastR > 0.001*getSliderItem(rMenu, "delayR") &&
+            else if (getCheckBoxItem(rMenu, "autoRlast") && Game.Time - lastR > 0.001 * getSliderItem(rMenu, "delayR") &&
                      IsCastingR)
             {
                 R.Cast(Rtarget);
@@ -302,7 +301,7 @@ namespace OneKeyToWin_AIO_Sebby.Champions
                 else if (Program.Combo && Player.Mana > RMANA + WMANA)
                     Program.CastSpell(W, t);
                 else if (Program.Farm && OktwCommon.CanHarras() && getCheckBoxItem(wMenu, "harrasW") &&
-                         getCheckBoxItem(harassMenu, "harras" + t.ChampionName) &&
+                         getCheckBoxItem(harassMenu, "harras" + t.NetworkId) &&
                          Player.Mana > RMANA + WMANA + EMANA + QMANA + WMANA)
                     Program.CastSpell(W, t);
                 else if (Program.Combo || Program.Farm)
@@ -336,11 +335,9 @@ namespace OneKeyToWin_AIO_Sebby.Champions
                 if (Q.IsCharging)
                 {
                     Program.CastSpell(Q, t);
-                    if (OktwCommon.GetPassiveTime(Player, "XerathArcanopulseChargeUp") < 1 ||
-                        (Player.CountEnemiesInRange(800) > 0) || Player.Distance(t) > 1450)
-                        Q.Cast(Q.GetPrediction(t).CastPosition);
-                    else if (OktwCommon.GetPassiveTime(Player, "XerathArcanopulseChargeUp") < 2 ||
-                             (Player.CountEnemiesInRange(1000) > 0))
+                    if (OktwCommon.GetPassiveTime(Player, "XerathArcanopulseChargeUp") < 1 || (Player.CountEnemiesInRange(800) > 0) || Player.Distance(t) > 1450)
+                        Q.Cast(t);
+                    else if (OktwCommon.GetPassiveTime(Player, "XerathArcanopulseChargeUp") < 2 || (Player.CountEnemiesInRange(1000) > 0))
                         Q.CastIfHitchanceEquals(t, HitChance.VeryHigh);
                 }
                 else if (t.IsValidTarget(Q.Range - 300))
@@ -352,7 +349,7 @@ namespace OneKeyToWin_AIO_Sebby.Champions
                         Q.StartCharging();
                     }
                     else if (t.IsValidTarget(1200) && Program.Farm && Player.Mana > RMANA + EMANA + QMANA + QMANA &&
-                             getCheckBoxItem(harassMenu, "harras" + t.ChampionName) && !Player.UnderTurret(true) &&
+                             getCheckBoxItem(harassMenu, "harras" + t.NetworkId) && !Player.UnderTurret(true) &&
                              OktwCommon.CanHarras())
                     {
                         Q.StartCharging();
@@ -451,9 +448,9 @@ namespace OneKeyToWin_AIO_Sebby.Champions
             EMANA = E.Instance.SData.Mana;
 
             if (!R.IsReady())
-                RMANA = QMANA - Player.PARRegenRate*Q.Instance.Cooldown;
+                RMANA = QMANA - Player.PARRegenRate * Q.Instance.Cooldown;
             else
-                RMANA = RMANA - (30 + Player.Level*3 + Player.Level);
+                RMANA = RMANA - (30 + Player.Level * 3 + Player.Level);
         }
 
         private static void Drawing_OnEndScene(EventArgs args)
@@ -531,21 +528,21 @@ namespace OneKeyToWin_AIO_Sebby.Champions
                 if (t.IsValidTarget())
                 {
                     var rDamage = R.GetDamage(t);
-                    if (rDamage*3 > t.Health)
+                    if (rDamage * 3 > t.Health)
                     {
-                        Drawing.DrawText(Drawing.Width*0.1f, Drawing.Height*0.5f, Color.Red,
+                        Drawing.DrawText(Drawing.Width * 0.1f, Drawing.Height * 0.5f, Color.Red,
                             "3 x Ult can kill: " + t.ChampionName + " have: " + t.Health + "hp");
                         drawLine(t.Position, Player.Position, 10, Color.Yellow);
                     }
-                    else if (rDamage*2 > t.Health)
+                    else if (rDamage * 2 > t.Health)
                     {
-                        Drawing.DrawText(Drawing.Width*0.1f, Drawing.Height*0.5f, Color.Red,
+                        Drawing.DrawText(Drawing.Width * 0.1f, Drawing.Height * 0.5f, Color.Red,
                             "2 x Ult can kill: " + t.ChampionName + " have: " + t.Health + "hp");
                         drawLine(t.Position, Player.Position, 10, Color.Yellow);
                     }
                     else if (rDamage > t.Health)
                     {
-                        Drawing.DrawText(Drawing.Width*0.1f, Drawing.Height*0.5f, Color.Red,
+                        Drawing.DrawText(Drawing.Width * 0.1f, Drawing.Height * 0.5f, Color.Red,
                             "1 x Ult can kill: " + t.ChampionName + " have: " + t.Health + "hp");
                         drawLine(t.Position, Player.Position, 10, Color.Yellow);
                     }

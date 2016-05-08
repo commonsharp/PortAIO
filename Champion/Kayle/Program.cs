@@ -16,7 +16,7 @@ namespace SephKayle
         private static Menu Config, comboMenu, harassMenu, clearMenu, farmMenu, healMenu, ultMenu, miscMenu, drawMenu;
         private static AIHeroClient Player;
         private static readonly float incrange = 525;
-        private static Spell Q, W, E, R, Ignite;
+        private static Spell Q, W, E, R;
 
         private static bool Eon
         {
@@ -60,8 +60,8 @@ namespace SephKayle
             healMenu.AddSeparator();
             foreach (var hero in ObjectManager.Get<AIHeroClient>().Where(h => h.IsAlly))
             {
-                healMenu.Add("heal" + hero.ChampionName, new CheckBox("Heal " + hero.ChampionName));
-                healMenu.Add("hpct" + hero.ChampionName, new Slider("Health % " + hero.ChampionName, 35));
+                healMenu.Add("heal" + hero.NetworkId, new CheckBox("Heal " + hero.ChampionName));
+                healMenu.Add("hpct" + hero.NetworkId, new Slider("Health % " + hero.ChampionName, 35));
                 healMenu.AddSeparator();
             }
 
@@ -71,10 +71,10 @@ namespace SephKayle
             ultMenu.Add("udamagedetection", new CheckBox("Disable damage detection", false));
             ultMenu.Add("ucheckdmgafter", new CheckBox("Take HP after damage into consideration"));
             ultMenu.AddSeparator();
-            foreach (var hero in ObjectManager.Get<AIHeroClient>().Where(h => h.IsAlly))
+            foreach (var hero in ObjectManager.Get<AIHeroClient>().Where(h => h.IsAlly || h.IsMe))
             {
-                ultMenu.Add("ult" + hero.ChampionName, new CheckBox("Ultimate " + hero.ChampionName));
-                ultMenu.Add("upct" + hero.ChampionName, new Slider("Health % " + hero.ChampionName, 25));
+                ultMenu.Add("ult" + hero.NetworkId, new CheckBox("Ultimate " + hero.ChampionName));
+                ultMenu.Add("upct" + hero.NetworkId, new Slider("Health % " + hero.ChampionName, 25));
                 ultMenu.AddSeparator();
             }
 
@@ -191,14 +191,9 @@ namespace SephKayle
                 {
                     Q.CastOnUnit(target);
                 }
-                if (target.Health <= igniteDmg && Player.Distance(target) <= Ignite.Range)
-                {
-                    Player.Spellbook.CastSpell(Ignite.Slot, target);
-                }
                 if (target.Health <= totalksdmg && Player.Distance(target) <= Q.Range)
                 {
                     Q.CastOnUnit(target);
-                    Player.Spellbook.CastSpell(Ignite.Slot, target);
                 }
             }
         }
@@ -265,23 +260,24 @@ namespace SephKayle
             var senderhero = sender as AIHeroClient;
             var senderturret = sender as Obj_AI_Turret;
 
-            if (sender.IsAlly || (target == null) || !target.IsAlly)
+            if ((sender.IsAlly || sender.IsMe || sender.IsMinion) || (target == null) || (!target.IsAlly || !target.IsMe))
             {
                 return;
             }
-            float setvaluehealth = getSliderItem(healMenu, "hpct" + target.ChampionName);
-            float setvalueult = getSliderItem(ultMenu, "upct" + target.ChampionName);
+
+            float setvaluehealth = getSliderItem(healMenu, "hpct" + target.NetworkId);
+            float setvalueult = getSliderItem(ultMenu, "upct" + target.NetworkId);
 
             var triggered = false;
 
-            if (W.IsReady() && getCheckBoxItem(healMenu, "heal" + target.ChampionName) &&
+            if (W.IsReady() && getCheckBoxItem(healMenu, "heal" + target.NetworkId) &&
                 (target.HealthPercent <= setvaluehealth))
             {
                 HealUltManager(true, false, target);
                 triggered = true;
             }
-            if (R.IsReady() && getCheckBoxItem(ultMenu, "ult" + target.ChampionName) &&
-                (target.HealthPercent <= setvalueult) && target.Distance(Player) <= R.Range)
+
+            if (R.IsReady() && getCheckBoxItem(ultMenu, "ult" + target.NetworkId) && (target.HealthPercent <= setvalueult) && target.Distance(Player) <= R.Range)
             {
                 if (args.SData.Name.ToLower().Contains("minion") && target.HealthPercent > 5)
                 {
@@ -289,10 +285,7 @@ namespace SephKayle
                 }
                 if (debug())
                 {
-                    Chat.Print("Ult target: " + target.ChampionName +
-                               " Ult reason: Target hp percent below set value of: " + setvalueult +
-                               " Current value is: " + target.HealthPercent + " Triggered by: Incoming spell: + " +
-                               args.SData.Name);
+                    Chat.Print("Ult target: " + target.ChampionName + " Ult reason: Target hp percent below set value of: " + setvalueult + " Current value is: " + target.HealthPercent + " Triggered by: Incoming spell: + " + args.SData.Name);
                 }
                 HealUltManager(false, true, target);
                 triggered = true;
@@ -306,10 +299,7 @@ namespace SephKayle
             var damage = sender.LSGetSpellDamage(target, args.SData.Name);
             var afterdmg = (target.Health - damage)/target.MaxHealth*100f;
 
-            if (W.IsReady() && Player.Distance(target) <= W.Range &&
-                getCheckBoxItem(healMenu, "heal" + target.ChampionName) &&
-                (target.HealthPercent <= setvaluehealth ||
-                 (getCheckBoxItem(healMenu, "hcheckdmgafter") && afterdmg <= setvaluehealth)))
+            if (W.IsReady() && Player.Distance(target) <= W.Range && getCheckBoxItem(healMenu, "heal" + target.NetworkId) && (target.HealthPercent <= setvaluehealth || (getCheckBoxItem(healMenu, "hcheckdmgafter") && afterdmg <= setvaluehealth)))
             {
                 if (getCheckBoxItem(healMenu, "hdamagedetection"))
                 {
@@ -318,7 +308,7 @@ namespace SephKayle
             }
 
             if (R.IsReady() && Player.Distance(target) <= R.Range &&
-                getCheckBoxItem(ultMenu, "ult" + target.ChampionName) &&
+                getCheckBoxItem(ultMenu, "ult" + target.NetworkId) &&
                 (target.HealthPercent <= setvalueult ||
                  (getCheckBoxItem(ultMenu, "ucheckdmgafter") && afterdmg <= setvalueult)) &&
                 (senderhero != null || senderturret != null || target.HealthPercent < 5f))
@@ -344,8 +334,7 @@ namespace SephKayle
                         {
                             Chat.Print("Ult target: " + target.ChampionName +
                                        " Ult reason: Incoming spell damage and health below set value of " + setvalueult +
-                                       " Current value is: " + target.HealthPercent +
-                                       " Triggered by: Incoming spell: + " + args.SData.Name);
+                                       " Current value is: " + target.HealthPercent + " Triggered by: Incoming spell: + " + args.SData.Name);
                         }
                     }
                     HealUltManager(false, true, target);
@@ -361,6 +350,7 @@ namespace SephKayle
                 W.CastOnUnit(target);
                 return;
             }
+
             if (forceult && target != null && R.IsReady() && Player.Distance(target) <= R.Range)
             {
                 if (debug())
@@ -373,15 +363,7 @@ namespace SephKayle
 
             if (getCheckBoxItem(miscMenu, "Healingon") && !getCheckBoxItem(healMenu, "onlyhincdmg"))
             {
-                var herolistheal = ObjectManager.Get<AIHeroClient>()
-                    .Where(
-                        h =>
-                            (h.IsAlly || h.IsMe) && !h.IsZombie && !h.IsDead &&
-                            getCheckBoxItem(healMenu, "heal" + h.ChampionName) &&
-                            h.HealthPercent <= getSliderItem(healMenu, "hpct" + h.ChampionName) &&
-                            Player.Distance(h) <= R.Range)
-                    .OrderByDescending(i => i.IsMe)
-                    .ThenBy(i => i.HealthPercent);
+                var herolistheal = ObjectManager.Get<AIHeroClient>().Where(h => (h.IsAlly || h.IsMe) && !h.IsZombie && !h.IsDead && getCheckBoxItem(healMenu, "heal" + h.NetworkId) && h.HealthPercent <= getSliderItem(healMenu, "hpct" + h.NetworkId) && Player.Distance(h) <= R.Range).OrderByDescending(i => i.IsMe).ThenBy(i => i.HealthPercent);
 
                 if (W.IsReady())
                 {
@@ -407,15 +389,7 @@ namespace SephKayle
             if (getCheckBoxItem(miscMenu, "Ultingon") && !getCheckBoxItem(ultMenu, "onlyuincdmg"))
             {
                 Console.WriteLine(Player.HealthPercent);
-                var herolist = ObjectManager.Get<AIHeroClient>()
-                    .Where(
-                        h =>
-                            (h.IsAlly || h.IsMe) && !h.IsZombie && !h.IsDead &&
-                            getCheckBoxItem(ultMenu, "ult" + h.ChampionName) &&
-                            h.HealthPercent <= getSliderItem(ultMenu, "upct" + h.ChampionName) &&
-                            Player.Distance(h) <= R.Range && Player.CountEnemiesInRange(500) > 0)
-                    .OrderByDescending(i => i.IsMe)
-                    .ThenBy(i => i.HealthPercent);
+                var herolist = ObjectManager.Get<AIHeroClient>().Where(h => (h.IsAlly || h.IsMe) && !h.IsZombie && !h.IsDead && getCheckBoxItem(ultMenu, "ult" + h.NetworkId) && h.HealthPercent <= getSliderItem(ultMenu, "upct" + h.NetworkId) && Player.Distance(h) <= R.Range && Player.CountEnemiesInRange(600) > 0).OrderByDescending(i => i.IsMe).ThenBy(i => i.HealthPercent);
 
                 if (R.IsReady())
                 {
@@ -595,11 +569,6 @@ namespace SephKayle
             W = new Spell(SpellSlot.W, 900);
             E = new Spell(SpellSlot.E, 0);
             R = new Spell(SpellSlot.R, 900);
-            var ignite = ObjectManager.Player.Spellbook.GetSpell(ObjectManager.Player.GetSpellSlot("summonerdot"));
-            if (ignite.Slot != SpellSlot.Unknown)
-            {
-                Ignite = new Spell(ignite.Slot, 600);
-            }
         }
 
         private enum HarassMode

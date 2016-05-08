@@ -140,11 +140,10 @@ namespace ElTristana
                         return;
                     }
 
-                    var targeta =
-                        HeroManager.Enemies.Find(
-                            x => x.HasBuff("TristanaECharge") && x.IsValidTarget(spells[Spells.E].Range));
+                    var targeta = HeroManager.Enemies.Find(x => x.HasBuff("TristanaECharge") && x.IsValidTarget(spells[Spells.E].Range));
                     if (targeta == null)
                     {
+                        Orbwalker.ForcedTarget = null;
                         return;
                     }
                     if (Orbwalking.InAutoAttackRange(targeta))
@@ -153,13 +152,19 @@ namespace ElTristana
                     }
                 }
 
-                if (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.LastHit) ||
-                    Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.LaneClear))
+                if (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.LastHit) || Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.LaneClear))
                 {
                     var minion = args.Target as Obj_AI_Minion;
-                    if (minion != null && minion.HasBuff("TristanaECharge"))
+                    if (minion != null)
                     {
-                        Orbwalker.ForcedTarget = minion;
+                        if (minion.HasBuff("TristanaECharge"))
+                        {
+                            Orbwalker.ForcedTarget = minion;
+                        }
+                    }
+                    else
+                    {
+                        Orbwalker.ForcedTarget = null;
                     }
                 }
             }
@@ -212,9 +217,7 @@ namespace ElTristana
 
         private static void OnCombo()
         {
-            var eTarget =
-                HeroManager.Enemies.Find(
-                    x => x.HasBuff("TristanaECharge") && x.IsValidTarget(Orbwalking.GetRealAutoAttackRange(Player)));
+            var eTarget = HeroManager.Enemies.Find(x => x.HasBuff("TristanaECharge") && x.IsValidTarget(Orbwalking.GetRealAutoAttackRange(Player)));
             var target = eTarget ?? TargetSelector.GetTarget(spells[Spells.E].Range, DamageType.Physical);
 
             if (!target.IsValidTarget())
@@ -224,12 +227,9 @@ namespace ElTristana
 
             if (getCheckBoxItem(comboMenu, "ElTristana.Combo.Focus.E"))
             {
-                var passiveTarget =
-                    HeroManager.Enemies.Find(
-                        x => x.HasBuff("TristanaECharge") && x.IsValidTarget(spells[Spells.E].Range));
+                var passiveTarget = HeroManager.Enemies.Find(x => x.HasBuff("TristanaECharge") && x.IsValidTarget(spells[Spells.E].Range));
                 Orbwalker.ForcedTarget = passiveTarget ?? null;
             }
-
 
             if (spells[Spells.E].IsReady() && getCheckBoxItem(comboMenu, "ElTristana.Combo.E")
                 && Player.ManaPercent > getSliderItem(comboMenu, "ElTristana.Combo.E.Mana"))
@@ -238,14 +238,14 @@ namespace ElTristana
                 {
                     if (hero.IsEnemy)
                     {
-                        var getEnemies = getCheckBoxItem(comboMenu, "ElTristana.E.On" + hero.ChampionName);
-                        if (comboMenu["ElTristana.E.On" + hero.ChampionName] != null && getEnemies)
+                        var getEnemies = getCheckBoxItem(comboMenu, "ElTristana.E.On" + hero.NetworkId);
+                        if (comboMenu["ElTristana.E.On" + hero.NetworkId] != null && getEnemies)
                         {
                             spells[Spells.E].Cast(hero);
                             Orbwalker.ForcedTarget = hero;
                         }
 
-                        if (comboMenu["ElTristana.E.On" + hero.ChampionName] != null && !getEnemies && Player.CountEnemiesInRange(1500) == 1)
+                        if (comboMenu["ElTristana.E.On" + hero.NetworkId] != null && !getEnemies && Player.CountEnemiesInRange(1500) == 1)
                         {
                             spells[Spells.E].Cast(hero);
                             Orbwalker.ForcedTarget = hero;
@@ -314,7 +314,7 @@ namespace ElTristana
                             for (var i = 0; 4 > i; i++)
                             {
                                 Drawing.DrawLine(x + i * 20, y, x + i * 20 + 10, y, 10,
-                                    i > stacks ? Color.DarkGray : Color.DeepSkyBlue);
+                                    i > stacks ? Color.DarkGray : Color.OrangeRed);
                             }
                         }
 
@@ -342,7 +342,11 @@ namespace ElTristana
 
                                             if (spells[Spells.W].GetDamage(target) > target.Health + 15)
                                             {
-                                                spells[Spells.W].Cast(target.ServerPosition);
+                                                var prediction = spells[Spells.W].GetPrediction(target);
+                                                if (prediction.Hitchance >= HitChance.High)
+                                                {
+                                                    spells[Spells.W].Cast(prediction.CastPosition);
+                                                }
                                             }
                                         }
                                     }
@@ -416,8 +420,8 @@ namespace ElTristana
                 {
                     if (hero.IsEnemy)
                     {
-                        var getEnemies = getCheckBoxItem(harassMenu, "ElTristana.E.On.Harass" + hero.CharData.BaseSkinName);
-                        if (harassMenu["ElTristana.E.On.Harass" + hero.CharData.BaseSkinName] != null && getEnemies)
+                        var getEnemies = getCheckBoxItem(harassMenu, "ElTristana.E.On.Harass" + hero.NetworkId);
+                        if (harassMenu["ElTristana.E.On.Harass" + hero.NetworkId] != null && getEnemies)
                         {
                             spells[Spells.E].Cast(hero);
                             Orbwalker.ForcedTarget = hero;
@@ -472,54 +476,41 @@ namespace ElTristana
             {
                 foreach (var tower in ObjectManager.Get<Obj_AI_Turret>())
                 {
-                    if (!tower.IsDead && tower.Health > 100 && tower.IsEnemy && tower.IsValidTarget()
-                        && Player.ServerPosition.Distance(tower.ServerPosition)
-                        < Orbwalking.GetRealAutoAttackRange(Player))
+                    if (!tower.IsDead && tower.Health > 100 && tower.IsEnemy && tower.IsValidTarget() && Player.ServerPosition.Distance(tower.ServerPosition) < Orbwalking.GetRealAutoAttackRange(Player))
                     {
                         spells[Spells.E].Cast(tower);
                     }
                 }
             }
 
-            var minions = MinionManager.GetMinions(
-                ObjectManager.Player.ServerPosition,
-                spells[Spells.E].Range,
-                MinionTypes.All,
-                MinionTeam.NotAlly,
-                MinionOrderTypes.MaxHealth);
-
-            if (minions.Count <= 0)
-            {
-                return;
-            }
-
-            if (spells[Spells.E].IsReady() && getCheckBoxItem(laneClearMenu, "ElTristana.LaneClear.E") &&
-                minions.Count > 2
-                && Player.ManaPercent > getSliderItem(laneClearMenu, "ElTristana.LaneClear.E.Mana"))
-            {
-                foreach (var minion in
-                    ObjectManager.Get<Obj_AI_Minion>().OrderByDescending(m => m.Health))
-                {
-                    spells[Spells.E].Cast(minion);
-                    Orbwalker.ForcedTarget = minion;
-                }
-            }
-
-            var eminion =
-                minions.Find(x => x.HasBuff("TristanaECharge") && x.IsValidTarget(1000));
+            var eminion = EntityManager.MinionsAndMonsters.EnemyMinions.Where(x => x.HasBuff("TristanaECharge") && x.LSIsValidTarget(1000)).FirstOrDefault();
 
             if (eminion != null)
             {
                 Orbwalker.ForcedTarget = eminion;
             }
-
-            if (spells[Spells.Q].IsReady() && getCheckBoxItem(laneClearMenu, "ElTristana.LaneClear.Q"))
+            else
             {
-                var eMob = minions.FindAll(x => x.IsValidTarget() && x.HasBuff("TristanaECharge")).FirstOrDefault();
-                if (eMob != null)
+                Orbwalker.ForcedTarget = null;
+            }
+
+            var minions = MinionManager.GetMinions(ObjectManager.Player.ServerPosition, spells[Spells.E].Range, MinionTypes.All, MinionTeam.NotAlly, MinionOrderTypes.MaxHealth);
+            if (minions.Count <= 0)
+            {
+                return;
+            }
+
+            if (spells[Spells.Q].IsReady() && minions.Count > 0 && getCheckBoxItem(laneClearMenu, "ElTristana.LaneClear.Q"))
+            {
+                spells[Spells.Q].Cast();
+            }
+
+            if (spells[Spells.E].IsReady() && getCheckBoxItem(laneClearMenu, "ElTristana.LaneClear.E") && minions.Count > 2 && Player.ManaPercent > getSliderItem(laneClearMenu, "ElTristana.LaneClear.E.Mana"))
+            {
+                foreach (var minion in ObjectManager.Get<Obj_AI_Minion>().OrderByDescending(m => m.Health))
                 {
-                    Orbwalker.ForcedTarget = eMob;
-                    spells[Spells.Q].Cast();
+                    spells[Spells.E].Cast(minion);
+                    Orbwalker.ForcedTarget = minion;
                 }
             }
         }

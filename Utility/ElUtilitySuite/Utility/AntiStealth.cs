@@ -11,6 +11,7 @@
     using EloBuddy;
     using EloBuddy.SDK.Menu;
     using EloBuddy.SDK.Menu.Values;
+    using EloBuddy.SDK;
     internal class AntiStealth : IPlugin
     {
         #region Static Fields
@@ -133,6 +134,34 @@
 
             GameObject.OnCreate += this.GameObject_OnCreate;
             Obj_AI_Base.OnProcessSpellCast += this.OnProcessSpellCast;
+            Game.OnUpdate += this.OnUpdate;
+        }
+
+        /// <summary>
+        ///     Fired when the game is updated.
+        /// </summary>
+        /// <param name="args">The <see cref="System.EventArgs" /> instance containing the event data.</param>
+        private void OnUpdate(EventArgs args)
+        {
+            try
+            {
+                this.vayne = HeroManager.Enemies.Find(x => x.ChampionName.ToLower() == "vayne");
+                if (this.vayne == null)
+                {
+                    return;
+                }
+
+                foreach (var hero in ObjectManager.Get<AIHeroClient>().Where(x => x.IsEnemy &&
+                    x.ChampionName.ToLower().Contains("vayne") &&
+                    x.Buffs.Any(y => y.Name == "VayneInquisition")))
+                {
+                    this.VayneBuffEndTime = hero.Buffs.First(x => x.Name == "VayneInquisition").EndTime;
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("An error occurred: '{0}'", e);
+            }
         }
 
         #endregion
@@ -147,7 +176,7 @@
         {
             try
             {
-                if (!sender.IsEnemy || !this.Menu["AntiStealthActive"].Cast<CheckBox>().CurrentValue)
+                if (!sender.IsEnemy || !this.Menu["AntiStealthActive"].Cast<CheckBox>().CurrentValue || ObjectManager.Player.InFountain(LeagueSharp.Common.Utility.FountainType.OwnFountain))
                 {
                     return;
                 }
@@ -156,7 +185,8 @@
                 {
                     if (sender.Name.Contains("Rengar_Base_R_Alert"))
                     {
-                        if (this.Player.HasBuff("rengarralertsound") && !this.rengar.IsVisible && !this.rengar.IsDead)
+                        if (this.Player.HasBuff("rengarralertsound") && !this.rengar.IsVisible && !this.rengar.IsDead &&
+                            this.Player.Distance(sender.Position) < 1700)
                         {
                             var hero = (AIHeroClient)sender;
 
@@ -181,6 +211,46 @@
             }
         }
 
+        public static Item Pink = new Item(ItemId.Vision_Ward, 550f);
+        public static Item Sweep = new Item(ItemId.Sweeping_Lens_Trinket, getLevelSWEEP());
+        public static Item Oracle = new Item(ItemId.Oracle_Alteration, 550f);
+
+        public static float getLevelSWEEP()
+        {
+            var f = 0.0f;
+            if (ObjectManager.Player.Level >= 1 && ObjectManager.Player.Level < 4)
+            {
+                f = 500f;
+            }
+            if (ObjectManager.Player.Level >= 4 && ObjectManager.Player.Level < 7)
+            {
+                f = 800f;
+            }
+            if (ObjectManager.Player.Level >= 7 && ObjectManager.Player.Level < 10)
+            {
+                f = 1100f;
+            }
+            if (ObjectManager.Player.Level >= 10 && ObjectManager.Player.Level < 13)
+            {
+                f = 1400f;
+            }
+            if (ObjectManager.Player.Level >= 13 && ObjectManager.Player.Level < 16)
+            {
+                f = 1700f;
+            }
+            if (ObjectManager.Player.Level >= 16)
+            {
+                f = 2000f;
+            }
+            return f;
+        }
+
+        /// <summary>
+        ///     Vayne
+        /// </summary>
+        private AIHeroClient vayne;
+        public float VayneBuffEndTime = 0;
+
         /// <summary>
         /// </summary>
         /// <param name="sender"></param>
@@ -190,21 +260,37 @@
             try
             {
                 var hero = sender as AIHeroClient;
-                if (!sender.IsEnemy || hero == null || !this.Menu["AntiStealthActive"].Cast<CheckBox>().CurrentValue)
+                if (!sender.IsEnemy || hero == null || !this.Menu["AntiStealthActive"].Cast<CheckBox>().CurrentValue || ObjectManager.Player.InFountain(LeagueSharp.Common.Utility.FountainType.OwnFountain))
                 {
                     return;
                 }
 
-                var stealthChampion =
-                    Spells.FirstOrDefault(x => x.SDataName.Equals(args.SData.Name, StringComparison.OrdinalIgnoreCase));
+                if (this.Player.Distance(sender.Position) > 800)
+                {
+                    return;
+                }
+
+                if (args.SData.Name.ToLower().Contains("vaynetumble") && Game.Time > this.VayneBuffEndTime)
+                {
+                    return;
+                }
+
+                var stealthChampion = Spells.FirstOrDefault(x => x.SDataName.Equals(args.SData.Name, StringComparison.OrdinalIgnoreCase));
 
                 if (stealthChampion != null)
                 {
-                    var item = this.Items.Select(x => x.Item).FirstOrDefault(x => x.IsInRange(hero) && x.IsReady());
-                    if (item != null)
+                    var spellCastPosition = this.Player.LSDistance(args.End) > 600 ? this.Player.Position : args.End;
+                    if (Pink.IsReady() && Pink.IsOwned())
                     {
-                        var spellCastPosition = this.Player.LSDistance(args.End) > 600 ? this.Player.Position : args.End;
-                        LeagueSharp.Common.Utility.DelayAction.Add(random.Next(100, 1000), () => item.Cast(spellCastPosition));
+                        LeagueSharp.Common.Utility.DelayAction.Add(random.Next(100, 1000), () => Pink.Cast(spellCastPosition));
+                    }
+                    if (Sweep.IsReady() && Sweep.IsOwned())
+                    {
+                        LeagueSharp.Common.Utility.DelayAction.Add(random.Next(100, 1000), () => Sweep.Cast(spellCastPosition));
+                    }
+                    if (Oracle.IsReady() && Oracle.IsOwned())
+                    {
+                        LeagueSharp.Common.Utility.DelayAction.Add(random.Next(100, 1000), () => Oracle.Cast());
                     }
                 }
             }

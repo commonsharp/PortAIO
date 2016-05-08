@@ -94,7 +94,7 @@ namespace OneKeyToWin_AIO_Sebby.Champions
 
             harassMenu = Config.AddSubMenu("Harass");
             foreach (var enemy in ObjectManager.Get<AIHeroClient>().Where(enemy => enemy.Team != Player.Team))
-                harassMenu.Add("haras" + enemy.ChampionName, new CheckBox(enemy.ChampionName));
+                harassMenu.Add("haras" + enemy.NetworkId, new CheckBox(enemy.ChampionName));
             harassMenu.Add("harassMana", new Slider("Harass Mana", 80));
 
             miscMenu = Config.AddSubMenu("Misc");
@@ -370,7 +370,7 @@ namespace OneKeyToWin_AIO_Sebby.Champions
                 else if (Program.Farm && Player.ManaPercent > getSliderItem(harassMenu, "harassMana") &&
                          OktwCommon.CanHarras())
                 {
-                    foreach (var enemy in Program.Enemies.Where(enemy => enemy.IsValidTarget(qtype.Range) && getCheckBoxItem(harassMenu, "haras" + enemy.ChampionName)))
+                    foreach (var enemy in Program.Enemies.Where(enemy => enemy.IsValidTarget(qtype.Range) && getCheckBoxItem(harassMenu, "haras" + enemy.NetworkId)))
                     {
                         CastQ(enemy);
                     }

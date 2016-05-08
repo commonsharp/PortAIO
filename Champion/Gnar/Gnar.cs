@@ -270,14 +270,14 @@ namespace Slutty_Gnar_Reworked
 
                     if (k == null)
                         return;
-                    var edm = Player.ServerPosition.Extend(minionPrediction.CastPosition,
+                    var edm = Player.ServerPosition.LSExtend(minionPrediction.CastPosition,
                         Player.ServerPosition.Distance(minionPrediction.CastPosition) + GnarSpells.EMini.Range);
                     if (!ObjectManager.Get<Obj_AI_Turret>().Any(type => type.IsMinion
                                                                         && !type.IsDead
                                                                         && type.Distance(edm, true) < 775*775))
                     {
                         GnarSpells.EMini.Cast(edm.Extend(Game.CursorPos,
-                            Player.ServerPosition.Distance(minionPrediction.CastPosition) + GnarSpells.EMini.Range));
+                            Player.ServerPosition.LSDistance(minionPrediction.CastPosition) + GnarSpells.EMini.Range));
                     }
                 }
             }

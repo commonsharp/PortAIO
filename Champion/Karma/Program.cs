@@ -232,7 +232,7 @@ namespace Karma
                     var qPrediction = _q.GetPrediction(qTarget);
                     if (qPrediction.Hitchance >= HitChance.High)
                     {
-                        _q.Cast(qPrediction.CastPosition);
+                        _q.Cast(qTarget);
                     }
                     else if (qPrediction.Hitchance == HitChance.Collision)
                     {
@@ -244,7 +244,7 @@ namespace Karma
 
                         if (closest != null && closest.Distance(qPrediction.UnitPosition) < 200)
                         {
-                            _q.Cast(qPrediction.CastPosition);
+                            _q.Cast(qTarget);
                         }
                     }
                 }

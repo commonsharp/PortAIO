@@ -69,14 +69,14 @@ namespace OneKeyToWin_AIO_Sebby.Champions
             eMenu.Add("EmodeGC",
                 new ComboBox("Gap Closer position mode", 0, "Dash end position", "Player position", "Prediction"));
             foreach (var enemy in ObjectManager.Get<AIHeroClient>().Where(enemy => enemy.IsEnemy))
-                eMenu.Add("EGCchampion" + enemy.ChampionName, new CheckBox("On : " + enemy.ChampionName));
+                eMenu.Add("EGCchampion" + enemy.NetworkId, new CheckBox("On : " + enemy.ChampionName));
 
             rMenu = Config.AddSubMenu("R Config");
             rMenu.Add("autoR", new CheckBox("Auto R KS"));
 
             harassMenu = Config.AddSubMenu("Harass");
             foreach (var enemy in ObjectManager.Get<AIHeroClient>().Where(enemy => enemy.IsEnemy))
-                harassMenu.Add("harras" + enemy.ChampionName, new CheckBox("Harass : " + enemy.ChampionName));
+                harassMenu.Add("harras" + enemy.NetworkId, new CheckBox("Harass : " + enemy.ChampionName));
 
             farmMenu = Config.AddSubMenu("Farm");
             farmMenu.Add("farmE", new CheckBox("Lane clear E"));
@@ -117,7 +117,7 @@ namespace OneKeyToWin_AIO_Sebby.Champions
         private static void AntiGapcloser_OnEnemyGapcloser(ActiveGapcloser gapcloser)
         {
             var t = gapcloser.Sender;
-            if (E.IsReady() && t.IsValidTarget(E.Range) && getCheckBoxItem(eMenu, "EGCchampion" + t.ChampionName))
+            if (E.IsReady() && t.IsValidTarget(E.Range) && getCheckBoxItem(eMenu, "EGCchampion" + t.NetworkId))
             {
                 if (getBoxItem(eMenu, "EmodeGC") == 0)
                     E.Cast(gapcloser.End);
@@ -156,8 +156,7 @@ namespace OneKeyToWin_AIO_Sebby.Champions
                     var t = TargetSelector.GetTarget(R.Range + 150, DamageType.Magical);
                     if (t.IsValidTarget() && OktwCommon.ValidUlt(t))
                     {
-                        Player.Spellbook.UpdateChargeableSpell(SpellSlot.R, R.GetPrediction(t, true).CastPosition, false,
-                            false);
+                        Player.Spellbook.UpdateChargeableSpell(SpellSlot.R, R.GetPrediction(t, true).CastPosition, false, false);
                     }
                 }
                 Orbwalker.DisableAttacking = true;
@@ -166,6 +165,12 @@ namespace OneKeyToWin_AIO_Sebby.Champions
             else if (R.IsReady() && getCheckBoxItem(rMenu, "autoR"))
             {
                 LogicR();
+                Orbwalker.DisableAttacking = false;
+                Orbwalker.DisableMovement = false;
+            }
+
+            if (!Player.IsChannelingImportantSpell())
+            {
                 Orbwalker.DisableAttacking = false;
                 Orbwalker.DisableMovement = false;
             }
@@ -225,7 +230,7 @@ namespace OneKeyToWin_AIO_Sebby.Champions
                 if (Program.Combo && Player.Mana > RMANA + EMANA)
                     Program.CastSpell(E, t);
                 else if (Program.Farm && OktwCommon.CanHarras() && getCheckBoxItem(eMenu, "harrasE") &&
-                         getCheckBoxItem(harassMenu, "harras" + t.ChampionName) &&
+                         getCheckBoxItem(harassMenu, "harras" + t.NetworkId) &&
                          Player.Mana > RMANA + EMANA + WMANA + EMANA)
                     Program.CastSpell(E, t);
                 else
@@ -268,7 +273,7 @@ namespace OneKeyToWin_AIO_Sebby.Champions
                 if (Program.Combo && Player.Mana > RMANA + WMANA)
                     Program.CastSpell(W, t);
                 else if (Program.Farm && getCheckBoxItem(wMenu, "harrasW") &&
-                         getCheckBoxItem(harassMenu, "harras" + t.ChampionName)
+                         getCheckBoxItem(harassMenu, "harras" + t.NetworkId)
                          && Player.Mana > RMANA + WMANA + EMANA + QMANA + WMANA && OktwCommon.CanHarras())
                     Program.CastSpell(W, t);
                 else
@@ -312,7 +317,7 @@ namespace OneKeyToWin_AIO_Sebby.Champions
                         if (Program.Combo && Player.Mana > RMANA + QMANA)
                             CastQ(t);
                         else if (Program.Farm && OktwCommon.CanHarras() && getCheckBoxItem(qMenu, "harrasQ") &&
-                                 getCheckBoxItem(harassMenu, "harras" + t.ChampionName) &&
+                                 getCheckBoxItem(harassMenu, "harras" + t.NetworkId) &&
                                  Player.ManaPercent > getSliderItem(qMenu, "QHarassMana"))
                             CastQ(t);
                         else
@@ -354,9 +359,9 @@ namespace OneKeyToWin_AIO_Sebby.Champions
                 if (pred.Hitchance >= HitChance.High)
                 {
                     if (Program.LagFree(1))
-                        pointList = AimQ(pred.CastPosition);
+                        pointList = AimQ(t.ServerPosition);
                     if (Program.LagFree(2))
-                        BestAim(pred.CastPosition);
+                        BestAim(t.ServerPosition);
                 }
             }
         }

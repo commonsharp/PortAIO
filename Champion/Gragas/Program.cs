@@ -230,7 +230,7 @@ namespace GragasTheDrunkCarry
 
             if (getCheckBoxItem(comboMenu, "AutoB") && Bomb != null)
             {
-                foreach (var hero in ObjectManager.Get<AIHeroClient>().Where(hero => hero.IsEnemy && hero.Distance(Bomb.Position) <= 250))
+                foreach (var hero in ObjectManager.Get<AIHeroClient>().Where(hero => hero.IsEnemy && hero.Distance(Bomb.Position) <= 300))
                 {
                     Qcast(hero);
                 }
@@ -391,7 +391,7 @@ namespace GragasTheDrunkCarry
                 Q.Cast(target, true);
             }
 
-            if (Bomb != null && target.Distance(Bomb.Position) <= 250)
+            if (Bomb != null && target.Distance(Bomb.Position) <= 300)
             {
                 Q.Cast();
             }

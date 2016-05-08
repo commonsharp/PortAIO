@@ -15,7 +15,7 @@ namespace PortAIO.Champion.Bard
 {
     internal class Program
     {
-        public static Menu BardMenu, comboMenu, harassMenu, fleeMenu, miscMenu;
+        public static Menu BardMenu, comboMenu, harassMenu, miscMenu;
 
         public static Dictionary<SpellSlot, Spell> spells = new Dictionary<SpellSlot, Spell>
         {
@@ -65,23 +65,16 @@ namespace PortAIO.Champion.Bard
             harassMenu.AddGroupLabel("Q Targets (Harass Only)");
             foreach (var hero in HeroManager.Enemies)
             {
-                harassMenu.Add(string.Format("dz191.bard.qtarget.{0}", hero.ChampionName.ToLower()),
-                    new CheckBox("Harass : " + hero.ChampionName));
+                harassMenu.Add(string.Format("dz191.bard.qtarget.{0}", hero.NetworkId), new CheckBox("Harass : " + hero.ChampionName));
             }
             harassMenu.AddSeparator();
             harassMenu.Add("dz191.bard.mixed.useq", new CheckBox("Use Q"));
-
-            fleeMenu = BardMenu.AddSubMenu("Flee", "dz191.bard.flee");
-            fleeMenu.Add("dz191.bard.flee.q", new CheckBox("Q Flee"));
-            fleeMenu.Add("dz191.bard.flee.w", new CheckBox("W Flee"));
-            fleeMenu.Add("dz191.bard.flee.e", new CheckBox("E Flee"));
 
             miscMenu = BardMenu.AddSubMenu("Misc", "dz191.bard.misc");
             miscMenu.AddGroupLabel("W Settings");
             foreach (var hero in HeroManager.Allies)
             {
-                miscMenu.Add(string.Format("dz191.bard.wtarget.{0}", hero.ChampionName.ToLower()),
-                    new CheckBox("Heal " + hero.ChampionName));
+                miscMenu.Add(string.Format("dz191.bard.wtarget.{0}", hero.NetworkId), new CheckBox("Heal " + hero.ChampionName));
             }
             miscMenu.Add("dz191.bard.wtarget.healthpercent", new Slider("Health % for W", 25, 1));
             miscMenu.AddGroupLabel("Q - Cosmic Binding");
@@ -147,7 +140,7 @@ namespace PortAIO.Champion.Bard
 
         private static void Game_OnUpdate(EventArgs args)
         {
-            var ComboTarget = TargetSelector.GetTarget(spells[SpellSlot.Q].Range/1.3f, DamageType.Magical);
+            var ComboTarget = TargetSelector.GetTarget(spells[SpellSlot.Q].Range / 1.3f, DamageType.Magical);
 
             if (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.Combo))
             {
@@ -168,66 +161,9 @@ namespace PortAIO.Champion.Bard
                 if (spells[SpellSlot.Q].IsReady() && getCheckBoxItem(harassMenu, "dz191.bard.mixed.useq") &&
                     ComboTarget.IsValidTarget() &&
                     getCheckBoxItem(harassMenu,
-                        string.Format("dz191.bard.qtarget.{0}", ComboTarget.ChampionName.ToLower())))
+                        string.Format("dz191.bard.qtarget.{0}", ComboTarget.NetworkId)))
                 {
                     HandleQ(ComboTarget);
-                }
-            }
-
-            if (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.Flee))
-            {
-                DoFlee();
-            }
-        }
-
-        private static void DoFlee()
-        {
-            if (IsOverWall(ObjectManager.Player.ServerPosition, Game.CursorPos) &&
-                GetWallLength(ObjectManager.Player.ServerPosition, Game.CursorPos) >= 250f &&
-                (spells[SpellSlot.E].IsReady() ||
-                 (TunnelNetworkID != -1 && (ObjectManager.Player.ServerPosition.Distance(TunnelEntrance) < 250f))))
-            {
-                MoveToLimited(GetFirstWallPoint(ObjectManager.Player.ServerPosition, Game.CursorPos));
-            }
-            else
-            {
-                MoveToLimited(Game.CursorPos);
-            }
-
-            if (getCheckBoxItem(fleeMenu, "dz191.bard.flee.q"))
-            {
-                var ComboTarget = TargetSelector.GetTarget(spells[SpellSlot.Q].Range/1.3f, DamageType.Magical);
-
-                if (spells[SpellSlot.Q].IsReady() &&
-                    ComboTarget.IsValidTarget())
-                {
-                    HandleQ(ComboTarget);
-                }
-            }
-
-            if (getCheckBoxItem(fleeMenu, "dz191.bard.flee.w"))
-            {
-                if (ObjectManager.Player.CountAlliesInRange(1000f) - 1 < ObjectManager.Player.CountEnemiesInRange(1000f)
-                    ||
-                    (ObjectManager.Player.HealthPercent <= getSliderItem(miscMenu, "dz191.bard.wtarget.healthpercent") &&
-                     ObjectManager.Player.CountEnemiesInRange(900f) >= 1))
-                {
-                    var castPosition = ObjectManager.Player.ServerPosition.Extend(Game.CursorPos, 65);
-                    spells[SpellSlot.W].Cast(castPosition);
-                }
-            }
-
-            if (getCheckBoxItem(fleeMenu, "dz191.bard.flee.e"))
-            {
-                var dir = ObjectManager.Player.ServerPosition.To2D() +
-                          ObjectManager.Player.Direction.To2D().Perpendicular()*
-                          (ObjectManager.Player.BoundingRadius*2.5f);
-                var Extended = Game.CursorPos;
-                if (dir.IsWall() && IsOverWall(ObjectManager.Player.ServerPosition, Extended)
-                    && spells[SpellSlot.E].IsReady()
-                    && GetWallLength(ObjectManager.Player.ServerPosition, Extended) >= 250f)
-                {
-                    spells[SpellSlot.E].Cast(Extended);
                 }
             }
         }
@@ -268,7 +204,7 @@ namespace PortAIO.Champion.Bard
                 foreach (var position in BeamStartPositions)
                 {
                     var collisionableObjects = spells[SpellSlot.Q].GetCollision(position.To2D(),
-                        new List<Vector2> {position.Extend(PlayerPosition, -QPushDistance)});
+                        new List<Vector2> { position.Extend(PlayerPosition, -QPushDistance) });
 
                     if (collisionableObjects.Any())
                     {
@@ -279,13 +215,13 @@ namespace PortAIO.Champion.Bard
                             break;
                         }
 
-                        for (var i = 0; i < QPushDistance; i += (int) comboTarget.BoundingRadius)
+                        for (var i = 0; i < QPushDistance; i += (int)comboTarget.BoundingRadius)
                         {
                             CollisionPositions.Add(position.Extend(PlayerPosition, -i).To3D());
                         }
                     }
 
-                    for (var i = 0; i < QPushDistance; i += (int) comboTarget.BoundingRadius)
+                    for (var i = 0; i < QPushDistance; i += (int)comboTarget.BoundingRadius)
                     {
                         PositionsList.Add(position.Extend(PlayerPosition, -i).To3D());
                     }
@@ -294,10 +230,10 @@ namespace PortAIO.Champion.Bard
                 if (PositionsList.Any())
                 {
                     //We don't want to divide by 0 Kappa
-                    var WallNumber = PositionsList.Count(p => p.IsWall())*1.3f;
+                    var WallNumber = PositionsList.Count(p => p.IsWall()) * 1.3f;
                     var CollisionPositionCount = CollisionPositions.Count;
-                    var Percent = (WallNumber + CollisionPositionCount)/PositionsList.Count;
-                    var AccuracyEx = QAccuracy/100f;
+                    var Percent = (WallNumber + CollisionPositionCount) / PositionsList.Count;
+                    var AccuracyEx = QAccuracy / 100f;
                     if (Percent >= AccuracyEx)
                     {
                         spells[SpellSlot.Q].Cast(QPrediction.CastPosition);
@@ -334,7 +270,7 @@ namespace PortAIO.Champion.Bard
                     ally =>
                         ally.IsValidTarget(spells[SpellSlot.W].Range) &&
                         ally.HealthPercent <= getSliderItem(miscMenu, "dz191.bard.wtarget.healthpercent") &&
-                        getCheckBoxItem(miscMenu, string.Format("dz191.bard.wtarget.{0}", ally.ChampionName.ToLower())))
+                        getCheckBoxItem(miscMenu, string.Format("dz191.bard.wtarget.{0}", ally.NetworkId)))
                     .OrderBy(ally => ally.Health)
                     .FirstOrDefault();
 

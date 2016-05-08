@@ -33,35 +33,16 @@ namespace OneKeyToWin_AIO_Sebby.Core
         private bool rengar;
         private AIHeroClient Vayne;
 
-        private readonly Items.Item
-            VisionWard = new Items.Item(2043, 550f);
-
-        private readonly Items.Item
-            OracleLens = new Items.Item(3364, 550f);
-
-        private readonly Items.Item
-            WardN = new Items.Item(2044, 600f);
-
-        private readonly Items.Item
-            TrinketN = new Items.Item(3340, 600f);
-
-        private readonly Items.Item
-            SightStone = new Items.Item(2049, 600f);
-
-        private readonly Items.Item
-            EOTOasis = new Items.Item(2302, 600f);
-
-        private readonly Items.Item
-            EOTEquinox = new Items.Item(2303, 600f);
-
-        private readonly Items.Item
-            EOTWatchers = new Items.Item(2301, 600f);
-
-        private readonly Items.Item
-            FarsightOrb = new Items.Item(3342, 4000f);
-
-        private readonly Items.Item
-            ScryingOrb = new Items.Item(3363, 3500f);
+        private Item VisionWard = new Item(ItemId.Vision_Ward, 550);
+        private Item Sweep = new Item(ItemId.Sweeping_Lens_Trinket, 550);
+        private Item OracleLens = new Item(ItemId.Oracle_Alteration, 550);
+        private Item TrinketN = new Item(ItemId.Warding_Totem_Trinket, 600);
+        private Item SightStone = new Item(ItemId.Sightstone, 600);
+        private Item RSightStone = new Item(ItemId.Ruby_Sightstone, 600);
+        private Item EOTOasis = new Item(ItemId.Eye_of_the_Oasis, 600);
+        private Item EOTEquinox = new Item(ItemId.Eye_of_the_Equinox, 600);
+        private Item EOTWatchers = new Item(ItemId.Eye_of_the_Watchers, 600);
+        private Item FarsightOrb = new Item(ItemId.Farsight_Alteration, 4000);
 
         public AIHeroClient Player
         {
@@ -118,7 +99,7 @@ namespace OneKeyToWin_AIO_Sebby.Core
                 }
             }
 
-            if (getCheckBoxItem("autoBuy") && Player.InFountain() && !ScryingOrb.IsOwned() && Player.Level >= 9)
+            if (getCheckBoxItem("autoBuy") && Player.InFountain() && !FarsightOrb.IsOwned() && Player.Level >= 9)
             {
                 var itm = new Item(ItemId.Farsight_Alteration);
                 itm.Buy();
@@ -135,12 +116,16 @@ namespace OneKeyToWin_AIO_Sebby.Core
 
         private void AutoWardLogic()
         {
-            foreach (var enemy in Program.Enemies.Where(enemy => enemy.IsValid && !enemy.IsVisible && !enemy.IsDead))
+            foreach (var enemy in Program.Enemies)
             {
+                if (enemy.IsHPBarRendered)
+                {
+                    return;
+                }
                 var need = OKTWtracker.ChampionInfoList.Find(x => x.NetworkId == enemy.NetworkId);
-
                 if (need == null || need.PredictedPos == null)
                     continue;
+
 
                 var PPDistance = need.PredictedPos.Distance(Player.Position);
 
@@ -151,19 +136,12 @@ namespace OneKeyToWin_AIO_Sebby.Core
 
                 if (timer > 1 && timer < 3)
                 {
-                    //if (Program.Combo && PPDistance < 1500 && Player.ChampionName == "Quinn" && W.IsReady() && Config.Item("autoW", true).GetValue<bool>())
-                    //{
-                    //W.Cast();
-                    //}
-
-                    if (Program.Combo && PPDistance < 900 && Player.ChampionName == "Karhus" && Q.IsReady() &&
-                        Player.CountEnemiesInRange(900) == 0)
+                    if (Program.Combo && PPDistance < 900 && Player.ChampionName == "Karthus" && Q.IsReady() && Player.CountEnemiesInRange(900) == 0)
                     {
                         Q.Cast(need.PredictedPos);
                     }
 
-                    if (Program.Combo && PPDistance < 1400 && Player.ChampionName == "Ashe" && E.IsReady() &&
-                        Player.CountEnemiesInRange(800) == 0 && PortAIO.Champion.Ashe.Program.getAutoE())
+                    if (Program.Combo && PPDistance < 1400 && Player.ChampionName == "Ashe" && E.IsReady() && Player.CountEnemiesInRange(800) == 0 && PortAIO.Champion.Ashe.Program.getAutoE())
                     {
                         E.Cast(Player.Position.Extend(need.PredictedPos, 5000));
                     }
@@ -174,21 +152,17 @@ namespace OneKeyToWin_AIO_Sebby.Core
                         E.Cast(Player.Position.Extend(need.PredictedPos, 800));
                     }
 
-                    if (PPDistance < 800 && Player.ChampionName == "Caitlyn" && W.IsReady() && Player.Mana > 200f && PortAIO.Champion.Caitlyn.Program.getBushW() && Utils.TickCount - W.LastCastAttemptT > 2000)
+                    if (!Orbwalker.IsAutoAttacking && PPDistance < 800 && Player.ChampionName == "Caitlyn" && W.IsReady() && Player.Mana > 200f && PortAIO.Champion.Caitlyn.Program.getBushW() && Utils.TickCount - W.LastCastAttemptT > 2000)
                     {
                         W.Cast(need.PredictedPos);
                     }
-                    //if (PPDistance < 760 && Player.ChampionName == "Jhin" && E.IsReady() && Player.Mana > 200f && Config.Item("bushE", true).GetValue<bool>() && Utils.TickCount - E.LastCastAttemptT > 2000)
-                    //{
-                    //E.Cast(need.PredictedPos);
-                    //}
                 }
+
 
                 if (timer < 4)
                 {
                     if (getCheckBoxItem("AutoWardCombo") && Program.AIOmode != 2 && !Program.Combo)
                         return;
-
                     if (NavMesh.IsWallOfGrass(need.PredictedPos, 0))
                     {
                         if (PPDistance < 600 && getCheckBoxItem("AutoWard"))
@@ -198,14 +172,14 @@ namespace OneKeyToWin_AIO_Sebby.Core
                                 TrinketN.Cast(need.PredictedPos);
                                 need.LastVisableTime = Game.Time - 5;
                             }
+                            else if (RSightStone.IsReady())
+                            {
+                                RSightStone.Cast(need.PredictedPos);
+                                need.LastVisableTime = Game.Time - 5;
+                            }
                             else if (SightStone.IsReady())
                             {
                                 SightStone.Cast(need.PredictedPos);
-                                need.LastVisableTime = Game.Time - 5;
-                            }
-                            else if (WardN.IsReady())
-                            {
-                                WardN.Cast(need.PredictedPos);
                                 need.LastVisableTime = Game.Time - 5;
                             }
                             else if (EOTOasis.IsReady())
@@ -230,11 +204,6 @@ namespace OneKeyToWin_AIO_Sebby.Core
                             if (FarsightOrb.IsReady())
                             {
                                 FarsightOrb.Cast(need.PredictedPos);
-                                need.LastVisableTime = Game.Time - 5;
-                            }
-                            else if (ScryingOrb.IsReady())
-                            {
-                                ScryingOrb.Cast(need.PredictedPos);
                                 need.LastVisableTime = Game.Time - 5;
                             }
                         }
@@ -276,9 +245,9 @@ namespace OneKeyToWin_AIO_Sebby.Core
                         }
                     }
 
-                    var dupa = (Obj_AI_Minion) sender;
+                    var dupa = (Obj_AI_Minion)sender;
                     if (dupa.Mana == 0)
-                        HiddenObjList.Add(new HiddenObj {type = 2, pos = sender.Position, endTime = float.MaxValue});
+                        HiddenObjList.Add(new HiddenObj { type = 2, pos = sender.Position, endTime = float.MaxValue });
                     else
                         HiddenObjList.Add(new HiddenObj
                         {
@@ -343,7 +312,7 @@ namespace OneKeyToWin_AIO_Sebby.Core
                 if (args.Target == null)
                     AddWard(args.SData.Name.ToLower(), args.End);
 
-                if ((OracleLens.IsReady() || VisionWard.IsReady()) && sender.Distance(Player.Position) < 1200)
+                if ((OracleLens.IsReady() || VisionWard.IsReady() || Sweep.IsReady()) && sender.Distance(Player.Position) < 1200)
                 {
                     switch (args.SData.Name.ToLower())
                     {
@@ -382,46 +351,46 @@ namespace OneKeyToWin_AIO_Sebby.Core
             {
                 //PINKS
                 case "visionward":
-                    HiddenObjList.Add(new HiddenObj {type = 2, pos = posCast, endTime = float.MaxValue});
+                    HiddenObjList.Add(new HiddenObj { type = 2, pos = posCast, endTime = float.MaxValue });
                     break;
                 case "trinkettotemlvl3B":
-                    HiddenObjList.Add(new HiddenObj {type = 1, pos = posCast, endTime = Game.Time + 180});
+                    HiddenObjList.Add(new HiddenObj { type = 1, pos = posCast, endTime = Game.Time + 180 });
                     break;
                 //SIGH WARD
                 case "itemghostward":
-                    HiddenObjList.Add(new HiddenObj {type = 1, pos = posCast, endTime = Game.Time + 180});
+                    HiddenObjList.Add(new HiddenObj { type = 1, pos = posCast, endTime = Game.Time + 180 });
                     break;
                 case "wrigglelantern":
-                    HiddenObjList.Add(new HiddenObj {type = 1, pos = posCast, endTime = Game.Time + 180});
+                    HiddenObjList.Add(new HiddenObj { type = 1, pos = posCast, endTime = Game.Time + 180 });
                     break;
                 case "sightward":
-                    HiddenObjList.Add(new HiddenObj {type = 1, pos = posCast, endTime = Game.Time + 180});
+                    HiddenObjList.Add(new HiddenObj { type = 1, pos = posCast, endTime = Game.Time + 180 });
                     break;
                 case "itemferalflare":
-                    HiddenObjList.Add(new HiddenObj {type = 1, pos = posCast, endTime = Game.Time + 180});
+                    HiddenObjList.Add(new HiddenObj { type = 1, pos = posCast, endTime = Game.Time + 180 });
                     break;
                 //TRINKET
                 case "trinkettotemlvl1":
-                    HiddenObjList.Add(new HiddenObj {type = 1, pos = posCast, endTime = Game.Time + 60});
+                    HiddenObjList.Add(new HiddenObj { type = 1, pos = posCast, endTime = Game.Time + 60 });
                     break;
                 case "trinkettotemlvl2":
-                    HiddenObjList.Add(new HiddenObj {type = 1, pos = posCast, endTime = Game.Time + 120});
+                    HiddenObjList.Add(new HiddenObj { type = 1, pos = posCast, endTime = Game.Time + 120 });
                     break;
                 case "trinkettotemlvl3":
-                    HiddenObjList.Add(new HiddenObj {type = 1, pos = posCast, endTime = Game.Time + 180});
+                    HiddenObjList.Add(new HiddenObj { type = 1, pos = posCast, endTime = Game.Time + 180 });
                     break;
                 //others
                 case "teemorcast":
-                    HiddenObjList.Add(new HiddenObj {type = 3, pos = posCast, endTime = Game.Time + 300});
+                    HiddenObjList.Add(new HiddenObj { type = 3, pos = posCast, endTime = Game.Time + 300 });
                     break;
                 case "noxious trap":
-                    HiddenObjList.Add(new HiddenObj {type = 3, pos = posCast, endTime = Game.Time + 300});
+                    HiddenObjList.Add(new HiddenObj { type = 3, pos = posCast, endTime = Game.Time + 300 });
                     break;
                 case "JackInTheBox":
-                    HiddenObjList.Add(new HiddenObj {type = 3, pos = posCast, endTime = Game.Time + 100});
+                    HiddenObjList.Add(new HiddenObj { type = 3, pos = posCast, endTime = Game.Time + 100 });
                     break;
                 case "Jack In The Box":
-                    HiddenObjList.Add(new HiddenObj {type = 3, pos = posCast, endTime = Game.Time + 100});
+                    HiddenObjList.Add(new HiddenObj { type = 3, pos = posCast, endTime = Game.Time + 100 });
                     break;
             }
         }
@@ -434,6 +403,8 @@ namespace OneKeyToWin_AIO_Sebby.Core
                     OracleLens.Cast(Player.Position.Extend(position, OracleLens.Range));
                 else if (VisionWard.IsReady())
                     VisionWard.Cast(Player.Position.Extend(position, VisionWard.Range));
+                else if (Sweep.IsReady())
+                    Sweep.Cast(Player.Position.Extend(position, Sweep.Range));
             }
         }
     }

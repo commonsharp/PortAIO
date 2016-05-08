@@ -90,7 +90,7 @@ namespace MoonLux
         /// <param name="gapcloser">The gapcloser.</param>
         private static void AntiGapcloserOnOnEnemyGapcloser(ActiveGapcloser gapcloser)
         {
-            if (!gapcloser.Sender.IsValidTarget(Q.Range) || !getCheckBoxItem(miscMenu, "QGapcloser"))
+            if (!gapcloser.Sender.LSIsValidTarget(Q.Range) || !getCheckBoxItem(miscMenu, "QGapcloser"))
             {
                 return;
             }
@@ -105,8 +105,8 @@ namespace MoonLux
         /// <param name="args">The <see cref="AttackableUnitDamageEventArgs" /> instance containing the event data.</param>
         private static void AttackableUnit_OnDamage(AttackableUnit sender, AttackableUnitDamageEventArgs args)
         {
-            var source = ObjectManager.GetUnitByNetworkId<GameObject>((uint) args.Source.NetworkId);
-            var obj = ObjectManager.GetUnitByNetworkId<GameObject>((uint) args.Target.NetworkId);
+            var source = ObjectManager.GetUnitByNetworkId<GameObject>((uint)args.Source.NetworkId);
+            var obj = ObjectManager.GetUnitByNetworkId<GameObject>((uint)args.Target.NetworkId);
 
             if (source == null || obj == null)
             {
@@ -118,18 +118,18 @@ namespace MoonLux
                 return;
             }
 
-            var hero = (AIHeroClient) obj;
+            var hero = (AIHeroClient)obj;
 
             if (hero.IsEnemy || (!hero.IsMe && !W.IsInRange(obj))
-                || !getCheckBoxItem(shieldMenu, string.Format("{0}", hero.ChampionName)))
+                || !getCheckBoxItem(shieldMenu, hero.NetworkId + ""))
             {
                 return;
             }
 
-            if (((int) (args.Damage/hero.Health) > getSliderItem(shieldMenu, "ASDamagePercent"))
+            if (((int)(args.Damage / hero.Health) > getSliderItem(shieldMenu, "ASDamagePercent"))
                 || (hero.HealthPercent < getSliderItem(shieldMenu, "ASHealthPercent")))
             {
-                W.Cast(W.GetPrediction(hero).CastPosition);
+                W.Cast(hero);
             }
         }
 
@@ -139,16 +139,14 @@ namespace MoonLux
         /// <param name="target">The target.</param>
         private static void CastE(AIHeroClient target)
         {
-            if (Environment.TickCount - E.LastCastAttemptT < E.Delay*1000)
+            if (Environment.TickCount - E.LastCastAttemptT < E.Delay * 1000)
             {
                 return;
             }
 
             if (ECasted)
             {
-                if (EObject.Position.CountEnemiesInRange(350) >= 1
-                    && ObjectManager.Get<AIHeroClient>()
-                        .Count(x => x.IsValidTarget(350, true, EObject.Position) && !x.HasPassive()) >= 1)
+                if (EObject.Position.CountEnemiesInRange(350) >= 1 && ObjectManager.Get<AIHeroClient>().Count(x => x.LSIsValidTarget(350, true, EObject.Position) && !x.HasPassive()) >= 1)
                 {
                     E.Cast();
                 }
@@ -165,24 +163,7 @@ namespace MoonLux
         /// <param name="target">The target.</param>
         private static void CastQ(AIHeroClient target)
         {
-            if (getCheckBoxItem(miscMenu, "QThroughMinions"))
-            {
-                var prediction = Q.GetPrediction(target);
-                var objects = Q.GetCollision(
-                    Player.ServerPosition.To2D(),
-                    new List<Vector2> {prediction.CastPosition.To2D()});
-
-                if (objects.Count == 1 || (objects.Count == 1 && objects.ElementAt(0).IsChampion())
-                    || objects.Count <= 1
-                    || (objects.Count == 2 && (objects.ElementAt(0).IsChampion() || objects.ElementAt(1).IsChampion())))
-                {
-                    Q.Cast(prediction.CastPosition);
-                }
-            }
-            else
-            {
-                Q.Cast(target);
-            }
+            Q.Cast(target);
         }
 
         /// <summary>
@@ -243,7 +224,7 @@ namespace MoonLux
             shieldMenu = Menu.AddSubMenu("Auto Shield Settings", "ASSettings");
             shieldMenu.Add("ASHealthPercent", new Slider("Health Percent", 25));
             shieldMenu.Add("ASDamagePercent", new Slider("Damage Percent", 20));
-            HeroManager.Allies.ForEach(x => shieldMenu.Add(x.ChampionName, new CheckBox("Shield " + x.ChampionName)));
+            HeroManager.Allies.ForEach(x => shieldMenu.Add(x.NetworkId + "", new CheckBox("Shield " + x.ChampionName)));
 
             jungleKsMenu = Menu.AddSubMenu("Jungle Steal Settings", "JungleKS");
             jungleKsMenu.Add("StealBaron", new CheckBox("Steal Baron"));
@@ -254,7 +235,6 @@ namespace MoonLux
 
             miscMenu = Menu.AddSubMenu("Miscellaneous Settings", "MiscSettings");
             miscMenu.Add("SpellWeaveCombo", new CheckBox("Spell Weave"));
-            miscMenu.Add("QThroughMinions", new CheckBox("Cast Q through minions"));
             miscMenu.Add("QGapcloser", new CheckBox("Use Q on a Gapcloser"));
 
             drawMenu = Menu.AddSubMenu("Drawing Settings", "DrawSettings");
@@ -280,7 +260,7 @@ namespace MoonLux
 
             var target = TargetSelector.GetTarget(Q.Range, DamageType.Magical);
 
-            if (!target.IsValidTarget())
+            if (!target.LSIsValidTarget())
             {
                 if (HeroManager.Enemies.Any(x => R.IsInRange(x)) && useRComboMode == 2 && R.IsReady())
                 {
@@ -354,7 +334,7 @@ namespace MoonLux
 
             var target = TargetSelector.GetTarget(Q.Range, DamageType.Magical);
 
-            if (!target.IsValidTarget() || Player.ManaPercent < getSliderItem(harassMenu, "HarassMinMana"))
+            if (!target.LSIsValidTarget() || Player.ManaPercent < getSliderItem(harassMenu, "HarassMinMana"))
             {
                 return;
             }
@@ -481,11 +461,11 @@ namespace MoonLux
 
             for (var i = 0; i < 30; i++)
             {
-                var angle = i*Math.PI*2/30;
+                var angle = i * Math.PI * 2 / 30;
                 pointList.Add(
                     new Vector3(
-                        Player.Position.X + R.Range*(float) Math.Cos(angle),
-                        Player.Position.Y + R.Range*(float) Math.Sin(angle),
+                        Player.Position.X + R.Range * (float)Math.Cos(angle),
+                        Player.Position.Y + R.Range * (float)Math.Sin(angle),
                         Player.Position.Z));
             }
 
@@ -535,11 +515,12 @@ namespace MoonLux
                 DoHarass();
             }
 
-            if (ECasted && EObject.Position.CountEnemiesInRange(350) >= 1
-                && ObjectManager.Get<AIHeroClient>()
-                    .Count(x => x.IsValidTarget(350, true, EObject.Position) && !x.HasPassive()) >= 1)
+            if (EObject != null && Player.CountEnemiesInRange(E.Range + 200) < 1)
             {
-                E.Cast();
+                if (!Player.LSIsRecalling() && ECasted && EObject.Position.CountEnemiesInRange(350) >= 1)
+                {
+                    E.Cast();
+                }
             }
 
             KillSteal();
@@ -569,7 +550,7 @@ namespace MoonLux
 
             CreateMenu();
 
-            GameObject.OnCreate += delegate(GameObject sender, EventArgs args2)
+            GameObject.OnCreate += delegate (GameObject sender, EventArgs args2)
             {
                 if (sender.Name.Contains("Lux_Base_E_tar"))
                 {
@@ -577,7 +558,7 @@ namespace MoonLux
                 }
             };
 
-            GameObject.OnDelete += delegate(GameObject sender, EventArgs args2)
+            GameObject.OnDelete += delegate (GameObject sender, EventArgs args2)
             {
                 if (sender.Name.Contains("Lux_Base_E_tar"))
                 {
@@ -615,7 +596,7 @@ namespace MoonLux
 
                 if (baron != null)
                 {
-                    var healthPred = HealthPrediction.GetHealthPrediction(baron, (int) (R.Delay*1000) + Game.Ping/2);
+                    var healthPred = HealthPrediction.GetHealthPrediction(baron, (int)(R.Delay * 1000) + Game.Ping / 2);
 
                     if (R.GetDamage(baron) >= healthPred)
                     {
@@ -631,7 +612,7 @@ namespace MoonLux
 
                 if (dragon != null)
                 {
-                    var healthPred = HealthPrediction.GetHealthPrediction(dragon, (int) (R.Delay*1000) + Game.Ping/2);
+                    var healthPred = HealthPrediction.GetHealthPrediction(dragon, (int)(R.Delay * 1000) + Game.Ping / 2);
 
                     if (R.GetDamage(dragon) >= healthPred)
                     {
@@ -651,7 +632,7 @@ namespace MoonLux
                         blueBuffs.Where(
                             x =>
                                 R.GetDamage(x) >
-                                HealthPrediction.GetHealthPrediction(x, (int) (R.Delay*1000) + Game.Ping/2))
+                                HealthPrediction.GetHealthPrediction(x, (int)(R.Delay * 1000) + Game.Ping / 2))
                             .FirstOrDefault(
                                 x =>
                                     (x.CountAlliesInRange(1000) == 0 && stealBuffMode == 0)
@@ -679,7 +660,7 @@ namespace MoonLux
 
             var redBuff =
                 redBuffs.Where(
-                    x => R.GetDamage(x) > HealthPrediction.GetHealthPrediction(x, (int) (R.Delay*1000) + Game.Ping/2))
+                    x => R.GetDamage(x) > HealthPrediction.GetHealthPrediction(x, (int)(R.Delay * 1000) + Game.Ping / 2))
                     .FirstOrDefault(
                         x =>
                             (x.CountAlliesInRange(1000) == 0 && stealBuffMode == 0)
@@ -698,15 +679,15 @@ namespace MoonLux
         {
             var spellsToUse =
                 new List<Spell>(
-                    new[] {Q, E, R}.Where(
+                    new[] { Q, E, R }.Where(
                         x =>
                             x.IsReady() &&
-                            getCheckBoxItem(ksMenu, "Use" + Enum.GetName(typeof (SpellSlot), x.Slot) + "KS")));
+                            getCheckBoxItem(ksMenu, "Use" + Enum.GetName(typeof(SpellSlot), x.Slot) + "KS")));
 
             foreach (var enemy in HeroManager.Enemies)
             {
                 var spell =
-                    spellsToUse.Where(x => x.GetDamage(enemy) > enemy.Health && enemy.IsValidTarget(x.Range))
+                    spellsToUse.Where(x => x.GetDamage(enemy) > enemy.Health && enemy.LSIsValidTarget(x.Range))
                         .MinOrDefault(x => x.GetDamage(enemy));
 
                 if (spell == null)
@@ -739,7 +720,7 @@ namespace MoonLux
                     ObjectManager.Player.CalcDamage(
                         target,
                         DamageType.Magical,
-                        10 + 8*ObjectManager.Player.Level + 0.2*ObjectManager.Player.TotalMagicalDamage);
+                        10 + 8 * ObjectManager.Player.Level + 0.2 * ObjectManager.Player.TotalMagicalDamage);
         }
 
         /// <summary>

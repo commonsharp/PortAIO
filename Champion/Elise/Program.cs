@@ -211,7 +211,7 @@ namespace GFUELElise
             {
                 if (getCheckBoxItem(miscMenu, "GFUELElise.Misc.Antigapcloser") && E.IsReady())
                 {
-                    if (gapcloser.Sender.IsValidTarget(E.Range))
+                    if (E.IsInRange(gapcloser.Sender) && gapcloser.Sender.LSIsValidTarget())
                     {
                         E.Cast(gapcloser.Sender);
                     }
@@ -227,12 +227,12 @@ namespace GFUELElise
                 {
                     foreach (var enemy in ObjectManager.Get<AIHeroClient>())
                     {
-                        if (enemy.IsValidTarget(E.Range))
+                        if (E.IsInRange(enemy))
                         {
                             var pred = E.GetPrediction(enemy);
                             if (pred.Hitchance >= HitChance.Immobile)
                             {
-                                E.Cast(pred.CastPosition);
+                                E.Cast(enemy);
                             }
                         }
                     }
@@ -260,13 +260,12 @@ namespace GFUELElise
                         R.Cast();
                     }
 
-                    if (getCheckBoxItem(comboMenu, "GFUELElise.Combo.E") && target.Distance(Player.Position) <= E.Range &&
-                        E.IsReady())
+                    if (getCheckBoxItem(comboMenu, "GFUELElise.Combo.E") && E.IsInRange(target) && E.IsReady())
                     {
                         var prediction = E.GetPrediction(target);
                         if (prediction.Hitchance >= HitChance.High)
                         {
-                            E.Cast(prediction.CastPosition);
+                            E.Cast(target);
                         }
                     }
 
@@ -751,13 +750,13 @@ namespace GFUELElise
                 return;
             }
 
-            if (!E.IsReady() || !target.IsValidTarget(E.Range))
+            if (!E.IsReady() || !E.IsInRange(target))
             {
                 return;
             }
 
             var prediction = E.GetPrediction(target);
-            E.Cast(prediction.CastPosition);
+            E.Cast(target);
         }
 
         #endregion

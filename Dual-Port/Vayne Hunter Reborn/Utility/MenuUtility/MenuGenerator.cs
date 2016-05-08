@@ -85,8 +85,8 @@ namespace VayneHunter_Reborn.Utility.MenuUtility
             miscMenu.Add("dz191.vhr.misc.general.antigpdelay", new Slider("Anti Gapcloser Delay (ms)", 0, 0, 1000));
             miscMenu.Add("dz191.vhr.misc.general.specialfocus", new CheckBox("Focus targets with 2 W marks"));
             miscMenu.Add("dz191.vhr.misc.general.reveal", new CheckBox("Stealth Reveal (Pink Ward / Lens)"));
-            miscMenu.Add("dz191.vhr.misc.general.disablemovement", new CheckBox("Disable Orbwalker Movement"));
-            miscMenu.Add("dz191.vhr.misc.general.disableattk", new CheckBox("Disable Orbwalker Attack"));
+            miscMenu.Add("dz191.vhr.misc.general.disablemovement", new CheckBox("Disable Orbwalker Movement", false));
+            miscMenu.Add("dz191.vhr.misc.general.disableattk", new CheckBox("Disable Orbwalker Attack", false));
 
             drawMenu = RootMenu.AddSubMenu("[VHR] Drawings", "dz191.vhr.draw");
             drawMenu.Add("dz191.vhr.draw.spots", new CheckBox("Draw Spots", false));

@@ -59,8 +59,6 @@ namespace YasuoPro
             public Vector3 To;
             public Vector3 CastPos;
 
-            double x, y, z;
-
             public bool Contains(Vector3 position)
             {
                 return position.LSDistance(From) <= player.BoundingRadius;

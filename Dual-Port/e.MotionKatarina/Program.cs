@@ -23,7 +23,6 @@ namespace e.Motion_Katarina
         private static Vector3 JumpPosition;
         private static LeagueSharp.Common.Spell Q, W, E, R;
         private static Menu _menu;
-        private static int whenToCancelR;
         private static AIHeroClient Player { get { return ObjectManager.Player; } }
         private static AIHeroClient qTarget;
         private static Obj_AI_Base qMinion;
@@ -797,7 +796,7 @@ namespace e.Motion_Katarina
         #endregion
         private static void Obj_AI_Base_OnIssueOrder(Obj_AI_Base sender, PlayerIssueOrderEventArgs args)
         {
-            if (sender.IsMe && HasRBuff() && Utils.GameTimeTickCount <= whenToCancelR && getCheckBoxItem(miscMenu, "motion.katarina.misc.noRCancel"))
+            if (sender.IsMe && HasRBuff() && getCheckBoxItem(miscMenu, "motion.katarina.misc.noRCancel"))
                 args.Process = false;
         }
     }

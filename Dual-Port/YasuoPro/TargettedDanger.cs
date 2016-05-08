@@ -87,9 +87,9 @@ namespace YasuoPro
             AddSpell("MissFortune", "MissFortuneRicochetShot", SpellSlot.Q);
         }
 
-        static void AddSpell(string champname, string spellname, SpellSlot  slot, float del = 0)
+        static void AddSpell(string champname, string spellname, SpellSlot slot, float del = 0)
         {
-            spellList.Add(new SData{ championName =  champname, spellName =  spellname, spellSlot =  slot });
+            spellList.Add(new SData { championName = champname, spellName = spellname, spellSlot = slot });
         }
 
         public static SData GetSpell(string spellName)
@@ -99,7 +99,8 @@ namespace YasuoPro
 
         public static void OnUpdate()
         {
-            foreach (var ls in DetectedPolygons) {
+            foreach (var ls in DetectedPolygons)
+            {
                 if (YasuoEvade.TickCount - ls.StartTick >= ls.data.delay + Helper.GetSliderInt("Evade.Delay", YasuoMenu.EvadeM))
                 {
                     if (ls.poly.PointInPolygon(Helper.Yasuo.ServerPosition.LSTo2D()) == 1)
@@ -133,40 +134,33 @@ namespace YasuoPro
 
         internal static void SpellCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
         {
-            try
+            if (!Helper.GetBool("Evade.WTS", YasuoMenu.EvadeM) || sender.IsAlly || !SpellSlot.W.IsReady() || (!Helper.GetBool("Evade.FOW", YasuoMenu.EvadeM) && !sender.IsVisible))
             {
-                if (!Helper.GetBool("Evade.WTS", YasuoMenu.EvadeM) || sender.IsAlly || !SpellSlot.W.IsReady() || (!Helper.GetBool("Evade.FOW", YasuoMenu.EvadeM) && !sender.IsVisible))
+                return;
+            }
+            if (args.SData.Name.Equals("MissFortuneBulletTime"))
+            {
+                var ssdata = GetSpell(args.SData.Name);
+                if (ssdata.IsEnabled)
                 {
-                    return;
-                }
-                if (args.SData.Name.Equals("MissFortuneBulletTime"))
-                {
-                    var ssdata = GetSpell(args.SData.Name);
-                    if (ssdata.IsEnabled)
-                    {
-                        var end = args.Start.LSTo2D().LSExtend(args.End.LSTo2D(), 1400);
-                        EvadeA.Geometry.Rectangle rect = new EvadeA.Geometry.Rectangle(args.Start.LSTo2D(), end, args.SData.LineWidth);
-                        var topoly = rect.ToPolygon();
-                        var newls = new LittleStruct { poly = topoly, argss = args, RealEndPos = end, StartTick = YasuoEvade.TickCount, data = ssdata };
-                        DetectedPolygons.Add(newls);
-                        LeagueSharp.Common.Utility.DelayAction.Add(3000, () => DetectedPolygons.Clear());
-                    }
-                }
-                if (!args.Target.IsMe)
-                {
-                    return;
-                }
-                //Console.WriteLine(args.SData.Name + " " + sender.BaseSkinName);
-                var sdata = GetSpell(args.SData.Name);
-                if (sdata != null && sdata.IsEnabled)
-                {
-                    var castpos = Helper.Yasuo.ServerPosition.LSExtend(args.Start, 50);
-                    LeagueSharp.Common.Utility.DelayAction.Add((int) sdata.delay, () => Helper.Spells[Helper.W].Cast(castpos));
+                    var end = args.Start.LSTo2D().LSExtend(args.End.LSTo2D(), 1400);
+                    EvadeA.Geometry.Rectangle rect = new EvadeA.Geometry.Rectangle(args.Start.LSTo2D(), end, args.SData.LineWidth);
+                    var topoly = rect.ToPolygon();
+                    var newls = new LittleStruct { poly = topoly, argss = args, RealEndPos = end, StartTick = YasuoEvade.TickCount, data = ssdata };
+                    DetectedPolygons.Add(newls);
+                    LeagueSharp.Common.Utility.DelayAction.Add(3000, () => DetectedPolygons.Clear());
                 }
             }
-            catch (Exception e)
+            if (!args.Target.IsMe)
             {
-                
+                return;
+            }
+            //Console.WriteLine(args.SData.Name + " " + sender.BaseSkinName);
+            var sdata = GetSpell(args.SData.Name);
+            if (sdata != null && sdata.IsEnabled)
+            {
+                var castpos = Helper.Yasuo.ServerPosition.LSExtend(args.Start, 50);
+                LeagueSharp.Common.Utility.DelayAction.Add((int)sdata.delay, () => Helper.Spells[Helper.W].Cast(castpos));
             }
         }
     }

@@ -29,7 +29,6 @@ using GamePath = System.Collections.Generic.List<SharpDX.Vector2>;
 using EloBuddy;
 using EvadeA;
 using EloBuddy.SDK.Menu.Values;
-using EvadeA.Pathfinding;
 
 #endregion
 
@@ -78,8 +77,6 @@ namespace EvadeA
         private static readonly Random RandomN = new Random();
         private static int LastSentMovePacketT = 0;
         private static int LastSentMovePacketT2 = 0;
-
-        private static int LastSMovePacketT = 0;
 
         public static bool Evading
         {
@@ -146,22 +143,6 @@ namespace EvadeA
 
             //Initialze the collision
             Collision.Init();
-
-            //Game.PrintChat("Evade Loaded");
-            
-            if (Config.PrintSpellData)
-            {
-                foreach (var hero in ObjectManager.Get<AIHeroClient>())
-                {
-                    foreach (var spell in hero.Spellbook.Spells)
-                    {
-                 /*       Console.WriteLine(
-                             "Slot  " + spell.Slot + " " + spell.SData.Name + " w:" + spell.SData.LineWidth + " s:" + spell.SData.MissileSpeed + " r: " +
-                            spell.SData.CastRangeArray[0]);*/
-                    }
-                }
-                Console.WriteLine(ObjectManager.Player.Spellbook.GetSpell(SpellSlot.W).Name);
-            }
         }
         private static void DetectedSkillshots_OnAdd(object sender, EventArgs e)
         {
@@ -462,18 +443,6 @@ namespace EvadeA
 
             return;
 
-            //Avoid sending move/cast packets while dead.
-            if (ObjectManager.Player.IsDead)
-            {
-                Evading = false;
-                EvadeToPoint = Vector2.Zero;
-                PathFollower.Stop();
-                return;
-            }
-
- 
-
-
             /*Avoid evading while stunned or immobile.*/
             if (Utils.ImmobileTime(ObjectManager.Player) - Utils.TickCount > Game.Ping / 2 + 70)
             {
@@ -764,21 +733,6 @@ namespace EvadeA
                         args.Process = false;
                     }
                 }
-            }
-        }
-
-        private static void UnitOnOnDash(Obj_AI_Base sender, Dash.DashItem args)
-        {
-            if (sender.IsMe)
-            {
-                if (Config.PrintSpellData)
-                {
-                    Console.WriteLine(
-                        Utils.TickCount + "DASH: Speed: " + args.Speed + " Width:" +
-                        args.EndPos.LSDistance(args.StartPos));
-                }
-
-                //Utility.DelayAction.Add(args.Duration, delegate { Evading = false; });
             }
         }
 

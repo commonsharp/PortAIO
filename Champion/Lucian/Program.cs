@@ -241,12 +241,10 @@ namespace LCS_Lucian
                 SemiManual();
             }
 
-            if (UltActive && getKeyBindItem(Config, "lucian.semi.manual.ult"))
+            if (UltActive)
             {
                 Orbwalker.DisableAttacking = true;
-            }
-
-            if (!UltActive || !getKeyBindItem(Config, "lucian.semi.manual.ult"))
+            } else
             {
                 Orbwalker.DisableAttacking = false;
             }
@@ -255,6 +253,10 @@ namespace LCS_Lucian
         private static void SemiManual()
         {
             Player.IssueOrder(GameObjectOrder.MoveTo, Game.CursorPos);
+            if (UltActive)
+            {
+                return;
+            }
             foreach (var enemy in HeroManager.Enemies.Where(x => x.IsValidTarget(LucianSpells.R.Range) && LucianSpells.R.GetPrediction(x).CollisionObjects.Count == 0))
             {
                 LucianSpells.R.Cast(enemy);

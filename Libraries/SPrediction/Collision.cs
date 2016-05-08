@@ -296,23 +296,9 @@ namespace SPrediction
                         (float) Math.PI*(to.LSDistance(from)/ 900), 410, 320*(to.LSDistance(from)/ 900))));
             }
             var _colFlags = Flags.None;
-            var collidedMinions =
-                MinionManager.GetMinions(range + 100, MinionTypes.All, MinionTeam.NotAlly, MinionOrderTypes.None)
-                    .AsParallel()
-                    .Where(
-                        p =>
-                            ClipperWrapper.IsIntersects(
-                                ClipperWrapper.MakePaths(
-                                    ClipperWrapper.DefineCircle(Prediction.GetFastUnitPosition(p, delay, missileSpeed),
-                                        p.BoundingRadius + 15)), spellHitBox));
-            var collidedEnemies =
-                HeroManager.Enemies.AsParallel()
-                    .Where(
-                        p =>
-                            ClipperWrapper.IsIntersects(
-                                ClipperWrapper.MakePaths(
-                                    ClipperWrapper.DefineCircle(Prediction.GetFastUnitPosition(p, delay, missileSpeed),
-                                        p.BoundingRadius)), spellHitBox));
+            var collidedMinions = MinionManager.GetMinions(range + 100, MinionTypes.All, MinionTeam.NotAlly, MinionOrderTypes.None).AsParallel().Where(p => ClipperWrapper.IsIntersects(ClipperWrapper.MakePaths(ClipperWrapper.DefineCircle(Prediction.GetFastUnitPosition(p, delay, missileSpeed), p.BoundingRadius + 15)), spellHitBox));
+
+            var collidedEnemies = HeroManager.Enemies.AsParallel().Where(p =>ClipperWrapper.IsIntersects(ClipperWrapper.MakePaths(ClipperWrapper.DefineCircle(Prediction.GetFastUnitPosition(p, delay, missileSpeed), p.BoundingRadius)), spellHitBox));
             var collidedAllies =
                 HeroManager.Allies.AsParallel()
                     .Where(

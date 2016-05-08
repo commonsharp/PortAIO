@@ -673,8 +673,7 @@ namespace SPrediction
             if (from == null)
                 from = ObjectManager.Player.ServerPosition.LSTo2D();
 
-            if (path.Count <= 1 || (target is AIHeroClient && ((AIHeroClient) target).IsChannelingImportantSpell()) ||
-                Utility.IsImmobileTarget(target))
+            if (path.Count <= 1 || (target is AIHeroClient && target.Spellbook.IsChanneling) || Utility.IsImmobileTarget(target))
                 return target.ServerPosition.LSTo2D();
 
             if (target.LSIsDashing())

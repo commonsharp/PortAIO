@@ -10,6 +10,7 @@ using LeagueSharp.Common;
 using SharpDX;
 using PortAIO.Properties;
 using iLucian;
+using EloBuddy.SDK;
 // ReSharper disable ObjectCreationAsStatement
 
 #endregion
@@ -21,6 +22,12 @@ namespace PortAIO
         private static void Main()
         {
             Loading.OnLoadingComplete += Initialize;
+            Game.OnUpdate += Game_OnUpdate;
+        }
+
+        private static void Game_OnUpdate(EventArgs args)
+        {
+            //Console.WriteLine(Orbwalker.ActiveModesFlags.ToString());
         }
 
         private static Render.Sprite Intro;
@@ -146,8 +153,8 @@ namespace PortAIO
                                 SebbyLib.Program.GameOnOnGameLoad();
                                 break;
                             case 1:
-                                Bootstrap.BuildMenu();
-                                Bootstrap.LoadChampion();
+                                ExorAIO.Core.Bootstrap.BuildMenu();
+                                ExorAIO.Core.Bootstrap.LoadChampion();
                                 break;
                             default:
                                 SebbyLib.Program.GameOnOnGameLoad();
@@ -234,8 +241,8 @@ namespace PortAIO
                     case "renekton":
                     case "tryndamere":
                     case "ryze":
-                        Bootstrap.BuildMenu();
-                        Bootstrap.LoadChampion();
+                        ExorAIO.Core.Bootstrap.BuildMenu();
+                        ExorAIO.Core.Bootstrap.LoadChampion();
                         break;
                     case "diana":
                         switch (Loader.diana)
@@ -416,8 +423,19 @@ namespace PortAIO
                     case "malphite": // eleasy
                         new ElEasy.Plugins.Malphite();
                         break;
-                    case "vayne": // ChallengerVayne
-                        Vayne.Program.OnLoad();
+                    case "vayne":
+                        switch (Loader.vayne)
+                        {
+                            case 0:
+                                Vayne.Program.OnLoad();
+                                break;
+                            case 1:
+                                VayneHunter_Reborn.Program.Game_OnGameLoad();
+                                break;
+                            default:
+                                Vayne.Program.OnLoad();
+                                break;
+                        }
                         break;
                     case "quinn": // GFuel Quinn
                         GFUELQuinn.Quinn.OnGameLoad();

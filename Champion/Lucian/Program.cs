@@ -105,8 +105,7 @@ namespace LCS_Lucian
 
         private static void LucianOnDoCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
         {
-            if (sender.IsMe && Orbwalking.IsAutoAttack(args.SData.Name) && args.Target is AIHeroClient &&
-                args.Target.IsValid)
+            if (sender.IsMe && Orbwalking.IsAutoAttack(args.SData.Name) && args.Target is AIHeroClient && args.Target.IsValid)
             {
                 if (getCheckBoxItem(comboMenu, "lucian.combo.start.e"))
                 {
@@ -125,15 +124,25 @@ namespace LCS_Lucian
                         Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.Combo) &&
                         ObjectManager.Player.Buffs.Any(buff => buff.Name != "lucianpassivebuff"))
                     {
-                        if (getCheckBoxItem(comboMenu, "lucian.disable.w.prediction"))
+                        if (LucianSpells.W.GetDamage((AIHeroClient)args.Target) >= ((AIHeroClient)args.Target).Health)
                         {
-                            LucianSpells.W.Cast(((AIHeroClient) args.Target).Position);
+                            if (LucianSpells.W.GetPrediction((AIHeroClient)args.Target).Hitchance >= HitChance.High)
+                            {
+                                LucianSpells.W.Cast(((AIHeroClient)args.Target));
+                            }
                         }
                         else
                         {
-                            if (LucianSpells.W.GetPrediction((AIHeroClient) args.Target).Hitchance >= HitChance.Medium)
+                            if (getCheckBoxItem(comboMenu, "lucian.disable.w.prediction"))
                             {
-                                LucianSpells.W.Cast(((AIHeroClient) args.Target).Position);
+                                LucianSpells.W.Cast(((AIHeroClient)args.Target).Position);
+                            }
+                            else
+                            {
+                                if (LucianSpells.W.GetPrediction((AIHeroClient)args.Target).Hitchance >= HitChance.Medium)
+                                {
+                                    LucianSpells.W.Cast(((AIHeroClient)args.Target).Position);
+                                }
                             }
                         }
                     }

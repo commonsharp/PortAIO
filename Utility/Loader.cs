@@ -40,7 +40,7 @@ namespace PortAIO.Utility
         public static int nidalee { get { return Miscc["nidalee"].Cast<ComboBox>().CurrentValue; } }
         public static int lucian { get { return Miscc["lucian"].Cast<ComboBox>().CurrentValue; } }
         public static int ashe { get { return Miscc["ashe"].Cast<ComboBox>().CurrentValue; } }
-        public static int vayne { get { return Miscc["ashe"].Cast<ComboBox>().CurrentValue; } }
+        public static int vayne { get { return Miscc["vayne"].Cast<ComboBox>().CurrentValue; } }
 
 
         public static Menu Miscc;

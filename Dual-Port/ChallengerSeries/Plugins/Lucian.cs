@@ -72,7 +72,6 @@ namespace Challenger_Series.Plugins
             //JungleClear
             if (target is Obj_AI_Base)
             {
-                Console.WriteLine("A");
                 JungleClear(target);
             }
         }

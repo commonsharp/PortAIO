@@ -97,10 +97,10 @@ namespace SPrediction
             if (isArc)
             {
                 spellHitBox = ClipperWrapper.MakePaths(new Geometry.Polygon(
-                    ClipperWrapper.DefineArc(from - new Vector2(875/2f, 20), to,
-                        (float) Math.PI*(to.LSDistance(from)/875f), 410, 200*(to.LSDistance(from)/875f)),
-                    ClipperWrapper.DefineArc(from - new Vector2(875/2f, 20), to,
-                        (float) Math.PI*(to.LSDistance(from)/875f), 410, 320*(to.LSDistance(from)/875f))));
+                    ClipperWrapper.DefineArc(from - new Vector2(900 / 2f, 20), to,
+                        (float) Math.PI*(to.LSDistance(from)/ 900), 410, 200*(to.LSDistance(from)/ 900)),
+                    ClipperWrapper.DefineArc(from - new Vector2(900 / 2f, 20), to,
+                        (float) Math.PI*(to.LSDistance(from)/ 900), 410, 320*(to.LSDistance(from)/ 900))));
             }
             return
                 MinionManager.GetMinions(from.LSDistance(to) + 250, MinionTypes.All, MinionTeam.NotAlly,
@@ -131,10 +131,10 @@ namespace SPrediction
             if (isArc)
             {
                 spellHitBox = ClipperWrapper.MakePaths(new Geometry.Polygon(
-                    ClipperWrapper.DefineArc(from - new Vector2(875/2f, 20), to,
-                        (float) Math.PI*(to.LSDistance(from)/875f), 410, 200*(to.LSDistance(from)/875f)),
-                    ClipperWrapper.DefineArc(from - new Vector2(875/2f, 20), to,
-                        (float) Math.PI*(to.LSDistance(from)/875f), 410, 320*(to.LSDistance(from)/875f))));
+                    ClipperWrapper.DefineArc(from - new Vector2(900 / 2f, 20), to,
+                        (float) Math.PI*(to.LSDistance(from)/ 900), 410, 200*(to.LSDistance(from)/ 900)),
+                    ClipperWrapper.DefineArc(from - new Vector2(900 / 2f, 20), to,
+                        (float) Math.PI*(to.LSDistance(from)/ 900), 410, 320*(to.LSDistance(from)/ 900))));
             }
             return
                 HeroManager.Enemies.AsParallel()
@@ -163,10 +163,10 @@ namespace SPrediction
             if (isArc)
             {
                 spellHitBox = ClipperWrapper.MakePaths(new Geometry.Polygon(
-                    ClipperWrapper.DefineArc(from - new Vector2(875/2f, 20), to,
-                        (float) Math.PI*(to.LSDistance(from)/875f), 410, 200*(to.LSDistance(from)/875f)),
-                    ClipperWrapper.DefineArc(from - new Vector2(875/2f, 20), to,
-                        (float) Math.PI*(to.LSDistance(from)/875f), 410, 320*(to.LSDistance(from)/875f))));
+                    ClipperWrapper.DefineArc(from - new Vector2(900 / 2f, 20), to,
+                        (float) Math.PI*(to.LSDistance(from)/ 900), 410, 200*(to.LSDistance(from)/ 900)),
+                    ClipperWrapper.DefineArc(from - new Vector2(900 / 2f, 20), to,
+                        (float) Math.PI*(to.LSDistance(from)/ 900), 410, 320*(to.LSDistance(from)/ 900))));
             }
             return
                 HeroManager.Allies.AsParallel()
@@ -231,10 +231,10 @@ namespace SPrediction
             if (isArc)
             {
                 spellHitBox = new Geometry.Polygon(
-                    ClipperWrapper.DefineArc(from - new Vector2(875/2f, 20), to,
-                        (float) Math.PI*(to.LSDistance(from)/875f), 410, 200*(to.LSDistance(from)/875f)),
-                    ClipperWrapper.DefineArc(from - new Vector2(875/2f, 20), to,
-                        (float) Math.PI*(to.LSDistance(from)/875f), 410, 320*(to.LSDistance(from)/875f)));
+                    ClipperWrapper.DefineArc(from - new Vector2(900 / 2f, 20), to,
+                        (float) Math.PI*(to.LSDistance(from)/ 900), 410, 200*(to.LSDistance(from)/ 900)),
+                    ClipperWrapper.DefineArc(from - new Vector2(900 / 2f, 20), to,
+                        (float) Math.PI*(to.LSDistance(from)/ 900), 410, 320*(to.LSDistance(from)/ 900)));
             }
 
             return ClipperWrapper.IsIntersects(ClipperWrapper.MakePaths(yasuoWallPoly),
@@ -290,10 +290,10 @@ namespace SPrediction
             if (isArc)
             {
                 spellHitBox = ClipperWrapper.MakePaths(new Geometry.Polygon(
-                    ClipperWrapper.DefineArc(from - new Vector2(875/2f, 20), to,
-                        (float) Math.PI*(to.LSDistance(from)/875f), 410, 200*(to.LSDistance(from)/875f)),
-                    ClipperWrapper.DefineArc(from - new Vector2(875/2f, 20), to,
-                        (float) Math.PI*(to.LSDistance(from)/875f), 410, 320*(to.LSDistance(from)/875f))));
+                    ClipperWrapper.DefineArc(from - new Vector2(900 / 2f, 20), to,
+                        (float) Math.PI*(to.LSDistance(from)/ 900), 410, 200*(to.LSDistance(from)/ 900)),
+                    ClipperWrapper.DefineArc(from - new Vector2(900 / 2f, 20), to,
+                        (float) Math.PI*(to.LSDistance(from)/ 900), 410, 320*(to.LSDistance(from)/ 900))));
             }
             var _colFlags = Flags.None;
             var collidedMinions =
